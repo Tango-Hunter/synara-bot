@@ -19,8 +19,17 @@ const client = new Client({
     ]
 });
 
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(`SYNARA online as ${client.user.tag}`);
+     await client.user.setPresence({
+        activities: [
+          {
+            name: 'over the network',
+            type: 3
+          }
+        ],
+        status: 'online'
+     });
 });
 
 client.on('messageCreate', async (message) => {
