@@ -38,7 +38,7 @@ The SYNARA Bot is designed to:
 
 ---
 
-##Environment Variable Configuration
+## Environment Variable Configuration
 This project uses environment variables for sensitive credentials and runtime configuration.  
 Examples include:  
 * Discord Bot Token  
