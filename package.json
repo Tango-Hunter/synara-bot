@@ -1,0 +1,17 @@
+{
+  "name": "synara-bot",
+  "version": "1.0.0",
+  "description": "SYNARA Bot is the core backend service powering the SYNARA ecosystem. This repository contains the infrastructure and automation pipeline responsible for Discord monitoring, AI-assisted response generation, event handling, and real-time community interaction.  \r The system is designed to run on Railway and acts as the bridge between Discord activity and the SYNARA personality framework.  \r ---\r ## 👤 Contributors\r - Tango Hunter\r ---\r ## Features\r * Real-time Discord monitoring  \r * AI-generated contextual responses  \r * Personality-driven interaction system  \r * Event-based automation pipeline  \r * Modular bot architecture  \r * Railway deployment support  \r * Environment-based configuration  \r * Scalable service structure  \r * Logging and diagnostic support  \r * Future-ready integration support",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.16.0",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2"
+  }
+}
