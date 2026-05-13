@@ -8,6 +8,8 @@
 
 require('dotenv').config();
 
+const express = require('express');
+
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
@@ -19,8 +21,16 @@ const client = new Client({
     ]
 });
 
+const app = express();
+
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
 client.once('clientReady', () => {
+
     console.log(`SYNARA online as ${client.user.tag}`);
+
     client.user.setPresence({
         activities: [
           {
@@ -29,6 +39,40 @@ client.once('clientReady', () => {
           }
         ],
         status: 'online'
+    });
+
+    app.post('/send-message', async (req, res) => {
+
+        try {
+
+            const {
+                channelId,
+                message
+            } = req.body;
+
+            const channel = await client.channels.fetch(channelId);
+
+            if (!channel) {
+
+                return res.status(404).json({
+                    error: 'Channel not found'
+                });
+            }
+
+            await channel.send(message);
+
+            return res.status(200).json({
+                success: true
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            return res.status(500).json({
+                error: 'Failed to send message'
+            });
+        }
     });
 });
 
@@ -63,3 +107,10 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+app.listen(PORT, () => {
+
+    console.log(
+        `API server running on port ${PORT}`
+    );
+});
