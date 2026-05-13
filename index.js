@@ -23,15 +23,15 @@ const {
 
 const {
     shouldIgnoreMessage
-} = require('./utils/selfProtection');
+} = require('./utils/self-protection');
 
 const {
     isAllowedChannel
-} = require('./utils/allowedChannels');
+} = require('./utils/allowed-channels');
 
 const {
     sendToN8N
-} = require('./services/webhookService');
+} = require('./services/webhook-service');
 
 const client = new Client({
     intents: [
@@ -59,6 +59,40 @@ client.once('clientReady', () => {
           }
         ],
         status: 'online'
+    });
+
+    app.post('/send-message', async (req, res) => {
+
+        try {
+
+            const {
+                channelId,
+                message
+            } = req.body;
+
+            const channel = await client.channels.fetch(channelId);
+
+            if (!channel) {
+
+                return res.status(404).json({
+                    error: 'Channel not found'
+                });
+            }
+
+            await channel.send(message);
+
+            return res.status(200).json({
+                success: true
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            return res.status(500).json({
+                error: 'Failed to send message'
+            });
+        }
     });
 });
 
