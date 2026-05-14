@@ -12,7 +12,10 @@ async function sendToN8N(webhookUrl, payload) {
 
     const response = await axios.post(
         webhookUrl,
-        payload
+        payload,
+        {
+            timeout: 30000
+        }
     );
 
     return response.data;

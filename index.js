@@ -6,33 +6,43 @@
  * Description: Discord Bot messaging service.
  */
 
+// ===============================
+// Creates server requirements
+// ===============================
 require('dotenv').config();
-
 const express = require('express');
-
 const { Client, GatewayIntentBits } = require('discord.js');
 
+// ===============================
+// Imported variables from compartmentalized files
+// ===============================
 const {
     cooldownSeconds,
     allowedChannels
 } = require('./config/settings');
-
 const {
     isOnCooldown
 } = require('./utils/cooldowns');
-
 const {
     shouldIgnoreMessage
 } = require('./utils/self-protection');
-
 const {
     isAllowedChannel
 } = require('./utils/allowed-channels');
-
+const {
+    sanitizeMessage
+} = require('./utils/sanitize-message');
+const {
+    logError
+} = require('./utils/logger');
 const {
     sendToN8N
 } = require('./services/webhook-service');
+const createMessageRoutes = require('./routes/messages');
 
+// ===============================
+// Establishes server requirements
+// ===============================
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -40,13 +50,17 @@ const client = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
-
 const app = express();
-
 app.use(express.json());
-
+app.use(
+    '/',
+    createMessageRoutes(client)
+);
 const PORT = process.env.PORT || 3000;
 
+// ===============================
+// Listens to Allowed Channels for @SYNARA mentions
+// ===============================
 client.once('clientReady', () => {
 
     console.log(`SYNARA online as ${client.user.tag}`);
@@ -60,42 +74,11 @@ client.once('clientReady', () => {
         ],
         status: 'online'
     });
-
-    app.post('/send-message', async (req, res) => {
-
-        try {
-
-            const {
-                channelId,
-                message
-            } = req.body;
-
-            const channel = await client.channels.fetch(channelId);
-
-            if (!channel) {
-
-                return res.status(404).json({
-                    error: 'Channel not found'
-                });
-            }
-
-            await channel.send(message);
-
-            return res.status(200).json({
-                success: true
-            });
-
-        } catch (error) {
-
-            console.error(error);
-
-            return res.status(500).json({
-                error: 'Failed to send message'
-            });
-        }
-    });
 });
 
+// ===============================
+// Sends Reply to @SYNARA mentions
+// ===============================
 client.on('messageCreate', async (message) => {
 
     // Self-protection
@@ -131,20 +114,37 @@ client.on('messageCreate', async (message) => {
 
     try {
 
-        const aiResponse = await sendToN8N(
+        const cleanedMessage = sanitizeMessage(
+            message.content,
+            client
+        );
+
+        let aiResponse = await sendToN8N(
             process.env.N8N_WEBHOOK_URL,
             {
-                content: message.content,
+                content: cleanedMessage,
                 author: message.author.username,
                 channelId: message.channel.id
             }
         );
 
+        if (!aiResponse || !aiResponse.trim()) {
+
+            aiResponse = 'Signal clarity insufficient.';
+        }
+
         await message.reply(aiResponse);
 
     } catch (error) {
 
-        console.error(error);
+        logError(
+            'SYNARA ERROR',
+            {
+                user: message.author.username,
+                channel: message.channel.id,
+                error: error.message
+            }
+        );
 
         await message.reply(
             'System interruption detected.'
@@ -152,6 +152,9 @@ client.on('messageCreate', async (message) => {
     }
 });
 
+// ===============================
+// Initialization
+// ===============================
 client.login(process.env.DISCORD_TOKEN);
 
 app.listen(PORT, () => {
