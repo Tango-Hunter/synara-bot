@@ -34,7 +34,7 @@ const {
 } = require('./utils/sanitize-message');
 const {
     splitIntoChunks
-} = require('./utils/responseManager');
+} = require('./utils/response-manager');
 const {
     logError
 } = require('./utils/logger');
