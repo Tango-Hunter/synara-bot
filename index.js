@@ -2,7 +2,7 @@
  * Title: index.js
  * Author: Tango Hunter
  * Date Created: 5/11/26
- * Date Modified: 5/13/26
+ * Date Modified: 5/15/26
  * Description: Discord Bot messaging service.
  */
 
@@ -32,6 +32,9 @@ const {
 const {
     sanitizeMessage
 } = require('./utils/sanitize-message');
+const {
+    splitIntoChunks
+} = require('./utils/responseManager');
 const {
     logError
 } = require('./utils/logger');
@@ -133,7 +136,29 @@ client.on('messageCreate', async (message) => {
             aiResponse = 'Signal clarity insufficient.';
         }
 
-        await message.reply(aiResponse);
+        const responseChunks =
+            splitIntoChunks(aiResponse);
+
+        for (let i = 0; i < responseChunks.length; i++) {
+
+            const chunk = responseChunks[i];
+
+            // Add sequence indicator if multiple chunks
+            const formattedChunk =
+                responseChunks.length > 1
+                    ? `[${i + 1}/${responseChunks.length}]\n\n${chunk}`
+                    : chunk;
+
+            await message.reply(formattedChunk);
+
+            // Small delay for natural pacing
+            if (i < responseChunks.length - 1) {
+
+                await new Promise(resolve =>
+                    setTimeout(resolve, 1200)
+                );
+            }
+        }
 
     } catch (error) {
 
