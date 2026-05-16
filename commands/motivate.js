@@ -6,7 +6,7 @@
  * Description: Prompt for the !motivate command.
  */
 
-const { sendToN8N } = require('../services/webhookService');
+const { sendToN8N } = require('../services/webhook-service');
 
 async function runMotivateCommand() {
 

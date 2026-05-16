@@ -6,7 +6,7 @@
  * Description: Prompt for the !fact command.
  */
 
-const { sendToN8N } = require('../services/webhookService');
+const { sendToN8N } = require('../services/webhook-service');
 
 async function runFactCommand() {
 
