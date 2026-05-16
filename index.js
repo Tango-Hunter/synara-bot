@@ -12,15 +12,15 @@
 require('dotenv').config();
 const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
+
+const createMessageRoutes =
+    require('./routes/messages');
 const {
     discordMessageHandler
 } = require(
     './handlers/discord/message-handler'
 );
 
-// ===============================
-// Establishes server requirements
-// ===============================
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
