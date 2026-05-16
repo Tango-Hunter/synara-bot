@@ -8,7 +8,7 @@
 
 const { sendToN8N } = require('../services/webhook-service');
 
-async function runObserveCommand() {
+async function runObserveCommand(username) {
 
     const prompt = `
 Generate a thoughtful observational statement as SYNARA.
@@ -24,7 +24,8 @@ Requirements:
 `;
 
     return await sendToN8N({
-        content: prompt
+        content: prompt,
+        username
     });
 }
 

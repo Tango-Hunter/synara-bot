@@ -8,7 +8,7 @@
 
 const { sendToN8N } = require('../services/webhook-service');
 
-async function runJokeCommand() {
+async function runJokeCommand(username) {
 
     const prompt = `
 Generate a short joke or humorous observation as SYNARA.
@@ -25,7 +25,8 @@ Requirements:
 `;
 
     return await sendToN8N({
-        content: prompt
+        content: prompt,
+        username
     });
 }
 

@@ -8,7 +8,7 @@
 
 const { sendToN8N } = require('../services/webhook-service');
 
-async function runMotivateCommand() {
+async function runMotivateCommand(username) {
 
     const prompt = `
 Generate a short motivational reflection as SYNARA.
@@ -25,7 +25,8 @@ Requirements:
 `;
 
     return await sendToN8N({
-        content: prompt
+        content: prompt,
+        username
     });
 }
 

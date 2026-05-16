@@ -38,7 +38,9 @@ async function handleCommands(message) {
         await message.channel.sendTyping();
 
         const response =
-            await runFactCommand();
+            await runFactCommand(
+                message.author.username
+            );
 
         await message.reply(response);
 
@@ -50,7 +52,9 @@ async function handleCommands(message) {
         await message.channel.sendTyping();
 
         const response =
-            await runJokeCommand();
+            await runJokeCommand(
+                message.author.username
+            );
 
         await message.reply(response);
 
@@ -62,7 +66,9 @@ async function handleCommands(message) {
         await message.channel.sendTyping();
 
         const response =
-            await runMotivateCommand();
+            await runMotivateCommand(
+                message.author.username
+            );
 
         await message.reply(response);
 
@@ -74,7 +80,9 @@ async function handleCommands(message) {
         await message.channel.sendTyping();
 
         const response =
-            await runObserveCommand();
+            await runObserveCommand(
+                message.author.username
+            );
 
         await message.reply(response);
 
@@ -86,7 +94,9 @@ async function handleCommands(message) {
         await message.channel.sendTyping();
 
         const response =
-            await runStatusCommand();
+            await runStatusCommand(
+                message.author.username
+            );
 
         await message.reply(response);
 

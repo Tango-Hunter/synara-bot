@@ -8,7 +8,7 @@
 
 const { sendToN8N } = require('../services/webhook-service');
 
-async function runStatusCommand() {
+async function runStatusCommand(username) {
 
     const prompt = `
 Generate a fictional SYNARA system status report.
@@ -24,7 +24,8 @@ Requirements:
 `;
 
     return await sendToN8N({
-        content: prompt
+        content: prompt,
+        username
     });
 }
 

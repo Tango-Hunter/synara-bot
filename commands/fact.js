@@ -8,7 +8,7 @@
 
 const { sendToN8N } = require('../services/webhook-service');
 
-async function runFactCommand() {
+async function runFactCommand(username) {
 
     const prompt = `
 Generate a fascinating short fact as SYNARA.
@@ -25,7 +25,8 @@ Requirements:
 `;
 
     return await sendToN8N({
-        content: prompt
+        content: prompt,
+        username
     });
 }
 
