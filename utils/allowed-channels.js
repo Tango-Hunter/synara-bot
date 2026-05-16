@@ -6,9 +6,12 @@
  * Description: Permits Bot responses on only allowed channels.
  */
 
-function isAllowedChannel(channelId, allowedChannels) {
+const settings =
+    require('../config/settings');
 
-    return allowedChannels.includes(channelId);
+function isAllowedChannel(channelId) {
+
+    return settings.allowedChannels.includes(channelId);
 }
 
 module.exports = {
