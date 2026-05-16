@@ -7,11 +7,24 @@
  */
 
 const {
+    getCooldownSeconds,
     isCooldownActive,
     updateCooldown
 } = require('../../utils/cooldowns');
 
 async function handleCooldown(message) {
+
+    const cooldownSeconds =
+        getCooldownSeconds(
+            message.member
+        );
+
+    if (
+        cooldownSeconds === 0
+    ) {
+
+        return false;
+    }
 
     if (
         isCooldownActive(
@@ -23,7 +36,8 @@ async function handleCooldown(message) {
     }
 
     updateCooldown(
-        message.author.id
+        message.author.id,
+        cooldownSeconds
     );
 
     return false;

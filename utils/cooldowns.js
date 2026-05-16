@@ -6,12 +6,40 @@
  * Description: Handles user cooldown tracking.
  */
 
-const settings =
-    require('../config/settings');
+const cooldownSettings =
+    require('../config/role-cooldowns');
 
 const cooldowns = new Map();
 
-function isCooldownActive(userId) {
+function getCooldownSeconds(member) {
+
+    let cooldown =
+        cooldownSettings.defaultCooldown;
+
+    for (
+        const [roleId, seconds]
+        of Object.entries(
+            cooldownSettings.roleCooldowns
+        )
+    ) {
+
+        if (
+            member.roles.cache.has(roleId)
+        ) {
+
+            cooldown = Math.min(
+                cooldown,
+                seconds
+            );
+        }
+    }
+
+    return cooldown;
+}
+
+function isCooldownActive(
+    userId
+) {
 
     const now = Date.now();
 
@@ -23,11 +51,14 @@ function isCooldownActive(userId) {
     return now < cooldowns.get(userId);
 }
 
-function updateCooldown(userId) {
+function updateCooldown(
+    userId,
+    cooldownSeconds
+) {
 
     const expiration =
         Date.now() +
-        settings.cooldownSeconds * 1000;
+        cooldownSeconds * 1000;
 
     cooldowns.set(
         userId,
@@ -36,6 +67,7 @@ function updateCooldown(userId) {
 }
 
 module.exports = {
+    getCooldownSeconds,
     isCooldownActive,
     updateCooldown
 };
