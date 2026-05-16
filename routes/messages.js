@@ -14,9 +14,16 @@ const {
     logError
 } = require('../utils/logger');
 
+const {
+    apiAuth
+} = require('../middleware/api-auth');
+
 module.exports = (client) => {
 
-    router.post('/send-message', async (req, res) => {
+    router.post(
+        '/send-message',
+        apiAuth,
+        async (req, res) => {
 
         try {
 
