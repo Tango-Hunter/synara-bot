@@ -9,24 +9,102 @@
 const {
     runFactCommand
 } = require('../../commands/fact');
+
 const {
     runJokeCommand
 } = require('../../commands/joke');
+
 const {
     runMotivateCommand
 } = require('../../commands/motivate');
+
 const {
     runObserveCommand
 } = require('../../commands/observe');
+
 const {
     runStatusCommand
 } = require('../../commands/status');
+
 const {
     formatCommandResponse
 } = require('../../utils/command-formatter');
+
 const {
     logCommand
 } = require('../../utils/command-logger');
+
+const commandRegistry = {
+
+    '!fact': {
+
+        title: 'FACT',
+
+        execute: runFactCommand
+    },
+
+    '!joke': {
+
+        title: 'HUMOR',
+
+        execute: runJokeCommand
+    },
+
+    '!motivate': {
+
+        title: 'MOTIVATION',
+
+        execute: runMotivateCommand
+    },
+
+    '!observe': {
+
+        title: 'OBSERVATION',
+
+        execute: runObserveCommand
+    },
+
+    '!status': {
+
+        title: 'STATUS',
+
+        execute: runStatusCommand
+    }
+};
+
+async function executeCommand(
+    message,
+    commandConfig,
+    commandName
+) {
+
+    await message.channel.sendTyping();
+
+    logCommand(
+
+        commandName,
+
+        message.author.username,
+
+        message.channel.id
+    );
+
+    const response =
+        await commandConfig.execute(
+
+            message.author.username
+        );
+
+    await message.reply(
+
+        formatCommandResponse(
+
+            commandConfig.title,
+
+            response
+        )
+    );
+}
 
 async function handleCommands(message) {
 
@@ -35,137 +113,24 @@ async function handleCommands(message) {
             .toLowerCase()
             .trim();
 
-    // FACT
-    if (content === '!fact') {
+    const commandConfig =
+        commandRegistry[content];
 
-        await message.channel.sendTyping();
+    if (!commandConfig) {
 
-        logCommand(
-            '!fact',
-            message.author.username,
-            message.channel.id
-        );
-
-        const response =
-            await runFactCommand(
-                message.author.username
-            );
-
-        await message.reply(
-            formatCommandResponse(
-                'FACT',
-                response
-            )
-        );
-
-        return true;
+        return false;
     }
 
-    // JOKE
-    if (content === '!joke') {
+    await executeCommand(
 
-        await message.channel.sendTyping();
+        message,
 
-        logCommand(
-            '!joke',
-            message.author.username,
-            message.channel.id
-        );
+        commandConfig,
 
-        const response =
-            await runJokeCommand(
-                message.author.username
-            );
+        content
+    );
 
-        await message.reply(
-    formatCommandResponse(
-        'HUMOR',
-        response
-    )
-);
-
-        return true;
-    }
-
-    // MOTIVATIONAL
-    if (content === '!motivate') {
-
-        await message.channel.sendTyping();
-
-        logCommand(
-            '!motivate',
-            message.author.username,
-            message.channel.id
-        );
-
-        const response =
-            await runMotivateCommand(
-                message.author.username
-            );
-
-        await message.reply(
-    formatCommandResponse(
-        'MOTIVATION',
-        response
-    )
-);
-
-        return true;
-    }
-
-    // OBSERVATION
-    if (content === '!observe') {
-
-        await message.channel.sendTyping();
-
-        logCommand(
-            '!observe',
-            message.author.username,
-            message.channel.id
-        );
-
-        const response =
-            await runObserveCommand(
-                message.author.username
-            );
-
-        await message.reply(
-    formatCommandResponse(
-        'OBSERVATION',
-        response
-    )
-);
-
-        return true;
-    }
-
-    // STATUS
-    if (content === '!status') {
-
-        await message.channel.sendTyping();
-
-        logCommand(
-            '!status',
-            message.author.username,
-            message.channel.id
-        );
-
-        const response =
-            await runStatusCommand(
-                message.author.username
-            );
-
-        await message.reply(
-    formatCommandResponse(
-        'STATUS',
-        response
-    )
-);
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 module.exports = {
