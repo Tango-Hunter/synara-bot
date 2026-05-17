@@ -10,7 +10,7 @@ const {
     getCooldownSeconds,
     isCooldownActive,
     updateCooldown
-} = require('../../utils/cooldowns');
+} = require('../utils/cooldowns');
 
 async function handleCooldown(message) {
 

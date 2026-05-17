@@ -8,31 +8,31 @@
 
 const {
     runFactCommand
-} = require('../../commands/fact');
+} = require('../commands/fact');
 
 const {
     runJokeCommand
-} = require('../../commands/joke');
+} = require('../commands/joke');
 
 const {
     runMotivateCommand
-} = require('../../commands/motivate');
+} = require('../commands/motivate');
 
 const {
     runObserveCommand
-} = require('../../commands/observe');
+} = require('../commands/observe');
 
 const {
     runStatusCommand
-} = require('../../commands/status');
+} = require('../commands/status');
 
 const {
     formatCommandResponse
-} = require('../../utils/command-formatter');
+} = require('../../shared/utils/command-formatter');
 
 const {
     logCommand
-} = require('../../utils/command-logger');
+} = require('../../core/logging/command-logger');
 
 const commandRegistry = {
 

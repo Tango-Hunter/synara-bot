@@ -14,11 +14,11 @@ const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
 
 const createMessageRoutes =
-    require('./routes/messages');
+    require('./discord/routes/messages');
 const {
     discordMessageHandler
 } = require(
-    './handlers/discord/message-handler'
+    './discord/handler/message-handler'
 );
 
 const client = new Client({

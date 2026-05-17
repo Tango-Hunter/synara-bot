@@ -7,7 +7,7 @@
  */
 
 const cooldownSettings =
-    require('../config/role-cooldowns');
+    require('../../core/config/role-cooldowns');
 
 const cooldowns = new Map();
 

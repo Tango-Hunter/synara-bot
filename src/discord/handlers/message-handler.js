@@ -8,15 +8,15 @@
 
 const {
     shouldIgnoreMessage
-} = require('../../utils/self-protection');
+} = require('../utils/self-protection');
 
 const {
     isAllowedChannel
-} = require('../../utils/allowed-channels');
+} = require('../utils/allowed-channels');
 
 const {
     logError
-} = require('../../utils/logger');
+} = require('../../core/logging/logger');
 
 const {
     handleCommands

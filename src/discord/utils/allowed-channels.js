@@ -6,8 +6,8 @@
  * Description: Permits Bot responses on only allowed channels.
  */
 
-const settings =
-    require('../config/settings');
+const settings = 
+    require('../../core/config/settings');
 
 function isAllowedChannel(channelId) {
 

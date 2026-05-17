@@ -6,7 +6,7 @@
  * Description: Prompt for the !observe command.
  */
 
-const { sendToN8N } = require('../services/webhook-service');
+const { sendToN8N } = require('../../core/services/webhook-service');
 
 async function runObserveCommand(username) {
 

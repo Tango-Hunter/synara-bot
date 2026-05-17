@@ -8,15 +8,15 @@
 
 const {
     sanitizeMessage
-} = require('../../utils/sanitize-message');
+} = require('../../shared/utils/sanitize-message');
 
 const {
     splitIntoChunks
-} = require('../../utils/response-manager');
+} = require('../../shared/utils/response-manager');
 
 const {
     sendToN8N
-} = require('../../services/webhook-service');
+} = require('../../core/services/webhook-service');
 
 async function handleMention(
     message,

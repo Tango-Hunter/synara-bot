@@ -12,11 +12,11 @@ const router = express.Router();
 
 const {
     logError
-} = require('../utils/logger');
+} = require('../../core/logging/logger');
 
 const {
     apiAuth
-} = require('../middleware/api-auth');
+} = require('../../core/security/api-auth');
 
 module.exports = (client) => {
 
