@@ -5,3 +5,18 @@
  * Date Modified: 5/13/26
  * Description: Formats the output message for commands.
  */
+
+function formatCommandResponse(
+    title,
+    response
+) {
+
+    return (
+        `## ${title}\n\n` +
+        `${response}`
+    );
+}
+
+module.exports = {
+    formatCommandResponse
+};
