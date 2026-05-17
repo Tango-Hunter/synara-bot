@@ -13,6 +13,7 @@ const path = require('path');
 const logFilePath = path.join(
     __dirname,
     '..',
+    '..',
     'logs',
     'commands.log'
 );
