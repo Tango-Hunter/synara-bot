@@ -12,11 +12,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-app.use(express.json());
-app.use(
-    '/',
-    createMessageRoutes(client)
-);
+
 const PORT = process.env.PORT || 3000;
 
 const client = 
@@ -32,6 +28,12 @@ const {
 const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
+
+app.use(express.json());
+app.use(
+    '/',
+    createMessageRoutes(client)
+);
 
 // ===============================
 // Listens to Allowed Channels for SYNARA mentions
