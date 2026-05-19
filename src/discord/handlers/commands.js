@@ -2,7 +2,7 @@
  * Title: commands.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/16/26
+ * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
 
@@ -78,32 +78,62 @@ async function executeCommand(
     commandName
 ) {
 
-    await message.channel.sendTyping();
+    try {
 
-    logCommand(
+        await message.channel.sendTyping();
 
-        commandName,
+        logCommand(
 
-        message.author.username,
+            commandName,
 
-        message.channel.id
-    );
+            message.author.username,
 
-    const response =
-        await commandConfig.execute(
-
-            message.author.username
+            message.channel.id
         );
 
-    await message.reply(
+        const response =
+            await commandConfig.execute({
 
-        formatCommandResponse(
+                username:
+                    message.author.username,
 
-            commandConfig.title,
+                platform:
+                    'Discord'
+            });
 
-            response
-        )
-    );
+        await message.reply(
+
+            formatCommandResponse(
+
+                commandConfig.title,
+
+                response
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+
+            '[COMMAND EXECUTION ERROR]',
+
+            {
+
+                command: commandName,
+
+                user:
+                    message.author.username,
+
+                error:
+                    error.message
+            }
+        );
+
+        await message.reply(
+
+            'System interruption detected.'
+        );
+    }
 }
 
 async function handleCommands(message) {

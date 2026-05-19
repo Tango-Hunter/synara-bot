@@ -2,18 +2,45 @@
  * Title: observe.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/16/26
+ * Date Modified: 5/19/26
  * Description: Prompt for the !observe command.
  */
 
-const { sendToN8N } = require('../../core/services/webhook-service');
+const {
 
-async function runObserveCommand(username) {
+    generateResponse
 
-    const prompt = `
+} = require(
+
+    '../../core/services/openai-service'
+);
+
+const {
+
+    buildSystemPrompt
+
+} = require(
+
+    '../../synara/cognition/prompt-builder'
+);
+
+async function runObserveCommand({
+
+    username,
+
+    platform
+
+}) {
+
+    const systemPrompt =
+        buildSystemPrompt();
+
+    const userPrompt = `
+
 Generate a thoughtful observational statement as SYNARA.
 
 Requirements:
+
 - Focus on human behavior, emotions, habits, creativity, ambition, relationships, or patterns
 - Tone should feel intelligent, calm, reflective, and slightly analytical
 - Keep under 120 words
@@ -21,11 +48,23 @@ Requirements:
 - Avoid repetitive phrasing
 - Make it feel like a genuine observation rather than a quote
 - Occasionally reference systems, signals, momentum, or patterns naturally
+
+Current User:
+${username}
+
+Current Platform:
+${platform}
 `;
 
-    return await sendToN8N({
-        content: prompt,
-        username
+    return await generateResponse({
+
+        systemPrompt,
+
+        userPrompt,
+
+        //temperature: 0.95,
+
+        maxTokens: 300
     });
 }
 

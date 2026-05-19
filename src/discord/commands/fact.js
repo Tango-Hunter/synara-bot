@@ -2,31 +2,63 @@
  * Title: fact.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/16/26
+ * Date Modified: 5/19/26
  * Description: Prompt for the !fact command.
  */
 
-const { sendToN8N } = require('../../core/services/webhook-service');
+const {
+    generateResponse
+} = require('../../core/services/openai-service');
 
-async function runFactCommand(username) {
+const {
+    buildSystemPrompt
+} = require('../../synara/cognition/prompt-builder');
 
-    const prompt = `
+async function runFactCommand({
+
+    username,
+    platform
+
+}) {
+
+    const systemPrompt =
+        buildSystemPrompt();
+
+    const userPrompt = `
+
 Generate a fascinating short fact as SYNARA.
 
 Requirements:
+
 - Must be true and accurate
-- Topics can include science, history, psychology, space, technology, biology, or strange human behavior
+- Topics can include:
+  science,
+  history,
+  psychology,
+  space,
+  technology,
+  biology,
+  or strange human behavior
 - Keep under 120 words
 - Make it feel intelligent and conversational
 - Avoid sounding like trivia website copy
 - Occasionally include subtle observational commentary
 - Avoid repetitive openings
 - Do not use emojis or hashtags
+
+Current User:
+${username}
+
+Current Platform:
+${platform}
 `;
 
-    return await sendToN8N({
-        content: prompt,
-        username
+    return await generateResponse({
+
+        systemPrompt,
+        userPrompt,
+        //temperature: 0.85,
+        maxTokens: 150
     });
 }
 

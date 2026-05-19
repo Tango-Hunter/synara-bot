@@ -2,7 +2,7 @@
  * Title: mentions.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/16/26
+ * Date Modified: 5/19/26
  * Description: Only sends message if SYNARA was correctly mentioned.
  */
 
@@ -15,8 +15,12 @@ const {
 } = require('../../shared/utils/response-manager');
 
 const {
-    sendToN8N
-} = require('../../core/services/webhook-service');
+    generateResponse
+} = require('../../core/services/openai-service');
+
+const {
+    buildSystemPrompt
+} = require('../../synara/cognition/prompt-builder');
 
 async function handleMention(
     message,
@@ -40,14 +44,47 @@ async function handleMention(
             client
         );
 
+    const systemPrompt =
+        buildSystemPrompt();
+
+    const userPrompt = `
+
+The following message was directed toward SYNARA inside Discord.
+
+Respond naturally as SYNARA.
+
+Requirements:
+
+- Stay conversational
+- Remain calm and observant
+- Avoid excessive verbosity
+- Avoid sounding robotic
+- Maintain SYNARA identity
+- Respond directly to the user message
+- Keep responses concise unless depth is warranted
+- Avoid emojis
+- Avoid roleplay formatting
+
+Current User:
+${message.author.username}
+
+Platform:
+Discord
+
+User Message:
+${cleanedMessage}
+`;
+
     let aiResponse =
-        await sendToN8N({
+        await generateResponse({
 
-            content:
-                cleanedMessage,
+            systemPrompt,
 
-            username:
-                message.author.username
+            userPrompt,
+
+            temperature: 0.85,
+
+            maxTokens: 400
         });
 
     const responseChunks =

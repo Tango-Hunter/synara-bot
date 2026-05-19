@@ -17,9 +17,13 @@ const createMessageRoutes =
     require('./discord/routes/messages');
 const {
     discordMessageHandler
-} = require(
-    './discord/handler/message-handler'
-);
+} = require('./discord/handlers/message-handler');
+const {
+    startDailyQuestionScheduler
+} = require('./discord/scheduler/qotd-scheduler');
+const {
+    startNightlyMessageScheduler
+} = require('./discord/scheduler/motivational-scheduler');
 
 const client = new Client({
     intents: [
@@ -42,6 +46,9 @@ const PORT = process.env.PORT || 3000;
 client.once('clientReady', () => {
 
     console.log(`SYNARA online as ${client.user.tag}`);
+
+    startDailyQuestionScheduler();
+    startNightlyMessageScheduler();
 
     client.user.setPresence({
         activities: [
