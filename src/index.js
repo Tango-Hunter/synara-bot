@@ -11,8 +11,16 @@
 // ===============================
 require('dotenv').config();
 const express = require('express');
-const { Client, GatewayIntentBits } = require('discord.js');
+const app = express();
+app.use(express.json());
+app.use(
+    '/',
+    createMessageRoutes(client)
+);
+const PORT = process.env.PORT || 3000;
 
+const client = 
+    require('./core/config/discord-client');
 const createMessageRoutes =
     require('./discord/routes/messages');
 const {
@@ -24,21 +32,6 @@ const {
 const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
-
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
-});
-const app = express();
-app.use(express.json());
-app.use(
-    '/',
-    createMessageRoutes(client)
-);
-const PORT = process.env.PORT || 3000;
 
 // ===============================
 // Listens to Allowed Channels for SYNARA mentions
