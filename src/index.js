@@ -1,0 +1,74 @@
+/**
+ * Title: index.js
+ * Author: Tango Hunter
+ * Date Created: 5/11/26
+ * Date Modified: 5/15/26
+ * Description: Discord Bot messaging service.
+ */
+
+// ===============================
+// Creates server requirements
+// ===============================
+require('dotenv').config();
+const express = require('express');
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+const client = 
+    require('./core/config/discord-client');
+const createMessageRoutes =
+    require('./discord/routes/messages');
+const {
+    discordMessageHandler
+} = require('./discord/handlers/message-handler');
+const {
+    startDailyQuestionScheduler
+} = require('./discord/scheduler/qotd-scheduler');
+const {
+    startNightlyMessageScheduler
+} = require('./discord/scheduler/motivational-scheduler');
+
+app.use(express.json());
+app.use(
+    '/',
+    createMessageRoutes(client)
+);
+
+// ===============================
+// Listens to Allowed Channels for SYNARA mentions
+// ===============================
+client.once('clientReady', () => {
+
+    console.log(`SYNARA online as ${client.user.tag}`);
+
+    startDailyQuestionScheduler();
+    startNightlyMessageScheduler();
+
+    client.user.setPresence({
+        activities: [
+          {
+            name: 'over the network',
+            type: 3
+          }
+        ],
+        status: 'online'
+    });
+});
+
+// ===============================
+// Sends SYNARA responses
+// ===============================
+discordMessageHandler(client);
+
+// ===============================
+// Initialization
+// ===============================
+client.login(process.env.DISCORD_TOKEN);
+
+app.listen(PORT, () => {
+
+    console.log(
+        `API server running on port ${PORT}`
+    );
+});
