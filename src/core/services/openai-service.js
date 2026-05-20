@@ -2,16 +2,36 @@
  * Title: openai-service.js
  * Author: Tango Hunter
  * Date Created: 5/19/26
- * Date Modified: 5/19/26
- * Description: OpenAI Response Service.
+ * Date Modified: 5/20/26
+ * Description:
+ * Centralized OpenAI service with:
+ * - timeout protection
+ * - retry handling
+ * - exponential backoff
+ * - graceful fallbacks
  */
 
 const OpenAI = require('openai');
 
 const openai = new OpenAI({
-
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey:
+        process.env.OPENAI_API_KEY
 });
+
+const MAX_RETRIES = 3;
+const REQUEST_TIMEOUT_MS = 15000;
+const BASE_RETRY_DELAY_MS = 1000;
+
+function delay(ms) {
+
+    return new Promise(
+
+        resolve => setTimeout(
+            resolve,
+            ms
+        )
+    );
+}
 
 async function generateResponse({
 
@@ -19,54 +39,118 @@ async function generateResponse({
 
     userPrompt,
 
-    //temperature = 0.8,
-
     maxTokens = 500
 
 }) {
 
-    try {
+    for (
+        let attempt = 1;
+        attempt <= MAX_RETRIES;
+        attempt++
+    ) {
 
-        const completion =
-            await openai.chat.completions.create({
+        try {
 
-                model: 'gpt-5.5',
+            console.log(
 
-                messages: [
+                `[OPENAI] Attempt ${attempt}/${MAX_RETRIES}`
+            );
 
-                    {
-                        role: 'system',
-                        content: systemPrompt
-                    },
+            const completion =
+                await Promise.race([
 
-                    {
-                        role: 'user',
-                        content: userPrompt
-                    }
-                ],
+                    openai.chat.completions.create({
 
-                //temperature,
+                        model: 'gpt-5.5',
 
-                max_completion_tokens: maxTokens
-            });
+                        messages: [
 
-        return completion
-            .choices[0]
-            .message
-            .content;
+                            {
+                                role: 'system',
+                                content: systemPrompt
+                            },
 
-    } catch (error) {
+                            {
+                                role: 'user',
+                                content: userPrompt
+                            }
+                        ],
 
-        console.error(
+                        max_completion_tokens:
+                            maxTokens
+                    }),
 
-            '[OPENAI SERVICE ERROR]',
+                    new Promise((_, reject) =>
 
-            error
-        );
+                        setTimeout(() =>
 
-        return (
-            'System interruption detected.'
-        );
+                            reject(
+                                new Error(
+                                    'OpenAI request timed out.'
+                                )
+                            ),
+
+                            REQUEST_TIMEOUT_MS
+                        )
+                    )
+                ]);
+
+            const response =
+                completion
+                    .choices?.[0]
+                    ?.message
+                    ?.content
+                    ?.trim();
+
+            if (!response) {
+
+                throw new Error(
+                    'Empty AI response received.'
+                );
+            }
+
+            return response;
+
+        } catch (error) {
+
+            console.error(
+
+                `[OPENAI ERROR] Attempt ${attempt}`,
+
+                error.message
+            );
+
+            const isFinalAttempt =
+                attempt === MAX_RETRIES;
+
+            if (isFinalAttempt) {
+
+                console.error(
+
+                    '[OPENAI] All retry attempts failed.'
+                );
+
+                return (
+                    'System instability detected. Response generation temporarily unavailable.'
+                );
+            }
+
+            const retryDelay =
+                BASE_RETRY_DELAY_MS *
+                Math.pow(
+                    2,
+                    attempt - 1
+                );
+
+            console.log(
+
+                `[OPENAI] Retrying in ${retryDelay}ms...`
+            );
+
+            await delay(
+                retryDelay
+            );
+        }
     }
 }
 
