@@ -19,6 +19,10 @@ const {
 } = require('../../core/logging/logger');
 
 const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
+const {
     handleCommands
 } = require('./commands');
 
@@ -87,19 +91,21 @@ function discordMessageHandler(client) {
 
         } catch (error) {
 
-            logError(
-                'MESSAGE HANDLER ERROR',
-                {
+            logError({
+                
+                type:
+                    ERROR_TYPES.DISCORD_ERROR,
+                source:
+                    'message-handler',
+                message:
+                    error.message,
+                details: {
                     user:
                         message.author.username,
-
                     channel:
-                        message.channel.id,
-
-                    error:
-                        error.message
+                        message.channel.id
                 }
-            );
+            });
 
             return await message.reply(
                 'Signal interference detected.'

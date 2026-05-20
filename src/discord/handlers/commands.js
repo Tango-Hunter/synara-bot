@@ -31,43 +31,38 @@ const {
 } = require('../../shared/utils/command-formatter');
 
 const {
+    logError,
     logCommand
-} = require('../../core/logging/command-logger');
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
 
 const commandRegistry = {
 
     '!fact': {
-
         title: 'FACT',
-
         execute: runFactCommand
     },
 
     '!joke': {
-
         title: 'HUMOR',
-
         execute: runJokeCommand
     },
 
     '!motivate': {
-
         title: 'MOTIVATION',
-
         execute: runMotivateCommand
     },
 
     '!observe': {
-
         title: 'OBSERVATION',
-
         execute: runObserveCommand
     },
 
     '!status': {
-
         title: 'STATUS',
-
         execute: runStatusCommand
     }
 };
@@ -85,9 +80,7 @@ async function executeCommand(
         logCommand(
 
             commandName,
-
             message.author.username,
-
             message.channel.id
         );
 
@@ -96,7 +89,6 @@ async function executeCommand(
 
                 username:
                     message.author.username,
-
                 platform:
                     'Discord'
             });
@@ -106,31 +98,29 @@ async function executeCommand(
             formatCommandResponse(
 
                 commandConfig.title,
-
                 response
             )
         );
 
     } catch (error) {
 
-        console.error(
+        logError({
 
-            '[COMMAND EXECUTION ERROR]',
-
-            {
-
-                command: commandName,
-
+            type:
+                ERROR_TYPES.DISCORD_ERROR,
+            source:
+                'commands-handler',
+            message:
+                error.message,
+            details: {
+                command:
+                    commandName,
                 user:
-                    message.author.username,
-
-                error:
-                    error.message
+                    message.author.username
             }
-        );
+        });
 
         await message.reply(
-
             'System interruption detected.'
         );
     }
@@ -147,16 +137,13 @@ async function handleCommands(message) {
         commandRegistry[content];
 
     if (!commandConfig) {
-
         return false;
     }
 
     await executeCommand(
 
         message,
-
         commandConfig,
-
         content
     );
 

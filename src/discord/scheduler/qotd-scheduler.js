@@ -20,6 +20,15 @@ const {
     sendDiscordMessage
 } = require('../services/post-message');
 
+const {
+    logInfo,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 async function runDailyQuestion() {
 
     try {
@@ -73,16 +82,24 @@ Requirements:
                 });
             }
 
-        console.log(
-            '[DAILY QUESTION] Posted successfully.'
-        );
+        logInfo({
+            source:
+                'qotd-scheduler',
+            message:
+                'Question of the day posted successfully.'
+        });
 
     } catch (error) {
 
-        console.error(
-            '[DAILY QUESTION ERROR]',
-            error
-        );
+        logError({
+
+            type:
+                ERROR_TYPES.SCHEDULER_ERROR,
+            source:
+                'qotd-scheduler',
+            message:
+                error.message
+        });
     }
 }
 

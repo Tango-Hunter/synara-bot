@@ -15,6 +15,10 @@ const {
 } = require('../../core/logging/logger');
 
 const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
+const {
     apiAuth
 } = require('../../core/security/api-auth');
 
@@ -49,12 +53,15 @@ module.exports = (client) => {
 
         } catch (error) {
 
-            logError(
-                'MESSAGE ROUTE ERROR',
-                {
-                    error: error.message
-                }
-            );
+            logError({
+
+                type:
+                    ERROR_TYPES.DISCORD_ERROR,
+                source:
+                    'message-route',
+                message:
+                    error.message
+            });
 
             return res.status(500).json({
                 error: 'Failed to send message'

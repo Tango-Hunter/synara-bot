@@ -21,6 +21,13 @@ const openai = new OpenAI({
 const {
     validateResponse
 } = require('./response-validator');
+const {
+    logError,
+    logInfo
+} = require('../logging/logger');
+const {
+    ERROR_TYPES
+} = require('../logging/error-types');
 
 const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 15000;
@@ -55,10 +62,12 @@ async function generateResponse({
 
         try {
 
-            console.log(
-
-                `[OPENAI] Attempt ${attempt}/${MAX_RETRIES}`
-            );
+            logInfo({
+                source:
+                    'openai-service',
+                message:
+                    `Attempt ${attempt}/${MAX_RETRIES}`
+            });
 
             const completion =
                 await Promise.race([
@@ -114,22 +123,33 @@ async function generateResponse({
 
         } catch (error) {
 
-            console.error(
+            logError({
 
-                `[OPENAI ERROR] Attempt ${attempt}`,
-
-                error.message
-            );
+                type:
+                    ERROR_TYPES.OPENAI_ERROR,
+                source:
+                    'openai-service',
+                message:
+                    error.message,
+                details: {
+                        attempt
+                    }
+            });
 
             const isFinalAttempt =
                 attempt === MAX_RETRIES;
 
             if (isFinalAttempt) {
 
-                console.error(
+                logError({
 
-                    '[OPENAI] All retry attempts failed.'
-                );
+                    type:
+                        ERROR_TYPES.OPENAI_ERROR,
+                    source:
+                        'openai-service',
+                    message:
+                        'All retry attempts failed.'
+                });
 
                 return (
                     'System instability detected. Response generation temporarily unavailable.'
@@ -143,10 +163,13 @@ async function generateResponse({
                     attempt - 1
                 );
 
-            console.log(
+            logInfo({
 
-                `[OPENAI] Retrying in ${retryDelay}ms...`
-            );
+                source:
+                    'openai-service',
+                message:
+                    `Retrying in ${retryDelay}ms`
+            });
 
             await delay(
                 retryDelay

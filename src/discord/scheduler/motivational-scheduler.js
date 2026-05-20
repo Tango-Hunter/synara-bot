@@ -20,12 +20,20 @@ const {
     sendDiscordMessage
 } = require('../services/post-message');
 
+const {
+    logInfo,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 async function runNightlyMessage() {
 
     try {
 
         console.log(
-
             '[NIGHTLY MESSAGE] Generating message...'
         );
 
@@ -88,16 +96,24 @@ Requirements:
             );
         }
 
-        console.log(
-            '[NIGHTLY MESSAGE] Posted successfully.'
-        );
+        logInfo({
+            source:
+                'motivational-scheduler',
+            message:
+                'Nightly message posted successfully.'
+        });
 
     } catch (error) {
 
-        console.error(
-            '[NIGHTLY MESSAGE ERROR]',
-            error
-        );
+        logError({
+
+            type:
+                ERROR_TYPES.SCHEDULER_ERROR,
+            source:
+                'motivational-scheduler',
+            message:
+                error.message
+        });
     }
 }
 
