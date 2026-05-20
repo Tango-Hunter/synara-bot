@@ -18,6 +18,10 @@ const openai = new OpenAI({
         process.env.OPENAI_API_KEY
 });
 
+const {
+    validateResponse
+} = require('./response-validator');
+
 const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 15000;
 const BASE_RETRY_DELAY_MS = 1000;
@@ -95,21 +99,18 @@ async function generateResponse({
                     )
                 ]);
 
-            const response =
+            const rawResponse =
                 completion
                     .choices?.[0]
                     ?.message
-                    ?.content
-                    ?.trim();
+                    ?.content;
 
-            if (!response) {
-
-                throw new Error(
-                    'Empty AI response received.'
+            const validatedResponse =
+                validateResponse(
+                    rawResponse
                 );
-            }
 
-            return response;
+            return validatedResponse;
 
         } catch (error) {
 
