@@ -11,7 +11,7 @@ module.exports = {
     cooldownSeconds: 15,
 
     allowedChannels: [
-        '1500545498745147482', // SYNARA test channel
+        //'1500545498745147482', // SYNARA test channel
         '1430018485408366740', // Void Army #general
         '1416462288575135746', // Hunter's Lodge #general
         '1429854951378518198', // Hunter's Lodge #announcements
