@@ -21,6 +21,10 @@ const {
 } = require('../services/post-message');
 
 const {
+    registerScheduler
+} = require('../../core/scheduler/scheduler-guard');
+
+const {
     logInfo,
     logError
 } = require('../../core/logging/logger');
@@ -104,6 +108,14 @@ Requirements:
 }
 
 function startDailyQuestionScheduler() {
+
+    const schedulerRegistered =
+        registerScheduler(
+            'daily-question'
+        );
+    if (!schedulerRegistered) {
+        return;
+    }
 
     cron.schedule(
 

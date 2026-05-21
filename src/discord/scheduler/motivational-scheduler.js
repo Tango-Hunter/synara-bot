@@ -21,6 +21,10 @@ const {
 } = require('../services/post-message');
 
 const {
+    registerScheduler
+} = require('../../core/scheduler/scheduler-guard');
+
+const {
     logInfo,
     logError
 } = require('../../core/logging/logger');
@@ -118,6 +122,14 @@ Requirements:
 }
 
 function startNightlyMessageScheduler() {
+
+    const schedulerRegistered =
+        registerScheduler(
+            'nightly-message'
+        );
+    if (!schedulerRegistered) {
+        return;
+    }
 
     cron.schedule(
 
