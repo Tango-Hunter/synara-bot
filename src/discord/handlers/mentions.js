@@ -23,6 +23,11 @@ const {
 } = require('../../synara/cognition/prompt-builder');
 
 const {
+    addUserMemory,
+    buildMemoryContext
+} = require('../../core/memory/memory-manager');
+
+const {
     logInfo
 } = require('../../core/logging/logger');
 
@@ -51,6 +56,11 @@ async function handleMention(
     const systemPrompt =
         buildSystemPrompt();
 
+    const memoryContext =
+        buildMemoryContext(
+            message.author.id
+        );
+
     const userPrompt = `
 
 The following message was directed toward SYNARA inside Discord.
@@ -75,7 +85,10 @@ ${message.author.username}
 Platform:
 Discord
 
-User Message:
+Previous Conversation Context:
+${memoryContext || 'No prior conversation context.'}
+
+Current User Message:
 ${cleanedMessage}
 `;
 
@@ -87,6 +100,15 @@ ${cleanedMessage}
             //temperature: 0.85,
             maxTokens: 400
         });
+
+    addUserMemory({
+        userId:
+            message.author.id,
+        username:
+            message.author.username,
+        messageContent:
+            cleanedMessage
+    });
 
     logInfo({
 
