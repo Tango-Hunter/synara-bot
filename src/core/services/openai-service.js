@@ -19,6 +19,10 @@ const openai = new OpenAI({
 });
 
 const {
+    openaiConfig
+} = require('../config/openai-config');
+
+const {
     validateResponse
 } = require('./response-validator');
 const {
@@ -29,9 +33,12 @@ const {
     ERROR_TYPES
 } = require('../logging/error-types');
 
-const MAX_RETRIES = 3;
-const REQUEST_TIMEOUT_MS = 15000;
-const BASE_RETRY_DELAY_MS = 1000;
+const MAX_RETRIES =
+    openaiConfig.maxRetries;
+const REQUEST_TIMEOUT_MS =
+    openaiConfig.timeoutMs;
+const BASE_RETRY_DELAY_MS =
+    openaiConfig.baseRetryDelayMs;
 
 function delay(ms) {
 
@@ -74,7 +81,8 @@ async function generateResponse({
 
                     openai.chat.completions.create({
 
-                        model: 'gpt-5.5',
+                        model:
+                            openaiConfig.model,
 
                         messages: [
 

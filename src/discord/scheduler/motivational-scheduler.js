@@ -22,7 +22,19 @@ const {
 
 const {
     registerScheduler
-} = require('../../core/scheduler/scheduler-guard');
+} = require('../../core/scheduler/schedule-guard');
+
+const {
+    schedulerConfig
+} = require('../../core/config/scheduler-config');
+
+const {
+    discordConfig
+} = require('../../core/config/discord-config');
+
+const {
+    featureFlags
+} = require('../../core/config/feature-flags');
 
 const {
     logInfo,
@@ -37,9 +49,12 @@ async function runNightlyMessage() {
 
     try {
 
-        console.log(
-            '[NIGHTLY MESSAGE] Generating message...'
-        );
+        logInfo({
+            source:
+                'motivational-scheduler',
+            message:
+                'Generating nightly message.'
+        });
 
         const systemPrompt =
             buildSystemPrompt();
@@ -83,10 +98,8 @@ Requirements:
                 maxTokens: 320
             });
 
-        const channelIds = [
-            '1430018485408366740', // Void Army #general
-            '1416462288575135746', // Hunter's Lodge #general
-        ];
+        const channelIds =
+            discordConfig.channels.nightlyMessages;
 
         for (const channelId of channelIds) {
 
@@ -95,9 +108,12 @@ Requirements:
                 message: response
             });
 
-            console.log(
-                `[NIGHTLY MESSAGE] Posted to ${channelId}`
-            );
+            logInfo({
+                source:
+                    'motivational-scheduler',
+                message:
+                    `Nightly message posted to ${channelId}`
+            });
         }
 
         logInfo({
@@ -123,6 +139,12 @@ Requirements:
 
 function startNightlyMessageScheduler() {
 
+    if (
+        !featureFlags.nightlyScheduler
+    ) {
+        return;
+    }
+
     const schedulerRegistered =
         registerScheduler(
             'nightly-message'
@@ -133,7 +155,7 @@ function startNightlyMessageScheduler() {
 
     cron.schedule(
 
-        '0 20 * * *',
+        schedulerConfig.schedules.nightlyMessage,
 
         async () => {
             await runNightlyMessage();
@@ -142,13 +164,16 @@ function startNightlyMessageScheduler() {
 
         {
             timezone:
-                'America/New_York'
+                schedulerConfig.timezone
         }
     );
 
-    console.log(
-        '[SCHEDULER] Nightly Message Scheduler Active'
-    );
+    logInfo({
+        source:
+            'motivational-scheduler',
+        message:
+            'Nightly scheduler registered.'
+    });
 }
 
 module.exports = {

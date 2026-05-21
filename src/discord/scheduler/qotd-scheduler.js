@@ -22,7 +22,19 @@ const {
 
 const {
     registerScheduler
-} = require('../../core/scheduler/scheduler-guard');
+} = require('../../core/scheduler/schedule-guard');
+
+const {
+    schedulerConfig
+} = require('../../core/config/scheduler-config');
+
+const {
+    discordConfig
+} = require('../../core/config/discord-config');
+
+const {
+    featureFlags
+} = require('../../core/config/feature-flags');
 
 const {
     logInfo,
@@ -37,10 +49,12 @@ async function runDailyQuestion() {
 
     try {
 
-        console.log(
-
-            '[DAILY QUESTION] Generating question...'
-        );
+        logInfo({
+            source:
+                'qotd-scheduler',
+            message:
+                'Generating question of the day.'
+        });
 
         const systemPrompt =
             buildSystemPrompt();
@@ -67,16 +81,12 @@ Requirements:
             await generateResponse({
 
                 systemPrompt,
-
                 userPrompt,
-
                 maxTokens: 220
             });
 
-            const channelIds = [
-                '1430018485408366740', // Void Army #general
-                '1416462288575135746', // Hunter's Lodge #general
-            ];
+            const channelIds =
+                discordConfig.channels.qotd;
 
             for (const channelId of channelIds) {
 
@@ -109,6 +119,12 @@ Requirements:
 
 function startDailyQuestionScheduler() {
 
+    if (
+        !featureFlags.qotdScheduler
+    ) {
+        return;
+    }
+
     const schedulerRegistered =
         registerScheduler(
             'daily-question'
@@ -119,7 +135,7 @@ function startDailyQuestionScheduler() {
 
     cron.schedule(
 
-        '0 8 * * *',
+        schedulerConfig.schedules.qotd,
 
         async () => {
             await runDailyQuestion();
@@ -128,13 +144,16 @@ function startDailyQuestionScheduler() {
 
         {
             timezone:
-                'America/New_York'
+                schedulerConfig.timezone
         }
     );
 
-    console.log(
-        '[SCHEDULER] Daily Question Scheduler Active'
-    );
+    logInfo({
+        source:
+            'qotd-scheduler',
+        message:
+            'QOTD scheduler registered.'
+    });
 }
 
 module.exports = {

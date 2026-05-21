@@ -11,8 +11,8 @@ const {
 } = require('../utils/self-protection');
 
 const {
-    isAllowedChannel
-} = require('../utils/allowed-channels');
+    discordConfig
+} = require('../../core/config/discord-config');
 
 const {
     logError
@@ -53,7 +53,7 @@ function discordMessageHandler(client) {
 
             // Allowed channels only
             if (
-                !isAllowedChannel(
+                !discordConfig.channels.allowedResponses.includes(
                     message.channel.id
                 )
             ) {

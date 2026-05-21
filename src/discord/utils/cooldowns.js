@@ -6,20 +6,21 @@
  * Description: Handles user cooldown tracking.
  */
 
-const cooldownSettings =
-    require('../../core/config/role-cooldowns');
+const {
+    discordConfig
+} = require('../../core/config/discord-config');
 
 const cooldowns = new Map();
 
 function getCooldownSeconds(member) {
 
     let cooldown =
-        cooldownSettings.defaultCooldown;
+        discordConfig.cooldowns.defaultResponse;
 
     for (
         const [roleId, seconds]
         of Object.entries(
-            cooldownSettings.roleCooldowns
+            discordConfig.cooldowns.roleCooldowns
         )
     ) {
 
