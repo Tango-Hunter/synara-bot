@@ -22,6 +22,10 @@ const {
     buildSystemPrompt
 } = require('../../synara/cognition/prompt-builder');
 
+const {
+    logInfo
+} = require('../../core/logging/logger');
+
 async function handleMention(
     message,
     client
@@ -79,13 +83,18 @@ ${cleanedMessage}
         await generateResponse({
 
             systemPrompt,
-
             userPrompt,
-
-            temperature: 0.85,
-
+            //temperature: 0.85,
             maxTokens: 400
         });
+
+    logInfo({
+
+        source:
+            'mentions-handler',
+        message:
+            `AI response generated for ${message.author.username}`
+    });
 
     const responseChunks =
         splitIntoChunks(

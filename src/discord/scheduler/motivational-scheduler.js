@@ -20,14 +20,41 @@ const {
     sendDiscordMessage
 } = require('../services/post-message');
 
+const {
+    registerScheduler
+} = require('../../core/scheduler/schedule-guard');
+
+const {
+    schedulerConfig
+} = require('../../core/config/scheduler-config');
+
+const {
+    discordConfig
+} = require('../../core/config/discord-config');
+
+const {
+    featureFlags
+} = require('../../core/config/feature-flags');
+
+const {
+    logInfo,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 async function runNightlyMessage() {
 
     try {
 
-        console.log(
-
-            '[NIGHTLY MESSAGE] Generating message...'
-        );
+        logInfo({
+            source:
+                'motivational-scheduler',
+            message:
+                'Generating nightly message.'
+        });
 
         const systemPrompt =
             buildSystemPrompt();
@@ -71,10 +98,8 @@ Requirements:
                 maxTokens: 320
             });
 
-        const channelIds = [
-            '1430018485408366740', // Void Army #general
-            '1416462288575135746', // Hunter's Lodge #general
-        ];
+        const channelIds =
+            discordConfig.channels.nightlyMessages;
 
         for (const channelId of channelIds) {
 
@@ -83,29 +108,54 @@ Requirements:
                 message: response
             });
 
-            console.log(
-                `[NIGHTLY MESSAGE] Posted to ${channelId}`
-            );
+            logInfo({
+                source:
+                    'motivational-scheduler',
+                message:
+                    `Nightly message posted to ${channelId}`
+            });
         }
 
-        console.log(
-            '[NIGHTLY MESSAGE] Posted successfully.'
-        );
+        logInfo({
+            source:
+                'motivational-scheduler',
+            message:
+                'Nightly message posted successfully.'
+        });
 
     } catch (error) {
 
-        console.error(
-            '[NIGHTLY MESSAGE ERROR]',
-            error
-        );
+        logError({
+
+            type:
+                ERROR_TYPES.SCHEDULER_ERROR,
+            source:
+                'motivational-scheduler',
+            message:
+                error.message
+        });
     }
 }
 
 function startNightlyMessageScheduler() {
 
+    if (
+        !featureFlags.nightlyScheduler
+    ) {
+        return;
+    }
+
+    const schedulerRegistered =
+        registerScheduler(
+            'nightly-message'
+        );
+    if (!schedulerRegistered) {
+        return;
+    }
+
     cron.schedule(
 
-        '0 20 * * *',
+        schedulerConfig.schedules.nightlyMessage,
 
         async () => {
             await runNightlyMessage();
@@ -114,13 +164,16 @@ function startNightlyMessageScheduler() {
 
         {
             timezone:
-                'America/New_York'
+                schedulerConfig.timezone
         }
     );
 
-    console.log(
-        '[SCHEDULER] Nightly Message Scheduler Active'
-    );
+    logInfo({
+        source:
+            'motivational-scheduler',
+        message:
+            'Nightly scheduler registered.'
+    });
 }
 
 module.exports = {

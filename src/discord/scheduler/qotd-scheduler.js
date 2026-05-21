@@ -20,14 +20,41 @@ const {
     sendDiscordMessage
 } = require('../services/post-message');
 
+const {
+    registerScheduler
+} = require('../../core/scheduler/schedule-guard');
+
+const {
+    schedulerConfig
+} = require('../../core/config/scheduler-config');
+
+const {
+    discordConfig
+} = require('../../core/config/discord-config');
+
+const {
+    featureFlags
+} = require('../../core/config/feature-flags');
+
+const {
+    logInfo,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 async function runDailyQuestion() {
 
     try {
 
-        console.log(
-
-            '[DAILY QUESTION] Generating question...'
-        );
+        logInfo({
+            source:
+                'qotd-scheduler',
+            message:
+                'Generating question of the day.'
+        });
 
         const systemPrompt =
             buildSystemPrompt();
@@ -54,16 +81,12 @@ Requirements:
             await generateResponse({
 
                 systemPrompt,
-
                 userPrompt,
-
                 maxTokens: 220
             });
 
-            const channelIds = [
-                '1430018485408366740', // Void Army #general
-                '1416462288575135746', // Hunter's Lodge #general
-            ];
+            const channelIds =
+                discordConfig.channels.qotd;
 
             for (const channelId of channelIds) {
 
@@ -73,24 +96,46 @@ Requirements:
                 });
             }
 
-        console.log(
-            '[DAILY QUESTION] Posted successfully.'
-        );
+        logInfo({
+            source:
+                'qotd-scheduler',
+            message:
+                'Question of the day posted successfully.'
+        });
 
     } catch (error) {
 
-        console.error(
-            '[DAILY QUESTION ERROR]',
-            error
-        );
+        logError({
+
+            type:
+                ERROR_TYPES.SCHEDULER_ERROR,
+            source:
+                'qotd-scheduler',
+            message:
+                error.message
+        });
     }
 }
 
 function startDailyQuestionScheduler() {
 
+    if (
+        !featureFlags.qotdScheduler
+    ) {
+        return;
+    }
+
+    const schedulerRegistered =
+        registerScheduler(
+            'daily-question'
+        );
+    if (!schedulerRegistered) {
+        return;
+    }
+
     cron.schedule(
 
-        '0 8 * * *',
+        schedulerConfig.schedules.qotd,
 
         async () => {
             await runDailyQuestion();
@@ -99,13 +144,16 @@ function startDailyQuestionScheduler() {
 
         {
             timezone:
-                'America/New_York'
+                schedulerConfig.timezone
         }
     );
 
-    console.log(
-        '[SCHEDULER] Daily Question Scheduler Active'
-    );
+    logInfo({
+        source:
+            'qotd-scheduler',
+        message:
+            'QOTD scheduler registered.'
+    });
 }
 
 module.exports = {

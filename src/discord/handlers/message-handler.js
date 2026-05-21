@@ -11,12 +11,16 @@ const {
 } = require('../utils/self-protection');
 
 const {
-    isAllowedChannel
-} = require('../utils/allowed-channels');
+    discordConfig
+} = require('../../core/config/discord-config');
 
 const {
     logError
 } = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
 
 const {
     handleCommands
@@ -49,7 +53,7 @@ function discordMessageHandler(client) {
 
             // Allowed channels only
             if (
-                !isAllowedChannel(
+                !discordConfig.channels.allowedResponses.includes(
                     message.channel.id
                 )
             ) {
@@ -87,19 +91,21 @@ function discordMessageHandler(client) {
 
         } catch (error) {
 
-            logError(
-                'MESSAGE HANDLER ERROR',
-                {
+            logError({
+                
+                type:
+                    ERROR_TYPES.DISCORD_ERROR,
+                source:
+                    'message-handler',
+                message:
+                    error.message,
+                details: {
                     user:
                         message.author.username,
-
                     channel:
-                        message.channel.id,
-
-                    error:
-                        error.message
+                        message.channel.id
                 }
-            );
+            });
 
             return await message.reply(
                 'Signal interference detected.'

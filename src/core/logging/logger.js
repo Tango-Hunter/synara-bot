@@ -2,51 +2,197 @@
  * Title: logger.js
  * Author: Tango Hunter
  * Date Created: 5/13/26
- * Date Modified: 5/13/26
- * Description: Creates error logs.
+ * Date Modified: 5/20/26
+ * Description: Centralized structured logging system.
  */
 
 const fs = require('fs');
 
 const path = require('path');
 
-const logFilePath = path.join(
-    __dirname,
-    '..',
-    '..',
-    'logs',
-    'errors.log'
-);
+const logDirectory =
+    path.join(
+        __dirname,
+        '../../../logs'
+    );
 
-function logError(context, details) {
+const errorLogPath =
+    path.join(
+        logDirectory,
+        'errors.log'
+    );
 
-    const timestamp = new Date().toISOString();
+const commandLogPath =
+    path.join(
+        logDirectory,
+        'commands.log'
+    );
 
-    const logEntry = `
-[${timestamp}]
-[${context}]
-${JSON.stringify(details, null, 2)}
+const systemLogPath =
+    path.join(
+        logDirectory,
+        'system.log'
+    );
 
-`;
+if (
+    !fs.existsSync(
+        logDirectory
+    )
+) {
+    fs.mkdirSync(
+        logDirectory,
+        { recursive: true }
+    );
+}
 
-    console.error(logEntry);
+const logFiles = [
+    errorLogPath,
+    commandLogPath,
+    systemLogPath
+];
 
-    fs.appendFile(
-        logFilePath,
-        logEntry,
-        (error) => {
+for (const filePath of logFiles) {
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(
+            filePath,
+            ''
+        );
+    }
+}
 
-            if (error) {
+function buildLogEntry({
 
-                console.error(
-                    '[LOGGER FAILURE]',
-                    error
-                );
+    type,
+    source,
+    message,
+    details = null
+
+}) {
+
+    return {
+
+        timestamp:
+            new Date().toISOString(),
+
+        type,
+        source,
+        message,
+        details
+    };
+}
+
+function logError({
+
+    type,
+    source,
+    message,
+    details = null
+
+}) {
+
+    const logEntry =
+        buildLogEntry({
+
+            type,
+            source,
+            message,
+            details
+        });
+
+    console.error(
+        JSON.stringify(
+            logEntry,
+            null,
+            2
+        )
+    );
+
+    fs.appendFileSync(
+
+        errorLogPath,
+        JSON.stringify(
+            logEntry
+        ) + '\n'
+    );
+}
+
+function logInfo({
+
+    source,
+    message,
+    details = null
+
+}) {
+
+    const logEntry =
+        buildLogEntry({
+
+            type: 'INFO',
+            source,
+            message,
+            details
+        });
+
+    console.log(
+        JSON.stringify(
+            logEntry,
+            null,
+            2
+        )
+    );
+
+    fs.appendFileSync(
+        systemLogPath,
+        JSON.stringify(
+            logEntry
+        ) + '\n'
+    );
+}
+
+function logCommand({
+
+    command,
+    username,
+    channelId
+
+}) {
+
+    const logEntry =
+        buildLogEntry({
+
+            type:
+                'COMMAND',
+            source:
+                'discord-command',
+            message:
+                `${username} used ${command}`,
+
+            details: {
+                username,
+                command,
+                channelId
             }
-        }
+        });
+
+    console.log(
+        JSON.stringify(
+            logEntry,
+            null,
+            2
+        )
+    );
+
+    fs.appendFileSync(
+
+        commandLogPath,
+        JSON.stringify(
+            logEntry
+        ) + '\n'
     );
 }
 
 module.exports = {
-    logError
+    logError,
+    logInfo,
+    logCommand
 };
