@@ -15,6 +15,14 @@ const {
 } = require('../../core/config/discord-config');
 
 const {
+    trackMessage
+} = require('../../core/observation/observation-manager');
+
+const {
+    tryObservation
+} = require('../../core/observation/observation-generator');
+
+const {
     logError
 } = require('../../core/logging/logger');
 
@@ -51,6 +59,8 @@ function discordMessageHandler(client) {
                 return;
             }
 
+            trackMessage(message);
+
             // Commands
             const commandHandled =
                 await handleCommands(
@@ -78,6 +88,8 @@ function discordMessageHandler(client) {
                 message,
                 client
             );
+
+            await tryObservation(message);
 
         } catch (error) {
 
