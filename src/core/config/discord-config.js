@@ -20,19 +20,6 @@ const discordConfig = {
 
             '1430018485408366740', // Void Army #general
             '1416462288575135746'  // Hunter's Lodge #general
-        ],
-
-        allowedResponses: [
-
-            '1500545498745147482', // SYNARA test channel
-            '1430018485408366740', // Void Army #general
-            '1416462288575135746', // Hunter's Lodge #general
-            '1429854951378518198', // Hunter's Lodge #announcements
-            '1429842283984851026', // Hunter's Lodge #stream-updates
-            '1429853679229341868', // Hunter's Lodge #scheduled-events
-            '1472682346854482033', // Hunter's Lodge #tech-streams
-            '1500567172055957667', // Hunter's Lodge #synara
-            '1429853723789889618'  // Hunter's Lodge #self-promo
         ]
     },
 

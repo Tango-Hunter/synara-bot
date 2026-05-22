@@ -51,16 +51,6 @@ function discordMessageHandler(client) {
                 return;
             }
 
-            // Allowed channels only
-            if (
-                !discordConfig.channels.allowedResponses.includes(
-                    message.channel.id
-                )
-            ) {
-
-                return;
-            }
-
             // Commands
             const commandHandled =
                 await handleCommands(

@@ -28,6 +28,10 @@ const {
 } = require('../../core/memory/memory-manager');
 
 const {
+    buildChannelContext
+} = require('../services/channel-awareness');
+
+const {
     logInfo
 } = require('../../core/logging/logger');
 
@@ -61,6 +65,13 @@ async function handleMention(
             message.author.id
         );
 
+    buildChannelContext({
+        guildId:
+            message.guild.id,
+        channelId:
+            message.channel.id
+    })
+
     const userPrompt = `
 
 The following message was directed toward SYNARA inside Discord.
@@ -87,6 +98,8 @@ Discord
 
 Previous Conversation Context:
 ${memoryContext || 'No prior conversation context.'}
+
+${channelContext}
 
 Current User Message:
 ${cleanedMessage}
