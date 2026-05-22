@@ -25,6 +25,15 @@ const {
     updateObservationTime
 } = require('./observation-manager');
 
+const {
+    logInfo,
+    logError
+} = require('../logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../logging/error-types');
+
 async function tryObservation(
     message
 ) {
@@ -155,6 +164,15 @@ async function tryObservation(
     await message.channel.send(
         response
     );
+
+    logInfo({
+
+        source:
+            'observation-system',
+
+        message:
+            `Observation generated in ${message.channel.name}`
+    });
 }
 
 module.exports = {

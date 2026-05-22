@@ -89,7 +89,27 @@ function discordMessageHandler(client) {
                 client
             );
 
-            await tryObservation(message);
+            tryObservation(
+                message
+            ).catch(error => {
+
+                logError({
+
+                    type:
+                        ERROR_TYPES.SYSTEM_ERROR,
+                    source:
+                        'observation-system',
+                    message:
+                        error.message,
+
+                    details: {
+                        channel:
+                            message.channel.name,
+                        user:
+                            message.author.username
+                    }
+                });
+            });
 
         } catch (error) {
 
