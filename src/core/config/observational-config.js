@@ -9,9 +9,9 @@
 const observationConfig = {
 
     enabled: true,
-    minimumMessages: 3,
-    observationChance: 1,
-    cooldownMinutes: 1,
+    minimumMessages: 12,
+    observationChance: 0.1,
+    cooldownMinutes: 10,
     ignoredChannels: [
 
         '1429854951378518198', // Hunter's Lodge announcements

@@ -2,7 +2,7 @@
  * Title: memory-manager.js
  * Author: Tango Hunter
  * Date Created: 5/21/26
- * Date Modified: 5/21/26
+ * Date Modified: 5/22/26
  * Description: Handles conversational memory retrieval and storage.
  */
 
@@ -15,10 +15,16 @@ const {
     memoryConfig
 } = require('../config/memory-config');
 
-function getUserMemory(userId) {
+function getUserMemory({
+
+    platform,
+    userId
+}) {
 
     const memory =
-        loadMemory();
+        loadMemory(
+            platform
+        );
 
     return (
         memory[userId] || []
@@ -27,6 +33,7 @@ function getUserMemory(userId) {
 
 function addUserMemory({
 
+    platform,
     userId,
     username,
     messageContent
@@ -41,7 +48,9 @@ function addUserMemory({
     }
 
     const memory =
-        loadMemory();
+        loadMemory(
+            platform
+        );
 
     if (
         !memory[userId]
@@ -59,7 +68,6 @@ function addUserMemory({
             new Date().toISOString(),
 
         username,
-
         message:
             messageContent.slice(
                 0,
@@ -76,19 +84,23 @@ function addUserMemory({
         userMemory.shift();
     }
 
-    saveMemory(
-        memory
-    );
+    saveMemory({
+        platform,
+        memoryData:
+            memory
+    });
 }
 
-function buildMemoryContext(
+function buildMemoryContext({
+    platform,
     userId
-) {
+}) {
 
     const memories =
-        getUserMemory(
+        getUserMemory({
+            platform,
             userId
-        );
+        });
 
     if (
         memories.length === 0
