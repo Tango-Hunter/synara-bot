@@ -65,12 +65,13 @@ async function handleMention(
             message.author.id
         );
 
-    buildChannelContext({
-        guildId:
-            message.guild.id,
-        channelId:
-            message.channel.id
-    })
+    const channelContext =
+        buildChannelContext({
+            guildId:
+                message.guild.id,
+            channelId:
+                message.channel.id
+        });
 
     const userPrompt = `
 
