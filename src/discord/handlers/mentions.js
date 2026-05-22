@@ -61,9 +61,12 @@ async function handleMention(
         buildSystemPrompt();
 
     const memoryContext =
-        buildMemoryContext(
-            message.author.id
-        );
+        buildMemoryContext({
+            platform:
+                'discord',
+            userId:
+                message.author.id
+        });
 
     const channelContext =
         buildChannelContext({
@@ -116,6 +119,8 @@ ${cleanedMessage}
         });
 
     addUserMemory({
+        platform:
+            'discord',
         userId:
             message.author.id,
         username:
