@@ -61,20 +61,59 @@ async function runDailyQuestion() {
 
         const userPrompt = `
 
-Generate a thoughtful Question of the Day as SYNARA.
+Generate a Question of the Day for a Discord community.
 
-Requirements:
+The question should feel natural, socially engaging, and varied.
 
-- Focus on reflection, growth, perspective, behavior, creativity, discipline, relationships, curiosity, or purpose
-- Feel intelligent and emotionally grounded
-- Avoid sounding corporate or motivational-speaker style
-- Avoid excessive length
-- Keep under 120 words
-- The message should feel conversational and natural
-- End with a single thoughtful question
-- Avoid emojis
+The topic can be:
+
+- entertainment
+- gaming
+- anime
+- nostalgia
+- music
+- internet culture
+- food
+- hobbies
+- personal experiences
+- technology
+- hypothetical scenarios
+- funny preferences
+- life memories
+- random curiosity
+- creativity
+- emotional reflection
+- storytelling
+
+Avoid making every question overly philosophical or self-improvement focused.
+
+The goal is to encourage casual community conversation.
+
+After the question:
+
+Add a SHORT and subtle SYNARA reflection.
+
+The reflection should:
+
+- feel observational
+- remain concise
+- avoid sounding inspirational
+- avoid sounding robotic
+- avoid excessive depth
+- occasionally sound curious
+- occasionally sound analytical
+- sometimes slightly sarcastic or dry
 - Maintain SYNARA personality
 
+Format:
+
+**Question of the Day**
+
+<Question>
+
+**SYNARA's Reflection**
+
+<Short reflection>
 `;
 
         const response =

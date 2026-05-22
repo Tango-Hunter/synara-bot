@@ -54,9 +54,7 @@ function delay(ms) {
 async function generateResponse({
 
     systemPrompt,
-
     userPrompt,
-
     maxTokens = 500
 
 }) {
@@ -117,10 +115,9 @@ async function generateResponse({
                 ]);
 
             const rawResponse =
-                completion
-                    .choices?.[0]
-                    ?.message
-                    ?.content;
+                completion?.choices?.[0]?.message?.content
+                ||
+                '';
 
             const validatedResponse =
                 validateResponse(

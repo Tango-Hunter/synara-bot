@@ -28,6 +28,10 @@ const {
 } = require('../../core/memory/memory-manager');
 
 const {
+    buildChannelContext
+} = require('../services/channel-awareness');
+
+const {
     logInfo
 } = require('../../core/logging/logger');
 
@@ -57,9 +61,20 @@ async function handleMention(
         buildSystemPrompt();
 
     const memoryContext =
-        buildMemoryContext(
-            message.author.id
-        );
+        buildMemoryContext({
+            platform:
+                'discord',
+            userId:
+                message.author.id
+        });
+
+    const channelContext =
+        buildChannelContext({
+            guildId:
+                message.guild.id,
+            channelId:
+                message.channel.id
+        });
 
     const userPrompt = `
 
@@ -88,6 +103,8 @@ Discord
 Previous Conversation Context:
 ${memoryContext || 'No prior conversation context.'}
 
+${channelContext}
+
 Current User Message:
 ${cleanedMessage}
 `;
@@ -102,6 +119,8 @@ ${cleanedMessage}
         });
 
     addUserMemory({
+        platform:
+            'discord',
         userId:
             message.author.id,
         username:

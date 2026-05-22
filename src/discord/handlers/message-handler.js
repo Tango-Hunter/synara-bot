@@ -15,6 +15,14 @@ const {
 } = require('../../core/config/discord-config');
 
 const {
+    trackMessage
+} = require('../../core/observation/observation-manager');
+
+const {
+    tryObservation
+} = require('../../core/observation/observation-generator');
+
+const {
     logError
 } = require('../../core/logging/logger');
 
@@ -51,15 +59,7 @@ function discordMessageHandler(client) {
                 return;
             }
 
-            // Allowed channels only
-            if (
-                !discordConfig.channels.allowedResponses.includes(
-                    message.channel.id
-                )
-            ) {
-
-                return;
-            }
+            trackMessage(message);
 
             // Commands
             const commandHandled =
@@ -88,6 +88,28 @@ function discordMessageHandler(client) {
                 message,
                 client
             );
+
+            tryObservation(
+                message
+            ).catch(error => {
+
+                logError({
+
+                    type:
+                        ERROR_TYPES.SYSTEM_ERROR,
+                    source:
+                        'observation-system',
+                    message:
+                        error.message,
+
+                    details: {
+                        channel:
+                            message.channel.name,
+                        user:
+                            message.author.username
+                    }
+                });
+            });
 
         } catch (error) {
 

@@ -2,21 +2,32 @@
  * Title: memory-store.js
  * Author: Tango Hunter
  * Date Created: 5/21/26
- * Date Modified: 5/21/26
- * Description: Persistent conversational memory storage.
+ * Date Modified: 5/22/26
+ * Description: Persistent platform-specific conversational memory storage.
  */
 
 const fs = require('fs');
 
 const path = require('path');
 
-const memoryPath =
-    path.join(
-        __dirname,
-        '../../../data/memory.json'
-    );
+function getMemoryPath(
+    platform
+) {
 
-function ensureMemoryFileExists() {
+    return path.join(
+        __dirname,
+        `../../../data/${platform}-memory.json`
+    );
+}
+
+function ensureMemoryFileExists(
+    platform
+) {
+
+    const memoryPath =
+        getMemoryPath(
+            platform
+        );
 
     const dataDirectory =
         path.dirname(
@@ -48,9 +59,18 @@ function ensureMemoryFileExists() {
     }
 }
 
-function loadMemory() {
+function loadMemory(
+    platform
+) {
 
-    ensureMemoryFileExists();
+    ensureMemoryFileExists(
+        platform
+    );
+
+    const memoryPath =
+        getMemoryPath(
+            platform
+        );
 
     const rawData =
         fs.readFileSync(
@@ -63,12 +83,20 @@ function loadMemory() {
     );
 }
 
-function saveMemory(memoryData) {
+function saveMemory({
+
+    platform,
+    memoryData
+}) {
+
+    const memoryPath =
+        getMemoryPath(
+            platform
+        );
 
     fs.writeFileSync(
 
         memoryPath,
-
         JSON.stringify(
             memoryData,
             null,
