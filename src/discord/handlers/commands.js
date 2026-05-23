@@ -23,6 +23,10 @@ const {
 } = require('../commands/observe');
 
 const {
+    runPointsCommand
+} = require('../commands/points');
+
+const {
     runStatusCommand
 } = require('../commands/status');
 
@@ -61,6 +65,11 @@ const commandRegistry = {
         execute: runObserveCommand
     },
 
+    '!points': {
+        title: 'EFFICIENCY',
+        execute: runPointsCommand
+    },
+
     '!status': {
         title: 'STATUS',
         execute: runStatusCommand
@@ -89,6 +98,8 @@ async function executeCommand(
 
                 username:
                     message.author.username,
+                userId:
+                    message.author.id,
                 platform:
                     'Discord'
             });

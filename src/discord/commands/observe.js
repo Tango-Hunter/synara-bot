@@ -7,27 +7,16 @@
  */
 
 const {
-
     generateResponse
-
-} = require(
-
-    '../../core/services/openai-service'
-);
+} = require('../../core/services/openai-service');
 
 const {
-
     buildSystemPrompt
-
-} = require(
-
-    '../../synara/cognition/prompt-builder'
-);
+} = require('../../synara/cognition/prompt-builder');
 
 async function runObserveCommand({
 
     username,
-
     platform
 
 }) {
@@ -59,11 +48,8 @@ ${platform}
     return await generateResponse({
 
         systemPrompt,
-
         userPrompt,
-
         //temperature: 0.95,
-
         maxTokens: 300
     });
 }

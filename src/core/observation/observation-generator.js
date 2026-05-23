@@ -26,6 +26,10 @@ const {
 } = require('./observation-manager');
 
 const {
+    adjustEfficiency
+} = require('../efficiency/efficiency-manager');
+
+const {
     logInfo,
     logError
 } = require('../logging/logger');
@@ -130,7 +134,7 @@ async function tryObservation(
         Generate ONE subtle observation if appropriate.
         `;
 
-    const response =
+    let response =
         await generateResponse({
 
             systemPrompt,
@@ -160,6 +164,28 @@ async function tryObservation(
     }
 
     updateObservationTime();
+
+    const efficiencyShift =
+
+        Math.floor(
+            Math.random() * 7
+        ) - 3;
+
+    const updatedScore =
+        adjustEfficiency({
+
+            userId:
+                message.author.id,
+            amount:
+                efficiencyShift
+        });
+
+        if (
+            Math.random() < 0.25
+        ) {
+
+            response += `\n\nEfficiency reassessment: ${updatedScore}%`;
+        }
 
     await message.channel.send(
         response
