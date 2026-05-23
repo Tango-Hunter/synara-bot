@@ -104,14 +104,26 @@ async function executeCommand(
                     'Discord'
             });
 
-        await message.reply(
+        if (
+            response.embed
+        ) {
 
-            formatCommandResponse(
+            await message.reply({
+                embeds: [
+                    response.embed
+                ]
+            });
 
-                commandConfig.title,
-                response
-            )
-        );
+        } else {
+
+            await message.reply(
+
+                formatCommandResponse(
+                    commandConfig.title,
+                    response.message
+                )
+            );
+        }
 
     } catch (error) {
 

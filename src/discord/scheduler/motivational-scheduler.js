@@ -17,6 +17,10 @@ const {
 } = require('../../synara/cognition/prompt-builder');
 
 const {
+    buildEmbed
+} = require('../services/embed-builder');
+
+const {
     sendDiscordMessage
 } = require('../services/post-message');
 
@@ -221,11 +225,21 @@ Every nightly reflection should feel meaningfully different from prior nights.
 
         for (const channelId of channelIds) {
 
+            const embed =
+                buildEmbed({
+
+                    type:
+                        'nightly',
+                    title:
+                        'Nightly Reflection',
+                    description:
+                        finalResponse
+                });
+
             await sendDiscordMessage({
 
                 channelId,
-                message:
-                    finalResponse
+                embed
             });
 
             logInfo({

@@ -17,6 +17,10 @@ const {
 } = require('../../synara/cognition/prompt-builder');
 
 const {
+    buildEmbed
+} = require('../services/embed-builder');
+
+const {
     sendDiscordMessage
 } = require('../services/post-message');
 
@@ -129,9 +133,22 @@ Format:
 
             for (const channelId of channelIds) {
 
+                const embed =
+                    buildEmbed({
+
+                        type:
+                            'qotd',
+                        title:
+                            'Good Morning',
+                        description:
+                            finalResponse
+                    });
+
                 await sendDiscordMessage({
+
                     channelId,
-                    message: response
+
+                    embed
                 });
             }
 

@@ -2,7 +2,7 @@
  * Title: status.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/19/26
+ * Date Modified: 5/23/26
  * Description: Prompt for the !status command.
  */
 
@@ -13,6 +13,10 @@ const {
 const {
     buildSystemPrompt
 } = require('../../synara/cognition/prompt-builder');
+
+const {
+    buildEmbed
+} = require('../services/embed-builder');
 
 async function runStatusCommand({
 
@@ -37,6 +41,7 @@ Requirements:
 - Keep under 120 words
 - Slightly playful but still intelligent
 - Vary structure and terminology often
+- Avoid repeating previous terminology or report structures
 
 Current User:
 ${username}
@@ -45,13 +50,35 @@ Current Platform:
 ${platform}
 `;
 
-    return await generateResponse({
+    const response =
+        await generateResponse({
 
-        systemPrompt,
-        userPrompt,
-        //temperature: 0.9,
-        maxTokens: 180
-    });
+            systemPrompt,
+            userPrompt,
+            //temperature: 0.9,
+            maxTokens: 180
+        });
+
+    const finalResponse =
+
+        response ||
+
+        'System visibility partially degraded. Operational insight unavailable.';
+
+    const embed =
+        buildEmbed({
+
+            type:
+                'status',
+            title:
+                'System Status',
+            description:
+                finalResponse
+        });
+
+    return {
+        embed
+    };
 }
 
 module.exports = {
