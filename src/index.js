@@ -29,6 +29,9 @@ const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
 
+// MOD Application import - see line 48
+//const { postModApplication } = require('./discord/setup/post-mod-applications');
+
 app.use(express.json());
 app.use(
     '/',
@@ -38,9 +41,13 @@ app.use(
 // ===============================
 // Listens to Allowed Channels for SYNARA mentions
 // ===============================
-client.once('clientReady', () => {
+client.once('clientReady', async () => {
 
     console.log(`SYNARA online as ${client.user.tag}`);
+
+    // Posts MOD application - see line 32
+    //const channel = await client.channels.fetch('1504828980161810442');
+    //await postModApplication(channel);
 
     startDailyQuestionScheduler();
     startNightlyMessageScheduler();
