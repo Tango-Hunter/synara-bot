@@ -23,6 +23,10 @@ const {
 } = require('../../synara/cognition/prompt-builder');
 
 const {
+    adjustEfficiency
+} = require('../../core/efficiency/efficiency-manager');
+
+const {
     addUserMemory,
     buildMemoryContext
 } = require('../../core/memory/memory-manager');
@@ -136,6 +140,28 @@ ${cleanedMessage}
         message:
             `AI response generated for ${message.author.username}`
     });
+
+    const efficiencyShift =
+
+        Math.floor(
+            Math.random() * 5
+        ) - 2;
+
+    const updatedScore =
+        adjustEfficiency({
+
+            userId:
+                message.author.id,
+            amount:
+                efficiencyShift
+        });
+
+    if (
+        Math.random() < 0.15
+    ) {
+
+        aiResponse += `\n\nEfficiency reassessment: ${updatedScore}%`;
+    }
 
     const responseChunks =
         splitIntoChunks(
