@@ -11,7 +11,8 @@ const {
     TextInputBuilder,
     TextInputStyle,
     ActionRowBuilder,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } = require('discord.js');
 
 const {
@@ -174,15 +175,6 @@ async function handleApplicationInteraction(
             }
         );
 
-        await interaction.reply({
-
-            content:
-                'Application section 1/3 submitted.',
-
-            ephemeral:
-                true
-        });
-
         const modal =
             new ModalBuilder()
 
@@ -258,19 +250,9 @@ async function handleApplicationInteraction(
             );
         }
 
-        return await interaction.followUp({
-
-            content:
-                'Please continue with section 2/3.',
-
-            ephemeral:
-                true
-        }).then(async () => {
-
-            await interaction.showModal(
-                modal
-            );
-        });
+        return await interaction.showModal(
+            modal
+        );
     }
 
     /*
@@ -319,15 +301,6 @@ async function handleApplicationInteraction(
                     )
             }
         );
-
-        await interaction.reply({
-
-            content:
-                'Application section 2/3 submitted.',
-
-            ephemeral:
-                true
-        });
 
         const modal =
             new ModalBuilder()
@@ -404,19 +377,9 @@ async function handleApplicationInteraction(
             );
         }
 
-        return await interaction.followUp({
-
-            content:
-                'Please continue with section 3/3.',
-
-            ephemeral:
-                true
-        }).then(async () => {
-
-            await interaction.showModal(
-                modal
-            );
-        });
+        return await interaction.showModal(
+            modal
+        );
     }
 
     /*
@@ -476,12 +439,6 @@ async function handleApplicationInteraction(
 
                 applicationConfig.reviewChannelId
             );
-
-        /*
-        ============================
-        IDENTITY EMBED
-        ============================
-        */
 
         const identityEmbed =
             new EmbedBuilder()
@@ -553,12 +510,6 @@ ${interaction.user.id}
 
                 .setTimestamp();
 
-        /*
-        ============================
-        PHILOSOPHY EMBED
-        ============================
-        */
-
         const philosophyEmbed =
             new EmbedBuilder()
 
@@ -619,12 +570,6 @@ ${interaction.user.id}
                 )
 
                 .setTimestamp();
-
-        /*
-        ============================
-        PERSPECTIVE EMBED
-        ============================
-        */
 
         const perspectiveEmbed =
             new EmbedBuilder()
@@ -717,8 +662,8 @@ ${interaction.user.id}
             content:
                 'Your moderator application has been submitted successfully.',
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
         });
     }
 }
