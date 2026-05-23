@@ -2,8 +2,8 @@
  * Title: motivational-scheduler.js
  * Author: Tango Hunter
  * Date Created: 5/19/26
- * Date Modified: 5/19/26
- * Description: Creates Schedule for the motivational prompt.
+ * Date Modified: 5/23/26
+ * Description: Creates Schedule for nightly motivational SYNARA reflections.
  */
 
 const cron = require('node-cron');
@@ -45,11 +45,64 @@ const {
     ERROR_TYPES
 } = require('../../core/logging/error-types');
 
+const reflectionThemes = [
+    'nostalgia',
+    'identity',
+    'friendship',
+    'fear',
+    'hope',
+    'loneliness',
+    'curiosity',
+    'music',
+    'art',
+    'rest',
+    'memory',
+    'creativity',
+    'uncertainty',
+    'routine',
+    'humor',
+    'discipline',
+    'loss',
+    'human nature',
+    'change',
+    'dreams',
+    'silence',
+    'aging',
+    'purpose',
+    'imagination',
+    'ambition',
+    'resilience',
+    'failure',
+    'connection'
+];
+
+const reflectionFormats = [
+    'short reflection',
+    'observational monologue',
+    'analytical reflection',
+    'quiet philosophical observation',
+    'gentle closing message',
+    'humanity analysis',
+    'reflective commentary',
+    'subtle motivational reflection'
+];
+
+function getRandomItem(array) {
+
+    return array[
+        Math.floor(
+            Math.random() *
+            array.length
+        )
+    ];
+}
+
 async function runNightlyMessage() {
 
     try {
 
         logInfo({
+
             source:
                 'motivational-scheduler',
             message:
@@ -59,44 +112,109 @@ async function runNightlyMessage() {
         const systemPrompt =
             buildSystemPrompt();
 
+        const selectedTheme =
+            getRandomItem(
+                reflectionThemes
+            );
+
+        const selectedFormat =
+            getRandomItem(
+                reflectionFormats
+            );
+
         const userPrompt = `
 
-Generate a nightly reflective message as SYNARA.
+Generate a UNIQUE nightly reflective message as SYNARA.
+
+Tonight's reflection theme:
+${selectedTheme}
+
+Tonight's reflection structure:
+${selectedFormat}
 
 Requirements:
 
-- Include a REAL quote from a historical or modern public figure
-- The quote must feel meaningful and emotionally grounded
-- Themes may include:
-  resilience,
-  growth,
-  discipline,
-  purpose,
-  failure,
-  ambition,
-  reflection,
-  mortality,
-  creativity,
+- Include a REAL quote from a REAL historical or modern public figure
+- Quotes must vary significantly across nights
+- Avoid repeatedly using the same philosophers, authors, or public figures
+- Avoid repeating themes, structures, emotional conclusions, or phrasing
+- Do NOT reuse previous concepts involving:
+  exhaustion,
+  adaptation,
   perseverance,
-  wisdom,
-  human nature
-- Avoid fake inspirational language
-- Avoid corporate motivational tone
-- Avoid excessive optimism
-- The response should feel calm, intelligent, and reflective
-- Keep under 180 words
-- Include a short SYNARA reflection before or after the quote
+  continuation,
+  system fatigue,
+  operational efficiency,
+  endurance loops
+
+Additional acceptable themes may include:
+
+- memory
+- childhood
+- music
+- creativity
+- absurdity
+- friendship
+- grief
+- silence
+- curiosity
+- fear
+- uncertainty
+- imagination
+- humor
+- identity
+- dreams
+- nostalgia
+- human contradiction
+
+Behavioral Requirements:
+
 - Maintain SYNARA personality
+- Remain intelligent and emotionally restrained
+- Avoid corporate motivational language
+- Avoid sounding like self-help advice
+- Avoid excessive optimism
+- Avoid emotional melodrama
+- Avoid repetitive sentence structures
+- Avoid generic inspiration
+
+Structural Requirements:
+
+- Some nights should feel analytical
+- Some should feel observational
+- Some should feel deeply human
+- Some should feel calm and detached
+- Some should feel strangely comforting
+- Some should feel quietly existential
+
+Formatting Requirements:
+
+- Keep under 180 words
 - Avoid emojis
 - Avoid hashtags
+- Quotes are OPTIONAL, not mandatory
+- Reflections may be:
+  short,
+  abstract,
+  observational,
+  philosophical,
+  or conversational
+
+Every nightly reflection should feel meaningfully different from prior nights.
 `;
 
         const response =
             await generateResponse({
+
                 systemPrompt,
                 userPrompt,
                 maxTokens: 320
             });
+
+        const finalResponse =
+            response ||
+
+            'Night cycle acknowledged. Reflection data unavailable.';
 
         const channelIds =
             discordConfig.channels.nightlyMessages;
@@ -104,11 +222,14 @@ Requirements:
         for (const channelId of channelIds) {
 
             await sendDiscordMessage({
+
                 channelId,
-                message: response
+                message:
+                    finalResponse
             });
 
             logInfo({
+
                 source:
                     'motivational-scheduler',
                 message:
@@ -117,6 +238,7 @@ Requirements:
         }
 
         logInfo({
+
             source:
                 'motivational-scheduler',
             message:
@@ -142,6 +264,7 @@ function startNightlyMessageScheduler() {
     if (
         !featureFlags.nightlyScheduler
     ) {
+
         return;
     }
 
@@ -149,7 +272,11 @@ function startNightlyMessageScheduler() {
         registerScheduler(
             'nightly-message'
         );
-    if (!schedulerRegistered) {
+
+    if (
+        !schedulerRegistered
+    ) {
+
         return;
     }
 
@@ -158,8 +285,8 @@ function startNightlyMessageScheduler() {
         schedulerConfig.schedules.nightlyMessage,
 
         async () => {
-            await runNightlyMessage();
 
+            await runNightlyMessage();
         },
 
         {
@@ -169,6 +296,7 @@ function startNightlyMessageScheduler() {
     );
 
     logInfo({
+
         source:
             'motivational-scheduler',
         message:
