@@ -120,6 +120,18 @@ async function tryObservation(
         - occasionally curious
         - occasionally dry
 
+        Formatting Requirements:
+
+        - Return plain text only
+        - Do not use markdown
+        - Do not use bullet points
+        - Do not use quotation marks
+        - Avoid roleplay formatting
+        - Keep observations under 2 sentences
+        - Avoid dramatic monologues
+        - Avoid theatrical language
+        - Avoid assistant-like helpfulness
+
         If no meaningful observation exists:
         Respond ONLY with:
         NO_OBSERVATION
@@ -139,7 +151,7 @@ async function tryObservation(
 
             systemPrompt,
             userPrompt,
-            maxTokens: 80
+            maxTokens: 140
         });
 
     if (!response) {
