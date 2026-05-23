@@ -46,13 +46,17 @@ Current Platform:
 ${platform}
 `;
 
-    return await generateResponse({
+    const response =
+        await generateResponse({
 
-        systemPrompt,
-        userPrompt,
-        //temperature: 0.85,
-        maxTokens: 250
-    });
+            systemPrompt,
+            userPrompt,
+            maxTokens: 250
+        });
+
+    return {
+        message: response
+    };
 }
 
 module.exports = {

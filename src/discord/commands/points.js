@@ -54,6 +54,11 @@ Requirements:
 - Keep under 2 sentences
 - Avoid emojis
 - Avoid hashtags
+- Return plain text only
+- Do not use markdown
+- Do not use bullet points
+- Do not use quotation marks
+- Keep formatting extremely simple
 
 Efficiency Score:
 ${score}
@@ -67,7 +72,7 @@ ${username}
 
             systemPrompt,
             userPrompt,
-            maxTokens: 80
+            maxTokens: 150
         });
 
     const finalAssessment =
