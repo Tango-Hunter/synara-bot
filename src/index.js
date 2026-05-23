@@ -29,8 +29,12 @@ const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
 
+const {
+    routeInteraction
+} = require('./discord/interactions/interaction-router');
+
 // MOD Application import - see line 48
-//const { postModApplication } = require('./discord/setup/post-mod-applications');
+//const { postModApplication } = require('./discord/setup/post-mod-application');
 
 app.use(express.json());
 app.use(
@@ -39,7 +43,7 @@ app.use(
 );
 
 // ===============================
-// Listens to Allowed Channels for SYNARA mentions
+// Starts the SYNARA presence within Discord
 // ===============================
 client.once('clientReady', async () => {
 
@@ -62,6 +66,17 @@ client.once('clientReady', async () => {
         status: 'online'
     });
 });
+
+// ===============================
+// Starts the Interactive Services within Discord
+// ===============================
+client.on('interactionCreate', async interaction => {
+
+        await routeInteraction(
+            interaction
+        );
+    }
+);
 
 // ===============================
 // Sends SYNARA responses
