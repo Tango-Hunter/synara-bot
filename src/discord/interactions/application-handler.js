@@ -131,31 +131,31 @@ function buildModal2() {
 
         [
             'experience',
-            'Previous moderation experience',
+            'What previous moderation or leadership experience do you have within online communities or Discord servers?',
             TextInputStyle.Paragraph
         ],
 
         [
             'approach',
-            'Moderation style & approach',
+            'Describe your moderation style and approach to enforcing rules.',
             TextInputStyle.Paragraph
         ],
 
         [
             'boundaries',
-            'Professionalism & fairness',
+            'How would you maintain professionalism and fairness when moderating friends or stressful situations?',
             TextInputStyle.Paragraph
         ],
 
         [
             'deescalation',
-            'Conflict de-escalation strategy',
+            'Describe how you would handle/de-escalate a heated conflict.',
             TextInputStyle.Paragraph
         ],
 
         [
             'scenario',
-            'Handling argumentative members',
+            'Describe what you would do if a member becomes argumentative after you have already issued them a warning.',
             TextInputStyle.Paragraph
         ]
     ];
@@ -211,13 +211,13 @@ function buildModal3() {
 
         [
             'judgment',
-            'Moderator intervention judgment',
+            'How do you determine if a situation requires moderator intervention?',
             TextInputStyle.Paragraph
         ],
 
         [
             'conflict',
-            'Moderator disagreement handling',
+            'How would you handle a disagreement between yourself and another moderator?',
             TextInputStyle.Paragraph
         ],
 
@@ -229,13 +229,13 @@ function buildModal3() {
 
         [
             'observations',
-            'Server strengths & improvements',
+            'What do you believe this server does well, and where could it improve?',
             TextInputStyle.Paragraph
         ],
 
         [
             'bonus',
-            'Anything else?',
+            'Is there anything else you would like the staff to know?',
             TextInputStyle.Paragraph
         ]
     ];
