@@ -5,6 +5,9 @@
  * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
+const {
+    runCommandsCommand
+} = require('../commands/commands');
 
 const {
     runFactCommand
@@ -44,6 +47,11 @@ const {
 } = require('../../core/logging/error-types');
 
 const commandRegistry = {
+
+    '!commands': {
+        title: 'COMMANDS',
+        execute: runCommandsCommand
+    },
 
     '!fact': {
         title: 'FACT',
