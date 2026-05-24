@@ -141,7 +141,7 @@ Format:
                         title:
                             'Good Morning',
                         description:
-                            finalResponse
+                            response
                     });
 
                 await sendDiscordMessage({
