@@ -2,7 +2,7 @@
  * Title: application-handler.js
  * Author: Tango Hunter
  * Date Created: 5/23/26
- * Date Modified: 5/23/26
+ * Date Modified: 5/24/26
  * Description: Handles moderator application interactions.
  */
 
@@ -11,6 +11,8 @@ const {
     TextInputBuilder,
     TextInputStyle,
     ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
     EmbedBuilder,
     MessageFlags
 } = require('discord.js');
@@ -26,13 +28,265 @@ const {
     clearSession
 } = require('../../core/applications/application-session-store');
 
+/*
+====================================
+MODAL BUILDERS
+====================================
+*/
+
+function buildModal1() {
+
+    const modal =
+        new ModalBuilder()
+
+            .setCustomId(
+                'mod_application_1'
+            )
+
+            .setTitle(
+                'Moderator Application • 1/3'
+            );
+
+    const fields = [
+
+        [
+            'name',
+            'Discord Username',
+            TextInputStyle.Short
+        ],
+
+        [
+            'age',
+            'Age',
+            TextInputStyle.Short
+        ],
+
+        [
+            'timezone',
+            'Timezone',
+            TextInputStyle.Short
+        ],
+
+        [
+            'languages',
+            'Primary Language(s)',
+            TextInputStyle.Short
+        ],
+
+        [
+            'availability',
+            'Availability',
+            TextInputStyle.Paragraph
+        ]
+    ];
+
+    for (const field of fields) {
+
+        const input =
+            new TextInputBuilder()
+
+                .setCustomId(
+                    field[0]
+                )
+
+                .setLabel(
+                    field[1]
+                )
+
+                .setStyle(
+                    field[2]
+                )
+
+                .setRequired(
+                    true
+                );
+
+        modal.addComponents(
+
+            new ActionRowBuilder()
+
+                .addComponents(
+                    input
+                )
+        );
+    }
+
+    return modal;
+}
+
+function buildModal2() {
+
+    const modal =
+        new ModalBuilder()
+
+            .setCustomId(
+                'mod_application_2'
+            )
+
+            .setTitle(
+                'Moderator Application • 2/3'
+            );
+
+    const fields = [
+
+        [
+            'experience',
+            'Previous moderation experience',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'approach',
+            'Moderation style & approach',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'boundaries',
+            'Professionalism & fairness',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'deescalation',
+            'Conflict de-escalation strategy',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'scenario',
+            'Handling argumentative members',
+            TextInputStyle.Paragraph
+        ]
+    ];
+
+    for (const field of fields) {
+
+        const input =
+            new TextInputBuilder()
+
+                .setCustomId(
+                    field[0]
+                )
+
+                .setLabel(
+                    field[1]
+                )
+
+                .setStyle(
+                    field[2]
+                )
+
+                .setRequired(
+                    true
+                );
+
+        modal.addComponents(
+
+            new ActionRowBuilder()
+
+                .addComponents(
+                    input
+                )
+        );
+    }
+
+    return modal;
+}
+
+function buildModal3() {
+
+    const modal =
+        new ModalBuilder()
+
+            .setCustomId(
+                'mod_application_3'
+            )
+
+            .setTitle(
+                'Moderator Application • 3/3'
+            );
+
+    const fields = [
+
+        [
+            'judgment',
+            'Moderator intervention judgment',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'conflict',
+            'Moderator disagreement handling',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'motivation',
+            'Why do you want to moderate?',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'observations',
+            'Server strengths & improvements',
+            TextInputStyle.Paragraph
+        ],
+
+        [
+            'bonus',
+            'Anything else?',
+            TextInputStyle.Paragraph
+        ]
+    ];
+
+    for (const field of fields) {
+
+        const input =
+            new TextInputBuilder()
+
+                .setCustomId(
+                    field[0]
+                )
+
+                .setLabel(
+                    field[1]
+                )
+
+                .setStyle(
+                    field[2]
+                )
+
+                .setRequired(
+                    true
+                );
+
+        modal.addComponents(
+
+            new ActionRowBuilder()
+
+                .addComponents(
+                    input
+                )
+        );
+    }
+
+    return modal;
+}
+
+/*
+====================================
+MAIN HANDLER
+====================================
+*/
+
 async function handleApplicationInteraction(
     interaction
 ) {
 
     /*
     ============================
-    START APPLICATION BUTTON
+    START APPLICATION
     ============================
     */
 
@@ -48,89 +302,52 @@ async function handleApplicationInteraction(
             interaction.user.id
         );
 
-        const modal =
-            new ModalBuilder()
-
-                .setCustomId(
-                    'mod_application_1'
-                )
-
-                .setTitle(
-                    'Moderator Application • 1/3'
-                );
-
-        const fields = [
-
-            [
-                'name',
-                'Discord Username',
-                TextInputStyle.Short
-            ],
-
-            [
-                'age',
-                'Age',
-                TextInputStyle.Short
-            ],
-
-            [
-                'timezone',
-                'Timezone',
-                TextInputStyle.Short
-            ],
-
-            [
-                'languages',
-                'Primary Language(s)',
-                TextInputStyle.Short
-            ],
-
-            [
-                'availability',
-                'Availability',
-                TextInputStyle.Paragraph
-            ]
-        ];
-
-        for (const field of fields) {
-
-            const input =
-                new TextInputBuilder()
-
-                    .setCustomId(
-                        field[0]
-                    )
-
-                    .setLabel(
-                        field[1]
-                    )
-
-                    .setStyle(
-                        field[2]
-                    )
-
-                    .setRequired(
-                        true
-                    );
-
-            modal.addComponents(
-
-                new ActionRowBuilder()
-
-                    .addComponents(
-                        input
-                    )
-            );
-        }
-
         return await interaction.showModal(
-            modal
+            buildModal1()
         );
     }
 
     /*
     ============================
-    MODAL 1
+    CONTINUE TO MODAL 2
+    ============================
+    */
+
+    if (
+
+        interaction.isButton() &&
+
+        interaction.customId ===
+        'continue_application_2'
+    ) {
+
+        return await interaction.showModal(
+            buildModal2()
+        );
+    }
+
+    /*
+    ============================
+    CONTINUE TO MODAL 3
+    ============================
+    */
+
+    if (
+
+        interaction.isButton() &&
+
+        interaction.customId ===
+        'continue_application_3'
+    ) {
+
+        return await interaction.showModal(
+            buildModal3()
+        );
+    }
+
+    /*
+    ============================
+    MODAL 1 SUBMIT
     ============================
     */
 
@@ -175,89 +392,41 @@ async function handleApplicationInteraction(
             }
         );
 
-        const modal =
-            new ModalBuilder()
+        const row =
+            new ActionRowBuilder()
 
-                .setCustomId(
-                    'mod_application_2'
-                )
+                .addComponents(
 
-                .setTitle(
-                    'Moderator Application • 2/3'
+                    new ButtonBuilder()
+
+                        .setCustomId(
+                            'continue_application_2'
+                        )
+
+                        .setLabel(
+                            'Continue to Section 2'
+                        )
+
+                        .setStyle(
+                            ButtonStyle.Primary
+                        )
                 );
 
-        const fields = [
+        return await interaction.reply({
 
-            [
-                'experience',
-                'Previous moderation experience',
-                TextInputStyle.Paragraph
-            ],
+            content:
+                'Application section 1/3 submitted successfully.',
 
-            [
-                'approach',
-                'Moderation style & approach',
-                TextInputStyle.Paragraph
-            ],
+            components: [row],
 
-            [
-                'boundaries',
-                'Professionalism & fairness',
-                TextInputStyle.Paragraph
-            ],
-
-            [
-                'deescalation',
-                'Conflict de-escalation strategy',
-                TextInputStyle.Paragraph
-            ],
-
-            [
-                'scenario',
-                'Handling argumentative members',
-                TextInputStyle.Paragraph
-            ]
-        ];
-
-        for (const field of fields) {
-
-            const input =
-                new TextInputBuilder()
-
-                    .setCustomId(
-                        field[0]
-                    )
-
-                    .setLabel(
-                        field[1]
-                    )
-
-                    .setStyle(
-                        field[2]
-                    )
-
-                    .setRequired(
-                        true
-                    );
-
-            modal.addComponents(
-
-                new ActionRowBuilder()
-
-                    .addComponents(
-                        input
-                    )
-            );
-        }
-
-        return await interaction.showModal(
-            modal
-        );
+            flags:
+                MessageFlags.Ephemeral
+        });
     }
 
     /*
     ============================
-    MODAL 2
+    MODAL 2 SUBMIT
     ============================
     */
 
@@ -302,89 +471,41 @@ async function handleApplicationInteraction(
             }
         );
 
-        const modal =
-            new ModalBuilder()
+        const row =
+            new ActionRowBuilder()
 
-                .setCustomId(
-                    'mod_application_3'
-                )
+                .addComponents(
 
-                .setTitle(
-                    'Moderator Application • 3/3'
+                    new ButtonBuilder()
+
+                        .setCustomId(
+                            'continue_application_3'
+                        )
+
+                        .setLabel(
+                            'Continue to Section 3'
+                        )
+
+                        .setStyle(
+                            ButtonStyle.Primary
+                        )
                 );
 
-        const fields = [
+        return await interaction.reply({
 
-            [
-                'judgment',
-                'Moderator intervention judgment',
-                TextInputStyle.Paragraph
-            ],
+            content:
+                'Application section 2/3 submitted successfully.',
 
-            [
-                'conflict',
-                'Moderator disagreement handling',
-                TextInputStyle.Paragraph
-            ],
+            components: [row],
 
-            [
-                'motivation',
-                'Why do you want to moderate?',
-                TextInputStyle.Paragraph
-            ],
-
-            [
-                'observations',
-                'Server strengths & improvements',
-                TextInputStyle.Paragraph
-            ],
-
-            [
-                'bonus',
-                'Anything else?',
-                TextInputStyle.Paragraph
-            ]
-        ];
-
-        for (const field of fields) {
-
-            const input =
-                new TextInputBuilder()
-
-                    .setCustomId(
-                        field[0]
-                    )
-
-                    .setLabel(
-                        field[1]
-                    )
-
-                    .setStyle(
-                        field[2]
-                    )
-
-                    .setRequired(
-                        true
-                    );
-
-            modal.addComponents(
-
-                new ActionRowBuilder()
-
-                    .addComponents(
-                        input
-                    )
-            );
-        }
-
-        return await interaction.showModal(
-            modal
-        );
+            flags:
+                MessageFlags.Ephemeral
+        });
     }
 
     /*
     ============================
-    MODAL 3
+    MODAL 3 SUBMIT
     ============================
     */
 
