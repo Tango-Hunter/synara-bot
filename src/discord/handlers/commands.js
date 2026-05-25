@@ -5,6 +5,9 @@
  * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
+const {
+    runCommandsCommand
+} = require('../commands/commands');
 
 const {
     runFactCommand
@@ -13,6 +16,9 @@ const {
 const {
     runJokeCommand
 } = require('../commands/joke');
+
+const leaderboardCommand =
+    require('../commands/leaderboard');
 
 const {
     runMotivateCommand
@@ -30,9 +36,16 @@ const {
     runStatusCommand
 } = require('../commands/status');
 
+const triviaCommand =
+    require('../commands/trivia');
+
 const {
     formatCommandResponse
 } = require('../../shared/utils/command-formatter');
+
+const {
+    createTriviaSession
+} = require('../trivia/trivia-session-manager');
 
 const {
     logError,
@@ -45,6 +58,11 @@ const {
 
 const commandRegistry = {
 
+    '!commands': {
+        title: 'COMMANDS',
+        execute: runCommandsCommand
+    },
+
     '!fact': {
         title: 'FACT',
         execute: runFactCommand
@@ -54,6 +72,9 @@ const commandRegistry = {
         title: 'HUMOR',
         execute: runJokeCommand
     },
+
+    '!leaderboard':
+        leaderboardCommand,
 
     '!motivate': {
         title: 'MOTIVATION',
@@ -73,7 +94,10 @@ const commandRegistry = {
     '!status': {
         title: 'STATUS',
         execute: runStatusCommand
-    }
+    },
+
+    '!trivia':
+        triviaCommand
 };
 
 async function executeCommand(
@@ -108,11 +132,46 @@ async function executeCommand(
             response.embed
         ) {
 
-            await message.reply({
-                embeds: [
-                    response.embed
-                ]
-            });
+            const sentMessage =
+
+                await message.reply({
+
+                    embeds: [
+                        response.embed
+                    ]
+                });
+
+            /*
+            ============================
+            TRIVIA SESSION CREATION
+            ============================
+            */
+
+            if (
+                response.triviaData
+            ) {
+
+                createTriviaSession({
+
+                    channelId:
+                        message.channel.id,
+
+                    channel:
+                        message.channel,
+
+                    userId:
+                        message.author.id,
+
+                    correctAnswer:
+                        response.triviaData.correctAnswer,
+
+                    answerMap:
+                        response.triviaData.answerMap,
+
+                    messageId:
+                        sentMessage.id
+                });
+            }
 
         } else {
 

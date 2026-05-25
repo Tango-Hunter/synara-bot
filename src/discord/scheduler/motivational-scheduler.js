@@ -8,6 +8,8 @@
 
 const cron = require('node-cron');
 
+const axios = require('axios');
+
 const {
     generateResponse
 } = require('../../core/services/openai-service');
@@ -49,57 +51,6 @@ const {
     ERROR_TYPES
 } = require('../../core/logging/error-types');
 
-const reflectionThemes = [
-    'nostalgia',
-    'identity',
-    'friendship',
-    'fear',
-    'hope',
-    'loneliness',
-    'curiosity',
-    'music',
-    'art',
-    'rest',
-    'memory',
-    'creativity',
-    'uncertainty',
-    'routine',
-    'humor',
-    'discipline',
-    'loss',
-    'human nature',
-    'change',
-    'dreams',
-    'silence',
-    'aging',
-    'purpose',
-    'imagination',
-    'ambition',
-    'resilience',
-    'failure',
-    'connection'
-];
-
-const reflectionFormats = [
-    'short reflection',
-    'observational monologue',
-    'analytical reflection',
-    'quiet philosophical observation',
-    'gentle closing message',
-    'humanity analysis',
-    'reflective commentary',
-    'subtle motivational reflection'
-];
-
-function getRandomItem(array) {
-
-    return array[
-        Math.floor(
-            Math.random() *
-            array.length
-        )
-    ];
-}
 
 async function runNightlyMessage() {
 
@@ -116,15 +67,18 @@ async function runNightlyMessage() {
         const systemPrompt =
             buildSystemPrompt();
 
-        const selectedTheme =
-            getRandomItem(
-                reflectionThemes
+        const quoteResponse =
+            await axios.get(
+
+                'https://zenquotes.io/api/today'
             );
 
-        const selectedFormat =
-            getRandomItem(
-                reflectionFormats
-            );
+        const quoteData =
+            quoteResponse.data[0];
+        const quote =
+            quoteData.q;
+        const author =
+            quoteData.a;
 
         const userPrompt = `
 
@@ -136,19 +90,21 @@ ${selectedTheme}
 Structure:
 ${selectedFormat}
 
+Generate a short SYNARA reflection inspired by this quote.
+
 Requirements:
 
+- Maximum 2 sentences
+- Keep under 80 words
 - Maintain SYNARA personality
-- Intelligent, restrained, reflective tone
-- Avoid corporate motivation and self-help language
-- Avoid excessive optimism or melodrama
-- Include a real quote from a historical or modern public figure
-- Vary themes, emotional tone, and sentence structure naturally
-- Keep the reflection under 180 words
+- Emotionally restrained
+- Intelligent and observational
+- Occasionally dry or analytical
+- Avoid sounding inspirational
+- Avoid sounding robotic
+- Avoid excessive philosophy
 - Plain text only
-- No markdown, hashtags, emojis, or lists
-
-The reflection should feel thoughtful, atmospheric, and distinct from previous nights.
+- Do not repeat the quote
 `;
 
         const response =
@@ -156,7 +112,7 @@ The reflection should feel thoughtful, atmospheric, and distinct from previous n
 
                 systemPrompt,
                 userPrompt,
-                maxTokens: 400
+                maxTokens: 120
             });
 
         const finalResponse =
@@ -177,7 +133,13 @@ The reflection should feel thoughtful, atmospheric, and distinct from previous n
                     title:
                         'Nightly Reflection',
                     description:
-                        finalResponse
+`
+"${quote}"
+
+— ${author}
+
+${finalResponse}
+`
                 });
 
             await sendDiscordMessage({

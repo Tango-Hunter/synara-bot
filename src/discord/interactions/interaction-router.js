@@ -12,6 +12,10 @@ const {
 } = require('./application-handler');
 
 const {
+    routeAdminCommand
+} = require('../admin/admin-command-router');
+
+const {
     logError
 } = require('../../core/logging/logger');
 
@@ -30,6 +34,10 @@ async function routeInteraction(
         APPLICATION INTERACTIONS
         ============================
         */
+       
+        await routeAdminCommand(
+            interaction
+        );
 
         await handleApplicationInteraction(
             interaction

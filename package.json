@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
+    "register-commands": "node src/discord/admin/register-admin-commands.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +16,7 @@
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "he": "^1.2.0",
     "node-cron": "^4.2.1",
     "openai": "^6.38.0"
   },
