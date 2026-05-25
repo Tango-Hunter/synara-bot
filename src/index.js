@@ -28,7 +28,9 @@ const {
 const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
-
+const {
+    initializeDatabase
+} = require('./core/database/init-database');
 const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
@@ -43,6 +45,8 @@ app.use(
 // Starts the SYNARA presence within Discord
 // ===============================
 client.once('clientReady', async () => {
+
+    await initializeDatabase();
 
     console.log(`SYNARA online as ${client.user.tag}`);
 
