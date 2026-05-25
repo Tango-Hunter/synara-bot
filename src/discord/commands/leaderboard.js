@@ -80,7 +80,7 @@ Your Current Streak:
 ${userStats.streak}
 
 Your Best Streak:
-${userStats.bestStreak}
+${userStats.best_streak}
 `
         });
 
