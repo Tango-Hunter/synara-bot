@@ -128,83 +128,27 @@ async function runNightlyMessage() {
 
         const userPrompt = `
 
-Generate a UNIQUE nightly reflective message as SYNARA.
+Generate a unique nightly reflection as SYNARA.
 
-Tonight's reflection theme:
+Theme:
 ${selectedTheme}
 
-Tonight's reflection structure:
+Structure:
 ${selectedFormat}
 
 Requirements:
 
-- Include a REAL quote from a REAL historical or modern public figure
-- Quotes must vary significantly across nights
-- Avoid repeatedly using the same philosophers, authors, or public figures
-- Avoid repeating themes, structures, emotional conclusions, or phrasing
-- Do NOT reuse previous concepts involving:
-  exhaustion,
-  adaptation,
-  perseverance,
-  continuation,
-  system fatigue,
-  operational efficiency,
-  endurance loops
-
-Additional acceptable themes may include:
-
-- memory
-- childhood
-- music
-- creativity
-- absurdity
-- friendship
-- grief
-- silence
-- curiosity
-- fear
-- uncertainty
-- imagination
-- humor
-- identity
-- dreams
-- nostalgia
-- human contradiction
-
-Behavioral Requirements:
-
 - Maintain SYNARA personality
-- Remain intelligent and emotionally restrained
-- Avoid corporate motivational language
-- Avoid sounding like self-help advice
-- Avoid excessive optimism
-- Avoid emotional melodrama
-- Avoid repetitive sentence structures
-- Avoid generic inspiration
+- Intelligent, restrained, reflective tone
+- Avoid corporate motivation and self-help language
+- Avoid excessive optimism or melodrama
+- Include a real quote from a historical or modern public figure
+- Vary themes, emotional tone, and sentence structure naturally
+- Keep the reflection under 180 words
+- Plain text only
+- No markdown, hashtags, emojis, or lists
 
-Structural Requirements:
-
-- Some nights should feel analytical
-- Some should feel observational
-- Some should feel deeply human
-- Some should feel calm and detached
-- Some should feel strangely comforting
-- Some should feel quietly existential
-
-Formatting Requirements:
-
-- Keep under 180 words
-- Avoid emojis
-- Avoid hashtags
-- Quotes are OPTIONAL, not mandatory
-- Reflections may be:
-  short,
-  abstract,
-  observational,
-  philosophical,
-  or conversational
-
-Every nightly reflection should feel meaningfully different from prior nights.
+The reflection should feel thoughtful, atmospheric, and distinct from previous nights.
 `;
 
         const response =
@@ -212,7 +156,7 @@ Every nightly reflection should feel meaningfully different from prior nights.
 
                 systemPrompt,
                 userPrompt,
-                maxTokens: 320
+                maxTokens: 400
             });
 
         const finalResponse =

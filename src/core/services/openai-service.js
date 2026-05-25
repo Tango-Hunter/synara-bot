@@ -118,7 +118,27 @@ async function generateResponse({
                 completion?.choices?.[0]?.message?.content
                 ||
                 '';
+/*
+            console.log(
+                '\n========== RAW OPENAI RESPONSE =========='
+            );
 
+            console.dir(
+                completion,
+                {
+                    depth: null
+                }
+            );
+
+            console.log(
+                'TYPEOF RESPONSE:',
+                typeof response
+            );
+
+            console.log(
+                '========================================\n'
+            );
+*/
             const validatedResponse =
                 validateResponse(
                     rawResponse
