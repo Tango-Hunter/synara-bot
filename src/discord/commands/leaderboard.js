@@ -8,7 +8,7 @@
 
 const {
     buildEmbed
-} = require('../utils/embed-builder');
+} = require('../services/embed-builder');
 
 const {
     getLeaderboard,

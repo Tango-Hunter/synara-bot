@@ -8,7 +8,7 @@
 
 const {
     buildEmbed
-} = require('../utils/embed-builder');
+} = require('../services/embed-builder');
 
 const {
     fetchTriviaQuestion
@@ -39,6 +39,27 @@ async function handleTriviaCommand({
 
                 Math.random() - 0.5
         );
+
+    const answerMap = {};
+
+    answers.forEach(
+
+        (
+            answer,
+            index
+        ) => {
+
+            const letter =
+
+                String.fromCharCode(
+
+                    65 + index
+                );
+
+            answerMap[letter] =
+                answer;
+        }
+    );
 
     const answerText =
 
@@ -98,7 +119,9 @@ Reply directly to this message with your answer.
         triviaData: {
 
             correctAnswer:
-                trivia.correctAnswer
+                trivia.correctAnswer,
+
+            answerMap
         }
     };
 }

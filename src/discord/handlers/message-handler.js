@@ -42,6 +42,10 @@ const {
     handleCooldown
 } = require('./cooldowns');
 
+const {
+    handleTriviaReply
+} = require('../trivia/trivia-reply-handler');
+
 function discordMessageHandler(client) {
 
     client.on('messageCreate', async (message) => {
@@ -60,6 +64,20 @@ function discordMessageHandler(client) {
             }
 
             trackMessage(message);
+
+            // Trivia
+            const handledTrivia =
+
+                await handleTriviaReply(
+                    message
+                );
+
+            if (
+                handledTrivia
+            ) {
+
+                return;
+            }
 
             // Commands
             const commandHandled =

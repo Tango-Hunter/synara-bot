@@ -14,6 +14,7 @@ function createTriviaSession({
     channelId,
     userId,
     correctAnswer,
+    answerMap,
     messageId
 }) {
 
@@ -27,6 +28,8 @@ function createTriviaSession({
                 correctAnswer
                     .toLowerCase()
                     .trim(),
+
+            answerMap,
 
             messageId,
 

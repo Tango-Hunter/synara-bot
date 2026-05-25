@@ -18,7 +18,7 @@ const {
 } = require('../commands/joke');
 
 const leaderboardCommand =
-    require('./leaderboard');
+    require('../commands/leaderboard');
 
 const {
     runMotivateCommand
@@ -37,7 +37,7 @@ const {
 } = require('../commands/status');
 
 const triviaCommand =
-    require('./trivia');
+    require('../commands/trivia');
 
 const {
     formatCommandResponse
@@ -161,6 +161,9 @@ async function executeCommand(
 
                     correctAnswer:
                         response.triviaData.correctAnswer,
+
+                    answerMap:
+                        response.triviaData.answerMap,
 
                     messageId:
                         sentMessage.id
