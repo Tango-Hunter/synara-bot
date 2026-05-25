@@ -32,6 +32,9 @@ Get a neat fact.
 !joke
 SYNARA's version of humor.
 
+!leaderboard
+Check the Trivia Game Leaderboard and view your stats.
+
 !motivate
 Motivational Message.
 
@@ -43,6 +46,9 @@ View your current efficiency assessment.
 
 !status
 View current SYNARA system status.
+
+!trivia
+Compete in the Trivia game.
 
 
 `

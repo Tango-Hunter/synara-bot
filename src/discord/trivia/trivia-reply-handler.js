@@ -124,6 +124,10 @@ async function handleTriviaReply(
             message.author.id
         );
 
+        clearTimeout(
+            session.timeoutId
+        );
+
         removeTriviaSession(
             message.channel.id
         );
@@ -146,17 +150,13 @@ async function handleTriviaReply(
         message.author.id
     );
 
-    removeTriviaSession(
-        message.channel.id
-    );
-
     await message.reply(
 
-        'Incorrect. Confidence exceeded accuracy.'
+        'Incorrect. Additional attempts remain available.'
     );
 
     return true;
-}
+    }
 
 module.exports = {
     handleTriviaReply

@@ -156,6 +156,9 @@ async function executeCommand(
                     channelId:
                         message.channel.id,
 
+                    channel:
+                        message.channel,
+
                     userId:
                         message.author.id,
 

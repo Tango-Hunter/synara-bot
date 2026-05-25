@@ -12,11 +12,58 @@ const activeTriviaSessions =
 function createTriviaSession({
 
     channelId,
+    channel,
     userId,
     correctAnswer,
     answerMap,
     messageId
 }) {
+
+    const timeoutId =
+
+        setTimeout(
+
+            async () => {
+
+                const session =
+
+                    activeTriviaSessions.get(
+                        channelId
+                    );
+
+                if (
+                    !session
+                ) {
+
+                    return;
+                }
+
+                try {
+
+                    const channel =
+
+                        session.channel;
+
+                    await channel.send(
+
+                        `Trivia session expired. The correct answer was: ${correctAnswer}`
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+                }
+
+                activeTriviaSessions.delete(
+                    channelId
+                );
+
+            },
+
+            5 * 60 * 1000
+        );
 
     activeTriviaSessions.set(
 
@@ -24,6 +71,7 @@ function createTriviaSession({
 
         {
             userId,
+
             correctAnswer:
                 correctAnswer
                     .toLowerCase()
@@ -32,6 +80,10 @@ function createTriviaSession({
             answerMap,
 
             messageId,
+
+            timeoutId,
+
+            channel,
 
             createdAt:
                 Date.now()
