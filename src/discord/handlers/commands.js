@@ -17,6 +17,9 @@ const {
     runJokeCommand
 } = require('../commands/joke');
 
+const leaderboardCommand =
+    require('./leaderboard');
+
 const {
     runMotivateCommand
 } = require('../commands/motivate');
@@ -33,9 +36,16 @@ const {
     runStatusCommand
 } = require('../commands/status');
 
+const triviaCommand =
+    require('./trivia');
+
 const {
     formatCommandResponse
 } = require('../../shared/utils/command-formatter');
+
+const {
+    createTriviaSession
+} = require('../trivia/trivia-session-manager');
 
 const {
     logError,
@@ -63,6 +73,9 @@ const commandRegistry = {
         execute: runJokeCommand
     },
 
+    '!leaderboard':
+        leaderboardCommand,
+
     '!motivate': {
         title: 'MOTIVATION',
         execute: runMotivateCommand
@@ -81,7 +94,10 @@ const commandRegistry = {
     '!status': {
         title: 'STATUS',
         execute: runStatusCommand
-    }
+    },
+
+    '!trivia':
+        triviaCommand
 };
 
 async function executeCommand(
@@ -116,11 +132,40 @@ async function executeCommand(
             response.embed
         ) {
 
-            await message.reply({
-                embeds: [
-                    response.embed
-                ]
-            });
+            const sentMessage =
+
+                await message.reply({
+
+                    embeds: [
+                        response.embed
+                    ]
+                });
+
+            /*
+            ============================
+            TRIVIA SESSION CREATION
+            ============================
+            */
+
+            if (
+                response.triviaData
+            ) {
+
+                createTriviaSession({
+
+                    channelId:
+                        message.channel.id,
+
+                    userId:
+                        message.author.id,
+
+                    correctAnswer:
+                        response.triviaData.correctAnswer,
+
+                    messageId:
+                        sentMessage.id
+                });
+            }
 
         } else {
 
