@@ -66,6 +66,26 @@ const embedThemes = {
             '⌬',
         footer:
             'SYNARA • Efficiency Assessment'
+    },
+
+    trivia: {
+
+        color:
+            0x5865F2,
+        icon:
+            '❖',
+        footer:
+            'SYNARA • Trivia Challenge'
+    },
+
+    leaderboard: {
+
+        color:
+            0xF1C40F,
+        icon:
+            '★',
+        footer:
+            'SYNARA • Trivia Leaderboard'
     }
 };
 

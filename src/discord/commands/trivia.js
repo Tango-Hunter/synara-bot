@@ -90,7 +90,7 @@ async function handleTriviaCommand({
         buildEmbed({
 
             type:
-                'observation',
+                'trivia',
 
             title:
                 'Trivia Challenge',

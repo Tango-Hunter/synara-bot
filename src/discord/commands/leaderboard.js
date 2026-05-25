@@ -67,7 +67,7 @@ async function handleLeaderboardCommand({
         buildEmbed({
 
             type:
-                'status',
+                'leaderboard',
 
             title:
                 'Trivia Leaderboard',
