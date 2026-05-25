@@ -1,0 +1,5587 @@
+[
+  {
+    "theme": "creativity",
+    "tone": "thoughtful",
+    "question": "Do you buy designer clothes, avoid them, or simply go by style / price? Why?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "Has the invention of the atomic bomb made the world a more peaceful place?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "nostalgic",
+    "question": "If you could control the weather, what would be your favorite weather to create?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "If you could create a new holiday, what would it celebrate?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "If you could create a new primary color that has never been seen before, what would you name it?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "If you could merge two animals to create a new species, what would they be?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "If you were given five million dollars to open a small museum, what kind of museum would you create?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "Is it be possible for humans to create something completely novel and new that is based on nothing that previously existed? Or is human creativity just rearranging and building on previous ideas?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "What do you think existed before the universe was created?"
+  },
+  {
+    "theme": "creativity",
+    "tone": "creative",
+    "question": "What invention doesn’t get a lot of love, but has greatly improved the world?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "Do you eat food that’s past its expiration date if it still smells and looks fine?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "How adventurous are you when it comes to food?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "How well do you handle spicy food?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If I steal a loaf of bread from you and eat it, when does the bread itself cease to be yours and becomes mine?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If you could bring back one discontinued snack, what would it be?"
+  },
+  {
+    "theme": "food",
+    "tone": "creative",
+    "question": "If you could invent a new flavor of ice cream, what would it be?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If you could summon any food item instantly at any time, what would it be?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If you had to eat only one color of food for a week, which color would you pick?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If you owned a restaurant, what kind of food would it serve?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "If you were a flavor of potato chip, what would you be?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What are some weird ice cream flavors you’ve seen or heard of, would you try them?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What food have you never eaten but would really like to try?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is a food combination that sounds gross but tastes amazing?"
+  },
+  {
+    "theme": "food",
+    "tone": "creative",
+    "question": "What is a food combination that you invented and swear is delicious?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is a food that everyone seems to love, but you think tastes like cardboard?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is a food that you swear tastes different depending on the shape (e.g., dino nuggets vs regular)?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is the best breakfast food?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is the best ice cream topping?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is the best pizza topping combination?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is the best way to eat a potato (fries, mashed, baked, etc.)?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What is the weirdest food you have ever tried?"
+  },
+  {
+    "theme": "food",
+    "tone": "nostalgic",
+    "question": "What is your favorite late-night snack?"
+  },
+  {
+    "theme": "food",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of bread?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What normally delicious food gets ruined when you wrap it in a tortilla?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What unhealthy snack can you not get enough of?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What weird food combinations do you really enjoy?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What weird potato chip flavor that doesn’t exist would you like to try?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What would be the worst food to be liquefied and drunk through a straw?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What would happen to a society in which no one had to work, and everyone was provided enough food/water/shelter/healthcare for free?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What’s the grossest food that you just can’t get enough of?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "What’s the worst thing you ate from a fast food restaurant?"
+  },
+  {
+    "theme": "food",
+    "tone": "conversational",
+    "question": "Where’s your go to restaurant for amazing food?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "Do you think aliens exist? If so, what do you think they look like?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "Do you think that aliens exist?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "How much do you plan / prepare for the future?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "How much of a role do you think A.I. will play in the near future?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "If you could have a conversation with your future self from 10 years from now, what would you ask?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "If you could live in a biodome on Mars, would you go?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "Is the concept of “you” continuous or does past “you” continually fade into present and future “you”? In other words, what part of “you” sticks around over time considering that the atoms that make up your body are constantly being replaced and your memories are always changing?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "Should we terraform planets if it means that we may be destroying undiscovered microscopic alien life?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "What do you think your future self will remember about you now?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "What job doesn’t exist now but will exist in the future?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "What near future predictions do you have?"
+  },
+  {
+    "theme": "future",
+    "tone": "speculative",
+    "question": "What questions would you like to ask a time traveler from 200 years in the future?"
+  },
+  {
+    "theme": "future",
+    "tone": "nostalgic",
+    "question": "What’s something common from your childhood that will seem strange to future generations?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "thoughtful",
+    "question": "Do you play video games? If so, what type of video games do you play the most? If not, why not?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could be a character in Mario Kart, who would you be?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could be a character in a fighting game, what would your 'ultimate' move be?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could be a contestant on any game show, which one would you choose?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could be a professional gamer, what team would you join?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could be the champion of any esport, which game would it be?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could combine two video game genres that don't belong together (e.g., FPS and Farming Sim), what would you make?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could only play games from one console generation (e.g., PS2 era, SNES era), which would you pick?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you could play a game of D&D with any three fictional characters, who is at the table?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you had to live in a video game tutorial level forever, which game would you pick?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you were a boss in a video game, what would your 'second phase' be?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you were a generic NPC in an RPG, what would your one line of dialogue be?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you were an NPC in a game, what kind of loot would you drop when defeated?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "If you were an RPG character, what class would you be (Warrior, Mage, Rogue, etc.)?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What game have you spent the most hours playing?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a 'dead' game that you desperately wish would make a comeback?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game mechanic that you absolutely hate?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game mechanic you wish existed in real life (e.g., double jump, fast travel)?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game sequel that completely ruined the franchise for you?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game that you are currently addicted to?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game that you have put the most hours into?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game that you love, but you are absolutely terrible at playing?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a game you have beaten 100%?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game achievement or trophy you are most proud of?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game boss that you beat on the first try and felt like a god?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game ending that made you cry?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game level that made you rage quit?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game that you think everyone should play at least once?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game world that looks beautiful but would be terrible to live in?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is a video game you wish had a sequel?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is the 'Comfort Food' of video games for you?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best 'Game Over' screen you have ever seen?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best 'idle animation' you have ever seen a character do in a game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best 'save point' music in gaming?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best gaming controller of all time?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best item description you have ever read in a game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best piece of lore in a game that most people miss?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the best soundtrack (OST) in video game history?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "humorous",
+    "question": "What is the funniest glitch you have ever encountered in a game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the most annoying enemy type in video games?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the most chaotic 'lawful evil' thing you have ever done in a video game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the most difficult boss you have ever beaten in a game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the most frustrating way you have ever died in a video game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the scariest non-horror game you have ever played?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the unwritten rule of gaming that everyone should know?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What is the worst mechanic in modern gaming (e.g., battle passes, loot boxes, escort missions)?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite Pokemon starter trio (Gen 1, Gen 2, etc.)?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite arcade game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite board game or card game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite boss fight in video game history?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite cheat code from an old game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite map in any FPS game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite mobile game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite puzzle game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite quote from a video game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "nostalgic",
+    "question": "What is your favorite sound effect in a video game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What sport could you play the longest in a televised game, without anyone discovering you aren’t a professional athlete?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What’s the most addicted to a game you’ve ever been?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What’s the most rage inducing game you’ve ever played?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "What’s your go to casino game?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "Which video game character has the best drip/outfit?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "Which video game villain do you actually sympathize with?"
+  },
+  {
+    "theme": "gaming",
+    "tone": "conversational",
+    "question": "Which video game world would you want to retire in?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "An epic feast is held in your honor, what’s on the table?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Are intelligence and happiness tied together in any way? If you are highly intelligent, is it more likely that you’ll be more, or less happy?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Are intentions or outcomes more important when judging whether actions are moral?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Are there limits to human creativity?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Are you a morning person or a night person?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Are you either a cat person or a dog person? Or neither?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "As a child, what did you think would be awesome about being an adult, but isn’t as awesome as you thought it would be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "At what point is a technologically enhanced human not a human anymore?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "By what standards do you judge yourself?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Can animals have morals?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Can human nature be changed? Should it be changed?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Can rational thought exist without language?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Could societies exist without a way to transfer value (i.e. without money or a barter system)?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do animals have rights and do those rights extend to all animals or do the rights change based on the complexity of the animal?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do business owners have the right to refuse service to customers?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you like cooking? What dishes can you make?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you like things to be carefully planned or do you prefer to just go with the flow?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you prefer dogs or cats or another animal perhaps?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Do you prefer to be too hot or too cold, and why?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think some adversity is good for a person? How much is too much?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think that children born today will have better or worse lives than their parents?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think that humans will ever be able to live together in harmony?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think that wanting things necessarily leads to more sadness and misery?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think the singularity will occur? If so, what time frame do you think it will happen in?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Do you think there will ever be a global government? If a world government did come to power, assuming it wasn’t particularly cruel or evil, would it be a good or bad thing?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Do you think you are good leader or would make a good leader? Why or why not?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does a person’s name influence the person they become?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does absolute power corrupt absolutely?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does fate exist? If so, do we have free will?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does hardship make a person stronger? If so, under what conditions and at what point is it too much hardship? If not, what makes a person stronger?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does jealously have value in driving humans to improve themselves or is it a purely negative emotion?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does knowledge have intrinsic value or does it need to have a practical use to have value?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does marriage as an institution need to be updated or is it fine how it is?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does the modern age make global conspiracies more or less feasible?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Does the study of philosophy ever lead to answers or simply more questions?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "From smiles to roars. From thrills to chills. Universal Orlando Resort. This changes everything."
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Have you ever or would you ever try cosplay?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How ambitious are you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How big of a part of success does luck play?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How conscious do you think animals are?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How do you feel about snakes and spiders?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How do you judge a person?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How do you make yourself sleep when you can’t seem to get to sleep?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How do you think countries could allocate their resources better?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How far should governments go to prevent its citizens from causing harm to themselves?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How forgiving are you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How good are you at admitting when you are wrong?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How important is play in living a healthy and fulfilling life?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How judgmental are you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How long will you be remembered after you die?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How long would you choose to live given the choice of any number of years?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much do you recycle?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much do you take care of your health?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much do you trust or distrust authority figures?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much does language affect our thinking?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much effort should an individual put into not offending others?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much of an accent do you think you have? Are you proud of it or do you wish you could lose it for a more neutral accent?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much privacy are you willing to sacrifice for safety?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How much sleep do you usually get?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How often did you climb trees as a child? Did you have a tree house or fort? When was the last time you climbed a tree?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How self-motivated are you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How well do you dance? What are some of your go to moves?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How well do you take criticism?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How will humans as a species go extinct?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How would the world change if there was an accurate measure of aptitude?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How would you define genius?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "How would you like to see the education system change?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "If a robust and cheap genetic engineering industry existed, would you have your genes edited? If so, what genetic changes would you choose to make? If not, why not?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If all your memories were erased, what kind of person would you be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If animals could talk, which species would be the absolute rudest?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If doing something good for others makes us feel good, can there ever be such a thing as pure altruism?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If freedom is simply being able to do what you want, are animals freer than humans?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If language influences how we perceive color, what other things could languages be changing our perception of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If magic was real, what spell would you try to learn first?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If money was no object, what would be your dream job?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If someone narrated your life, who would you want to be the narrator?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If the universe is finite, what would beyond the edge of the universe be like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If there existed a perfect clone of you, would it also be you? Would it act in exactly the same manner as you (like a mirror) or would it act differently? If it acted differently then would it still be you? At what point would it not be you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If there was a book of commandments for the modern world, what would some of the rules be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you built a themed hotel, what would the theme be and what would the rooms look like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you can save another’s life and don’t because doing so would break the law, are you ethically justified in your decision?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could attend Hogwarts, which house do you think you would be sorted into?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a famous streamer, what kind of content would you make?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a fly on the wall for any secret meeting in history, which one would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a master at any form of dance, which style would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a master of any weapon (sword, bow, nunchucks), which would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a master of disguise, who would you impersonate?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be a master smith, what legendary weapon would you forge?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be born in a different decade, which one would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be invisible for a day, what would you do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be the CEO of any company for a day, which company would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be the best in the world at one sport, which one would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could be the ruler of a microscopic kingdom, what would your citizens be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could breathe underwater, how would you use that ability?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could bring one dinosaur back to life, but it had to be the size of a chicken, which one would you pick?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could challenge any historical figure to a fistfight, who would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could change one thing about your physical appearance with a snap, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could change the color of the sky, what color would you make it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could change your first name, what would you change it to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could communicate with one type of inanimate object, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could experience a day in the life of your pet, would you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could grow a money tree, but it only produced $100 a day, would you quit your job?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a axe that could chop down any tree, what would you build?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a bow that never missed, what would you hunt?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a button that played a specific sound effect whenever you pressed it, what sound would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a clone of yourself to help with tasks, would you get along with them?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a device that translated animal thoughts into speech, would you use it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a functional lightsaber, but it only worked for cutting toast, would you still want it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a hammer that could build anything, what would you construct?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a key that opened any door, where would you go?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a lifetime supply of one specific toiletry item, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a lightsaber, what color would the blade be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a magic carpet, where would you fly to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a magic pen that made whatever you wrote come true, what is the first thing you would write?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a magic wallet that always had $50 in it, how would you spend it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a magic wand, what spell would you cast first?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a magical bag that always produced the exact tool you needed, would you use it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a mute button for one specific sound in real life, what would you mute?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a pause button for your life, when would you use it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a permanent discount (50% off) at one store, which store would you pick?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a personal chef or a personal driver, which would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a personal narrator for your life, would you want Morgan Freeman or someone else?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a personalized license plate, what would it say?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a pet dragon, what would you name it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a pocket dimension to store things, what would you keep in it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a portal gun (Portal) or a gravity gun (Half-Life), which would you pick?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a potion that gave you perfect health forever, would you drink it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a ring that made you invisible, would you use it for good or mischief?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a safe house anywhere in the world, where would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a sidekick from any piece of fiction, who would watch your back?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a spear that always returned to your hand, who would you fight?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a superpower that is strictly 'utility' (no combat), what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a superpower that only worked on weekends, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a tattoo that moved or changed, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have a treehouse that was bigger on the inside, what would you put in it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have an unlimited supply of one specific beverage, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have an unlimited supply of one specific fruit, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have any animal (mythical or real) as a loyal pet, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have any animal's ability (e.g., chameleon camouflage, cheetah speed), what would you take?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have any job in a fantasy world (blacksmith, alchemist, innkeeper), what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "If you could have any superpower for 24 hours, what would you choose and why?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have the ability to always know when someone is lying, would you want it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have the ability to never get tired, what would you accomplish?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have the answer to any one question about the universe, what would you ask?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could have the strength of an ant (proportional to size), what would you lift?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could instantly clean your house by snapping your fingers, what would you do with the extra time?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could instantly know multiple languages, which ones would you pick?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could live in a house made of candy (Hansel & Gretel style), would you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could live in a world made of LEGO, would you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could live in a world where one element of physics was different (e.g., low gravity), what would you change?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could live in the Star Wars universe, would you be a Jedi, Sith, or Bounty Hunter?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could live to be 200 years old but you stop aging at 25, would you do it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could make any object unbreakable, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could make one law that everyone had to follow, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could own a tiny, pocket-sized version of any large animal (e.g., a teacup elephant), what would you pick?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could perfectly mimic any voice, whose voice would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could press a button and receive a million dollars, but one stranger would die, would you press the button? And if so, how many times?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could put a new idiom into common usage, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could rename the Earth, what would you call it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could restart your life but keep your current memories, would you do it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could rewrite the laws of physics, what is one thing you would change?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could shrink yourself down to the size of an ant, what is the first thing you would explore?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could solve one major world problem instantly, which one would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could speak to animals, what is the first animal you would talk to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could start a cult based on a mundane object, what object would you worship?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could stop time for one hour every day, what would you do during that hour?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could summon a swarm of any insect to do your bidding, but they were harmless, which insect would you choose for the scare factor?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could swap lives with a cat for 24 hours, what is the first thing you would do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could swap lives with any celebrity for a day, who would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could talk to animals and they would understand you, but you couldn’t understand them, what would you do with that power?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could teleport anything you want, worth two million dollars or less, anywhere you want, what would you choose and where would you teleport it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could teleport anywhere right now, where would you go?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could understand what babies are saying, would you want to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you could witness any event in history, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had a giraffe that you needed to hide, where would you hide it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had to defend your home from intruders using only the items currently in your room, how long would you survive?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had to disappear and start a whole new life, what would you want your new life to look like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had to fight a horde of 100 duck-sized horses or 1 horse-sized duck, which would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had to live inside a commercial for the rest of your life, which brand's world would you choose?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you had to wear one color for the rest of your life, what would it be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you lived in the Harry Potter universe, what would your Patronus be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you wanted to slowly drive a roommate insane using only notes, what kind of notes would you leave around the house?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a clown themed super hero, what powers would you have?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a deity, what would you be the god/goddess of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a mad scientist, what kind of 'inator' would you build?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a specialized gym leader in Pokémon, what type would you be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a spice, what spice would you be?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "If you were a spice, which one would you be and why?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a transformer, what object (not a vehicle) would you transform into?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a transformer, what vehicle would you turn into?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were a wrestler, what would your stage name be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were given a PhD degree, but had no more knowledge of the subject of the degree besides what you have now, what degree would you want to be given to you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were given one thousand acres of land that you didn’t need to pay taxes on but couldn’t sell, what would you do with it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were in charge renaming things so that their names would be more accurate, what names would you come up with?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "If you were stranded on a deserted island, which three items would you want with you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "In an ideal government, what should a good citizen provide to their government and what should that government provide that good citizen?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "In general, is it better for a person to stand out and be different or blend in with everyone else?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "In what situations, do you wish you could throw down a smoke bomb and disappear?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Is a hotdog a sandwich? Why or why not?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is free will real or just an illusion?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is hierarchy necessary for all successful human communities?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is intelligence or wisdom more useful?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is it better for a person to have a broad knowledge base or a deep knowledge base?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is it better to be a big fish in a small pond or a small fish in a big pond?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is it more or less difficult to be successful in the modern world than it was in the past (10, 50, 100, or 1,000 years ago)?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is it possible that some animals are self-aware and think about their ability to think?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Is it possible that someone’s genes might affect their political leanings? If no, why not? If so, what would be the ramifications?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is it possible to live a normal life and not ever tell a lie?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is justice a human construct or is it independent of humans?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is privacy a right?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is some degree of censorship necessary?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is technological advancement a net positive or a net negative?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is technological progress inevitable as long as humans exist or can it be stopped?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is the cultural trend of individualism and the rejection of collectivism a beneficial or detrimental trend?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Is there inherent order in nature or is it all chaos and chance?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Should kidneys be able to be bought and sold?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Should tax payers have the option to explicitly say what they don’t want their tax dollars spent on?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Should there be limitations on the right to free speech?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "There has always been something. Before there was something, there was only nothing. Which do you think is more likely?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Think of a brand, now what would an honest slogan for that brand be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "This Changes Fun"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Under our government are there any rights that you have but shouldn’t? How about rights you don’t have but should?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What actions in your life will have the longest reaching consequences? How long will those effects be felt?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What activities cause you to feel like you are living life to the fullest?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What always cheers you up when you think about it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What animal or plant do you think should be renamed?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What animal would be cutest if scaled down to the size of a cat?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What app can you not believe someone hasn’t made yet?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What appliance would you have the hardest time doing without?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What are a couple of your favorite quotes?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are some clever examples of misdirection you’ve seen?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are some misconceptions about your hobby?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What are some of your favorite memories with your family?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What are some of your favorite things to do outside?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What are some of your happiest childhood memories?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are some pieces of art that had a big impact on you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are the three biggest threats facing the world?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are you a stickler for?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are you capable of achieving?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are you currently worried about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What are you going to do with the one life you have?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What bit of trivia do you know that is very interesting but also very useless?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What company do you despise?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What current trend do you hope will go on for a long time?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What current trend makes no sense to you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What did you Google last?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What did you believe for way too long as a child?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What did you eat so much of that now you hate it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What did you like / dislike about where you grew up?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What did you think was going to be amazing but turned out to be horrible?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you do to relax and let off steam?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you do when you feel like you are in a rut?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you do when you hear something fall in the middle of the night while you are in bed?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What do you look for when you buy clothes? (Good value, latest fashion, your own unique style, function, comfort, etc.)"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you pretend to understand but actually have no clue about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you probably spend too much money or time on but it is totally worth it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you think about when you hear the word “classy”?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you think could be done to improve the media?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you think the next big tech thing will be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What do you think you are much better at than you actually are?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What does it mean to live a good life?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What elements of pop culture will be forever tied in your mind to your childhood?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What escalated very quickly?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What famous person are you a little too obsessed with?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What feels like a lifetime ago but was relatively recent?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What from the present will withstand the test of time?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What habit do you have now that you wish you started much earlier?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What happens regularly that would horrify a person from 100 years ago?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What has been blown way out of proportion?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What has someone borrowed but never given back?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What horror story do you have from a job you’ve had?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What in life is truly objective and not subjective?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What inconsequential super power would you like to have?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What innovative idea or product have you heard about recently?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a book that changed your perspective on life?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a candy flavor that should not exist?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is a childhood cartoon that you still enjoy watching?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is a childhood toy you wish you still had?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a commercial jingle that has been stuck in your head for years?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a common piece of advice that you think is actually terrible?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a conspiracy theory that you think might actually be true?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a fashion trend you hope never comes back?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a hobby you have always wanted to try but haven't yet?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a memorable mess you had to clean up?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a popular franchise (Star Wars, Marvel, Harry Potter) that you think is overrated?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a popular trend that you just do not understand?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a seemingly small decision you made that changed your life significantly?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a slang term from the past that needs to make a comeback?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a slang word that you use way too much?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a small thing that makes you irrationally angry?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is a smell that immediately reminds you of your childhood?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a talent you have that is completely useless?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a trend from the past that you wish would come back?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a word that sounds fake but is actually real?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is a word you always misspell?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is something you covet?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best 'bad guy turns good' redemption arc in history?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best 'life hack' you have actually used?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best 'so bad it's good' joke you know?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best advice you would give to your younger self?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best complement you’ve ever received?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best compliment you have ever received?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best feeling in the world?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best flavor of chip?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best flavor of juice?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best fruit?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best gift you have ever received?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best kind of cookie?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best museum or strangest museum you have been to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best piece of advice you have ever received from a stranger?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best prank you have ever pulled?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best sandwich you have ever eaten?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best text font (e.g., Times New Roman, Comic Sans)?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best thing going on in your life at the moment?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to spend a Sunday afternoon?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to spend a birthday?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to spend a day alone?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to spend a holiday?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to spend an autumn afternoon?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the best way to start the morning?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the biggest waste of human potential?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the craziest thing you’ve done this week?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the cringiest fashion trend you actually participated in?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the dumbest way you have ever hurt yourself?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the perfect room temperature?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the spiciest thing you’ve ever eaten?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the strangest room or building you’ve been in?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the strangest sport you’ve heard of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is the worst job you have ever had?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is worth standing in line for?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is your definition of evil?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite accent?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite accessory?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite animated film?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite constellation?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite dipping sauce?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite emoji?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite holiday tradition?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite kind of candy?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite meme of all time?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite memory from high school?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite mythical creature?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite season and why?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite smell in a bakery?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite texture?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing about yourself?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing to buy at a bakery?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing to cook for dinner?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing to order at a coffee shop?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite trope in fiction (e.g., enemies to lovers, the chosen one)?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of cheese?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of citrus?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of dried fruit?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of flower?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of melon?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of shoe?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of stone fruit?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of tropical fruit?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite type of weather?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What is your favorite way to relax after a long day?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is your ideal home aesthetic if money wasn’t an issue?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What is your zombie apocalypse weapon of choice?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What job are you grossly under qualified for but think you would be pretty good at?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What just around the corner tech are you eager to get your hands on?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What kinds of things do you like to cook or are good at cooking?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What languages do you wish you could speak?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What life-altering things should every human ideally get to experience at least once in their lives?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What makes you happy?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What makes you roll your eyes every time you hear it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What makes your hometown special?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What mythical creature do you wish actually existed?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What odd smell do you really enjoy?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What outdated slang do you use on a regular basis?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What outdoor activity haven’t you tried, but would like to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What percentage of your life do you feel truly alive? When do you feel that way? How can you feel that way more often?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What problem are you currently grappling with?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What product do you wish a company would make a “smart” version of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What product or service is way more expensive than it needs to be?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What profession doesn’t get enough credit or respect?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What really needs to be modernized?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What riddles do you know?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What rights does every human have? Do those rights change based on age?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What routine are you sick of but haven’t gotten around to changing it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What seemingly innocent question makes you think “It’s a trap!”?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What should the role of a government be, what boundaries and limitations should it have?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What small change greatly improves a person’s appearance?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What still makes you cringe when you think back on it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What story you’ve heard has stayed with you and always disturbs you every time you think about it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What three “tribes” do you feel closest to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What tips or tricks have you picked up from your job / jobs?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What topic could you spend hours talking about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What trend are you tired of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What trend do you think is on the way out?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What two films would you like to combine into one?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What two things are terrible when separate but great when you put them together?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was cool when you were young but isn’t cool now?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was one experience that you were hesitant to try but are really glad you did?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was ruined because it became popular?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was something you really wanted as a kid but now look back on and shake your head? (For me it was wanting to live in a water tower, or an inflatable giant soda can.)"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was the best thing that happened to you today?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was the biggest realization you had about yourself?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was the last book you read?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was the last photo you took?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What was the worst shopping experience you’ve ever had?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What was your favorite class in school?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What were some of the non-tragic turning points in your life?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What were some of your favorite toys as a child?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What will the economy of wealthy countries look like in 50 to 100 years?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What word do you always mispronounce?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What word do you always misspell?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What word is a lot of fun to say?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would a utopia be like, how would it function and continue to exist?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would a world populated by clones of you be like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would be an accurate tag line for each month?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would be the best thing you could reasonably expect to find in a cave?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would be the worst thing to hear as you are going under anesthesia before heart surgery?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would happen if a maximum income of was implemented?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would the box with all your hopes and dreams inside look like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would you genetically change about humans to make them a better species?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What would your perfect bar look like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What “old person” things do you do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s about to get much better?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s are some of your Pavlovian responses?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s better broken than whole?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s fine in small numbers but terrifying in large numbers?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s incredibly cheap and you would pay way more for?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s legal now, but probably won’t be in 25 years?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s quickly becoming obsolete?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something that I don’t know?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something that everyone agrees we should change, but somehow it never changes?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something that everyone knows is true, but we don’t like to admit it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something that everyone, absolutely everyone, in the entire world can agree on?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something that will always be in fashion, no matter how much time passes?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s something you really resent paying for?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the best / worst practical joke that you’ve played on someone or that was played on you?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the best concert you’ve been to? What made it so good?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the best lesson you’ve learned from a work of fiction?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the best sandwich you’ve ever had?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the best way you or someone you know has gotten out of a ticket / trouble with the law?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the biggest overreaction you’ve ever seen?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the clumsiest thing you’ve done?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the coldest you’ve ever been?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the coolest animal you’ve seen in the wild?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the craziest conversation you’ve overheard?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the craziest video you’ve ever seen?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the creepiest tech out there?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the difference between justice and revenge?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the dumbest thing someone has argued with you about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the hardest you’ve ever worked?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the longest rabbit hole you’ve been down?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the oldest thing you own?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the opposite of a koala?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the shadiest thing you’ve seen someone do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the silliest thing you’ve convinced someone of?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the silliest thing you’ve seen someone get upset about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the smartest thing you’ve seen an animal do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the spiciest thing you’ve ever eaten?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the worst backhanded compliment you could give someone?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s the worst thing you’ve eaten out of politeness?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s wrong but sounds right?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your best example of correlation not equaling causation?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your best example of easy come, easy go?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your best example of fake it till you make it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your best story from a wedding?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your cure for hiccups?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What’s your favorite store or type of store to walk around in? How about your least favorite?"
+  },
+  {
+    "theme": "general",
+    "tone": "nostalgic",
+    "question": "What’s your favorite type of funny video to watch?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your good luck charm?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your grossest bug story?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your haunted house story?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your perfect night out look like?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your secret talent?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your worst example of procrastination?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your “Back in my day, we…”?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "What’s your “and then it got worse” story?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When are you at your happiest?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When did something start out badly for you but in the end, it was great?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When is censorship warranted?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was a time you acted nonchalant but were going crazy inside?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you face palmed?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you felt you had a new lease on life?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you got to tell someone “I told you so.”?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you slept more than nine hours?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you stayed up through the entire night?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you went camping?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you were snooping, and found something you wish you hadn’t?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When was the last time you yelled at someone?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When you are old, what do you think children will ask you to tell stories about?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When you fidget, what do you do?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "When, if ever, is taking a human life justified?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where are you not welcome anymore?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where do you draw your inner strength?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where do you get your news?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where does your self-worth come from?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where is the line between art and not art?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Where’s the line between soup and cereal?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which celebrity or band has the worst fan base?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which celebrity would you want to narrate your life?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which do you prefer, shopping online or in person?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Which drugs, if any, do you think should be legalized and why?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which of your beliefs are justified and which ones aren’t?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which of your possessions are so precious that if you dropped it in a public toilet you would reach in and grab it?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which of your vices or bad habits would be the hardest to give up?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which superhero do you think would actually be a terrible person in real life?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Which way should toilet paper hang, over or under?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Who do you feel like you know even though you’ve never met them?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Who do you go out of your way to be nice to?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Who do you wish you could get back into contact with?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Who in your life has the best / worst luck?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why are humans so confident in beliefs that can’t be proven?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why are humans so susceptible to magical thinking?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why do humans have such a strong urge to distract ourselves from the real world?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why do we dream?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why do we judge ourselves by our intentions but judge others by their actions?"
+  },
+  {
+    "theme": "general",
+    "tone": "thoughtful",
+    "question": "Why do we resist doing things that we know are good for our well-being while craving things that are detrimental to our well-being?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Will religion ever become obsolete?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "With no laws or rules to influence your behavior, how do you think you would behave?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would a government run with algorithms, A.I., and statistics be better or worse than the government we have now?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would selectively breeding an animal such as a dog based on intelligence, increase its intelligence over time? If so, how intelligent could dogs become? If not, how does intelligence emerge in a species?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would things get better or worse if humans focused on what was going well rather than what’s going wrong?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would you be able to tell if time had been altered in some way?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would you rather take a walk through a forest or along a beach?"
+  },
+  {
+    "theme": "general",
+    "tone": "conversational",
+    "question": "Would you want to know you are going to die before hand or die suddenly without warning?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "If you could replace the sound of your laugh with any sound effect, what would it be?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What fashion trend makes you cringe or laugh every time you see it?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What is the funniest thing you believed as a child?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What is the weirdest dream you remember having?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What is the weirdest rule your school or workplace ever enforced?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What is the weirdest superstition you actually believe in?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What is the weirdest thing you have ever bought online?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What is the weirdest thing you have ever seen someone do in public?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What made you laugh recently?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What sports if any do you like to watch? If you aren’t into traditional sports, weird and uncommon sports count too."
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What was the last situation where some weird stuff went down and everyone acted like it was normal, and you weren’t sure if you were crazy or everyone around you was crazy?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What’s something commonly done that gets progressively weirder the more you think about it?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest actual name you’ve heard of someone having?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest comedy skit you’ve seen?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest joke you know by heart?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest pick up line you’ve heard?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest thing you’ve done or had happen while your mind was wandering?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest thing you’ve seen a kid do?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s the funniest word in the English language?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What’s the weirdest conversation you’ve eavesdropped on?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What’s the weirdest crush you’ve had?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What’s the weirdest thing that has happened to you while working at your job?"
+  },
+  {
+    "theme": "humor",
+    "tone": "conversational",
+    "question": "What’s the weirdest thing you’ve found lying on the ground / side of the road?"
+  },
+  {
+    "theme": "humor",
+    "tone": "humorous",
+    "question": "What’s your funniest story involving a car?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Do you like movie theater popcorn with butter or without?"
+  },
+  {
+    "theme": "media",
+    "tone": "thoughtful",
+    "question": "Do you prefer book or movies with happy endings or more dramatic endings and why?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Human memory has been shown to be incredibly unreliable. With that in mind, how do you know which of your memories are genuine and which have been altered or made up?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a ghost story, how would you scare people?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a musical, which one would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a noir film, would you be the detective or the femme fatale?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a nursery rhyme, which one would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a sci-fi novel, what role would you play?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a tall tale, what exaggeration would describe you?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a urban legend, what creature would you be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in a western movie, would you be the sheriff or the outlaw?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in any sitcom, which show would you choose?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could be a character in the Lord of the Rings fellowship, who would you be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could bring any fictional character into real life, who would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could change the ending of any movie or show, which one would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could date any fictional character, who would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could force everyone in the world to watch one movie, what would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could have a magic mirror that showed you anything, what would you look at?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could have an unlimited budget to cosplay one character perfectly, who would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could have any car from a movie (e.g., Batmobile, DeLorean), which would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could perfectly recite one movie script from start to finish, which one would it be?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you could switch two movie characters, what switch would lead to the most inappropriate movies?"
+  },
+  {
+    "theme": "media",
+    "tone": "humorous",
+    "question": "If you could turn any serious movie into a musical, which one would be the funniest?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you had to live in a movie universe for a year, which one would you pick?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you had to survive a horror movie, which specific horror movie trope would be your downfall?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "If you were hired to show tourists what life is really like where you live, what would you show them / have them do?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What TV show character would it be the most fun to change places with for a week?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What actors or actresses can’t play a different character because they played their most famous character too well?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What actors or actresses play the same character in almost every movie or show they do?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What awful movie do you love?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What character in a movie could have been great, but the actor they cast didn’t fit the role?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What features would you like to see in the next round of TV’s?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What fictional characters have you had a crush on over the years?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a TV show intro that is unskippable because the song is too good?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a TV show intro you never skip?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a TV show that went on for way too many seasons?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a cliche in anime that you actually love?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a fictional character you hated at first but eventually grew to love?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a fictional sport (e.g., Quidditch, Blitzball) you would want to play professionally?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a genre of movie you refuse to watch?"
+  },
+  {
+    "theme": "media",
+    "tone": "humorous",
+    "question": "What is a movie scene that always makes you laugh, no matter how many times you see it?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie sequel that was better than the original?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie that changed the way you see the world?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie that everyone loves but you hate?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie that is considered a 'classic' that you have never seen?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie that scarred you as a child?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a movie that you think deserves a sequel but never got one?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is a plot hole in a movie that bothers you to this day?"
+  },
+  {
+    "theme": "media",
+    "tone": "thoughtful",
+    "question": "What is one anime that you think is way too overrated? Why do you think that?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the best 'unintentional' comedy movie?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the best fictional currency (e.g., Rupees, Bells, Credits)?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the best opening song (OP) in anime history?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the best plot twist you have ever seen in a movie or show?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the most 'overpowered' ability in any anime?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the most impactful death in anime/movie history for you?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the most intense cliffhanger you have ever experienced in a show?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What is the scariest movie you have ever seen?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your 'comfort' movie or show that you can watch over and over?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your favorite 'bad' movie that you secretly love?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your favorite classic Disney movie?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your favorite fan theory about a movie or show?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your favorite fictional weapon?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What is your favorite movie that came out in the last year?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What movie can you watch over and over without ever getting tired of?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What movie or book do you know the most quotes from?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What movie quotes do you use on a regular basis?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What movie universe would be the worst to live out your life in?"
+  },
+  {
+    "theme": "media",
+    "tone": "humorous",
+    "question": "What movie, picture, or video always makes you laugh no matter how often you watch it?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What scene from a movie still haunts you?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What was the darkest movie you’ve ever seen?"
+  },
+  {
+    "theme": "media",
+    "tone": "humorous",
+    "question": "What’s the funniest TV show you’ve ever seen?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What’s the last movie you watched?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What’s the most recent show you’ve binge watched?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What’s the saddest scene in a movie or TV series?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What’s the scariest non-horror movie?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "What’s the worst movie trope?"
+  },
+  {
+    "theme": "media",
+    "tone": "nostalgic",
+    "question": "What’s your favorite holiday movie?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which anime character do you relate to the most?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which celebrity is the most likely to have a collection of canes that are just for show?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which fictional character would be the best roommate?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which fictional world would be the most terrifying to live in?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which protagonist from a book or movie would make the worst roommate?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Which secondary character in a show deserved a spin-off but never got one?"
+  },
+  {
+    "theme": "media",
+    "tone": "conversational",
+    "question": "Who is the most overpowered anime character in history?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Are you a patient person? What are you patient with that most people aren’t and what do you have no patience for?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "How good is your sense of direction? How often do you get lost?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If animals could talk, which animal would be the most annoying?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If money and practicality weren’t a problem, what would be the most interesting way to get around town?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could ban one specific type of post from social media forever, what would it be?"
+  },
+  {
+    "theme": "music",
+    "tone": "creative",
+    "question": "If you could design your own planet, what would be the most unique rule there?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could have a cinematic montage of your life, what song would be playing?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could have a private concert by any artist, who would it be?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could have a theme song that plays whenever you enter a room, what would it be?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could master any musical instrument in one hour, which one would you choose?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you could only listen to one genre of music for the rest of your life, what would it be?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you had to guess, what do you think would be the most likely way you’ll die?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a ghost and could possess people, what would you make them do?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a ghost, what mild inconvenience would you cause to the people you haunt (e.g., hiding keys)?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a ghost, who or where would you haunt?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a ghostbuster, what would your weapon be?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a graffiti artist what would your tag look like?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "If you were a wrestler, what would your entrance music be?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Most cultures have some form of dance, what benefit do you think dancing gave to early humans?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "There is zero chance that ALL your firmly and dearly held beliefs are true. So, which of your beliefs are most likely to be wrong and which are most liable to be true?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What about humans confuses you the most?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What animal is the most majestic?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What animal would be the most terrifying if it could speak?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What animal would you most like to eat?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are some of the dumbest lyrics you’ve heard in a song?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are some of the most common misconceptions?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are some of the most interesting facts about the natural world you know?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are the three most important life lessons you’ve learned?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are you interested in that most people aren’t?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What are your most important rules when going on a date?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What artist or band do you always recommend when someone asks for a music recommendation?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What big event do you think will happen soon that most people aren’t expecting?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What brand are you most loyal to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What causes the most harm in the world, but is completely avoidable?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What do you hate most and love most about your car / bike if you own one?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What do you know the most about?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What do you need help with most often?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What do you think of the electric scooters you find in most big cities?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What food do you crave most often?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What happens in your country regularly that people in most countries would find strange or bizarre?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What inanimate object would be the most annoying if it played loud upbeat music while being used?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is a song that everyone hates but you secretly vibe to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is a song that instantly puts you in a good mood?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is a song you know every single word to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is or was your most treasured clothing item?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the best part of this period your life? What do you think you’ll be nostalgic for?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most 'satisfying' sound in the world (e.g., opening a soda can, stepping on a crunchy leaf)?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most adventurous thing you have ever done?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most amazing slow motion video you’ve seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most awkward situation you have ever been in?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most beautiful language in the world?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most beautiful place you have ever visited?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most boring sport to watch?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most calming place you can imagine?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most creative insult you have ever heard?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most expensive thing you have bought that you instantly regretted?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most expensive thing you have ever broken?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most fertile soil for hatred? Fear, ignorance, jealousy, or something else entirely? Is it possible that some people are genetically predisposed to hatred?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most heartwarming thing you have ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most important goal every person should have?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most important right our government allows for?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most impressive magic trick you have ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most impressive thing you can cook?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most interesting documentary you have ever watched?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most interesting fact you know?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most legendary 'rage quit' you have ever witnessed or experienced?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most memorable 'plot twist' in your own personal life?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most memorable commercial or advertisement you have ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most memorable meal you have ever had?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most mysterious thing you have ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most nostalgic smell to you?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most random thing you have memorized?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most refreshing drink?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most relaxing sound in the world to you?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most romantic thing you have ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most satisfying sound in the world?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most satisfying thing to clean?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most underrated song from a popular artist?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most underrated topping for a burger?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the most unexpected thing on your bucket list?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the single most important thing a single individual can do to further the greater good?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What is the strangest or most interesting creature you have heard of?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What memory of yours feels real but is most likely false?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What naps are the most satisfying?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What new language would you like to learn most?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What obstacles would be included in the World’s most amazing obstacle course?"
+  },
+  {
+    "theme": "music",
+    "tone": "humorous",
+    "question": "What outfit could you put together from clothes you own to get the most laughs?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What part of the house do you hate to clean the most?"
+  },
+  {
+    "theme": "music",
+    "tone": "creative",
+    "question": "What piece of “art” would you create if you had to pretend to be an artist and submit something to a gallery?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What song or artist are you into at the moment?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What songs do you feel compelled to sing along with when you hear them, even if you don’t totally know all the words?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What songs do you know every word to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What songs do you only know the chorus to?"
+  },
+  {
+    "theme": "music",
+    "tone": "nostalgic",
+    "question": "What songs hit you with a wave of nostalgia every time you hear them?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What two questions would you ask to get the most information about who a person truly is?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What values are most important to you?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was one of the most interesting concerts you’ve been to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was the last song you sang along to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was the most amazing physical feat you’ve managed to pull off?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was the most important appointment or deadline you missed?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was the most unsettling film you’ve seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What was your most recent lie?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What would be the most ethical way to give away five million dollars?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What would be the most unsettling thing to keep occasionally finding around your house?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What would the adult version of an ice-cream truck sell and what song would it play?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most amazing place in nature you’ve been?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most amazing true story you’ve heard?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most annoying animal you’ve encountered?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most annoying noise?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most annoying thing about the social media platform you use most often?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most anxiety inducing thing you do on a regular basis?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most awkward thing that happens to you on a regular basis?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most beautiful beach you’ve been to?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most boring sport, and what would you do to make it more exciting?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most boring super hero you can come up with?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most creative use of emojis you’ve ever seen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most depressing meal you’ve eaten?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most disgusting sounding word in the English language?"
+  },
+  {
+    "theme": "music",
+    "tone": "nostalgic",
+    "question": "What’s the most embarrassing story from your childhood?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most epic way you’ve seen someone quit or be fired?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most exotic food you’ve ever eaten?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most expensive thing you’ve broken?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most frustrating product you own?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most historic thing that has happened in your lifetime?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most interesting building you’ve ever seen or been in?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most interesting documentary you’ve ever watched?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most ironic thing you’ve seen happen?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most overrated product out on the market?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "What’s the most pleasant sounding accent?"
+  },
+  {
+    "theme": "music",
+    "tone": "humorous",
+    "question": "What’s the most ridiculous animal on the planet?"
+  },
+  {
+    "theme": "music",
+    "tone": "humorous",
+    "question": "What’s the most ridiculous thing you have bought?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "When was the last time you were hopelessly lost?"
+  },
+  {
+    "theme": "music",
+    "tone": "humorous",
+    "question": "When was the most inappropriate time you busted out in laughter?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Where do you get most of the decorations for your home?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Where is the most enchanting place you’ve been?"
+  },
+  {
+    "theme": "music",
+    "tone": "nostalgic",
+    "question": "Where is the most uncomfortable place you have ever slept?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Which apocalyptic dystopia do you think is most likely?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Which celebrity do you think is the most down to earth?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Which charity or charitable cause is most deserving of money?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Who is the most creative person you know?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Who is the most hardcore person you know?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Who is the most manipulative person you’ve ever met?"
+  },
+  {
+    "theme": "music",
+    "tone": "nostalgic",
+    "question": "Who is your favorite artist or what is your favorite art style?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Who was your craziest / most interesting teacher?"
+  },
+  {
+    "theme": "music",
+    "tone": "nostalgic",
+    "question": "Who’s is the person you feel most comfortable around?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "Would it be more frightening to discover that humans are the most advanced species in the universe or that we are far from being the most advanced species in the universe?"
+  },
+  {
+    "theme": "music",
+    "tone": "conversational",
+    "question": "“Know thyself” is an ancient concept going back much further than Socrates and is at the root of much of philosophy. With that in mind, what are the most important things to learn about one’s self or is all self-knowledge equal?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "As more and more is being discovered about quantum physics, we become less and less able to comprehend the nature of reality. Is this something temporary and our minds will adapt and begin to understand this new reality or is it possible that the human mind will soon reach its limits of comprehension? If it’s only temporary, is there is a limit to what the human mind can comprehend? If we are reaching our limits, how do we continue to study our reality?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Assuming evolution is correct, do you think that if humans went extinct another species as intelligent as humans would evolve? If life exists long enough on a planet, is intelligence and consciousness inevitable?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Can morality ever be objective or is it always subjective? If it can be objective, in what instances? If it’s always subjective, how do we decide whose concept of morality is correct?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Different people and different organisms perceive reality in vastly different ways. With that in mind, what is real and what is just our perception of reality? Or does every organism live in its own personal reality?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "How do you define consciousness?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "How would humanity change if all humans’ life expectancy was significantly increased (let’s say to around 500 years)?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "speculative",
+    "question": "If humanity was put on trial by an advanced race of aliens, how would you defend humanity and argue for its continued existence?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If it was discovered that most animals were conscious of their existence and eventual death, what would be the ramifications of that discovery?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If you could delete one app from existence forever, which one would it be?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If you could have a universal remote that controlled reality, what button would you press first?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "If you could know the truth behind every conspiracy, but you would instantly die if you hinted that you knew the truth, would you want to know?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "If you could learn the truth about one unsolved mystery, which one would it be?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If you could teach everyone in the world one concept, what concept would have the biggest positive impact on humanity?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If you lived in a virtual reality world of your own creation, what would it look like?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "If you were given unlimited resources, how would you lure the worst of humanity into one stadium at the same time?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Is a sense of humor a byproduct of consciousness or something else entirely?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Is humanity headed in the right or wrong direction?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Is it possible for a human to fathom the true depths of reality and existence?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Is it possible to prove that other people besides yourself have consciousness?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Is it right or wrong that everyone seems to be accustomed to the fact that all of humanity and most of the life on Earth could be wiped out at the whim of a handful of people?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "creative",
+    "question": "Is math something that humans created or something we discovered? Is looking at reality mathematically an accurate representation of how things work?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Is the meaning of life the same for animals and humans?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Is there a meaning to life? If so, what is it?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What do you think about reality TV shows?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What do you think would be humanity’s reaction to the discovery of extraterrestrial life?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What goal do you think humanity is not focused enough on achieving?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "What harsh truths do you prefer to ignore?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "What is the benefit of consciousness from an evolutionary stand point?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "What is the best path to find truth; science, math, art, philosophy, or something else?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What scientific breakthrough would have the biggest effect on humanity?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What scientific discovery would change the course of humanity overnight if it was discovered?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "What should be the goal of humanity?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Where do you find meaning in your life?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Where do you think is the most worthwhile place to find meaning in life? Work, family, hobby, religion, philosophy, helping others, all the small miracles, or something else entirely?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "thoughtful",
+    "question": "Why do humans often associate beauty with morality?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Will humanity ever be able to escape tribalism and the creation of in and out groups? Should it?"
+  },
+  {
+    "theme": "philosophy",
+    "tone": "conversational",
+    "question": "Will we keep leaping to even greater technological and scientific breakthroughs that radically change society, or will the rate of progress slow and humanity’s progress be limited to incremental improvements?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Are people ethically obligated to improve themselves?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Are relationships with your friends or your family more important to you?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Can a society exist without laws?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Do all people have equal value regardless of their actions or is a person’s value based on their actions?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Do people in wealthier countries have a moral obligation to help those in poorer countries?"
+  },
+  {
+    "theme": "social",
+    "tone": "thoughtful",
+    "question": "Do you think people are wiser now than they were 100 years ago? Why or why not?"
+  },
+  {
+    "theme": "social",
+    "tone": "thoughtful",
+    "question": "Do you think silence is relaxing or unnerving? Why do you think other people might feel the opposite way?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Does anonymity encourage people to misbehave or does it reveal how people would choose to act all the time if they could?"
+  },
+  {
+    "theme": "social",
+    "tone": "thoughtful",
+    "question": "Has social media been a net positive or a net negative for our society? Why?"
+  },
+  {
+    "theme": "social",
+    "tone": "nostalgic",
+    "question": "How comfortable are you speaking in front of large groups of people?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "How much do you think names affect the outcomes of people’s lives?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "How should we measure the productivity of a society?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "How would society change if men were able to get pregnant and men and women both had an equal chance of getting pregnant?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "If a child somehow survived and grew up in the wilderness without any human contact, how “human” would they be without the influence of society and culture?"
+  },
+  {
+    "theme": "social",
+    "tone": "thoughtful",
+    "question": "If all humans want the same basic things, why is there so much violence and strife between people?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "If babies are considered innocent, when do people cease to be innocent?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "If people receive a purple heart for bravery, what would other color hearts represent?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "If you could have dinner with any three people (dead or alive), who would they be?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "If you were a cryptid (like Bigfoot or Nessie), what blurry photo would people have of you?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "In the past people were buried with the items they would need in the afterlife, what would you want buried with you so you could use it in the afterlife?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Is it more important to help yourself, help your family, help your society, or help the world?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Is poverty in society inevitable?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Is suffering a necessary part of the human condition? What would people who never suffered be like?"
+  },
+  {
+    "theme": "social",
+    "tone": "creative",
+    "question": "Some people believe that if life has no purpose, then there is no reason for living. While others think that if life has no purpose, that frees a person to find/create and follow their own personal purpose. Which is a more valid point of view or are they both equally valid?"
+  },
+  {
+    "theme": "social",
+    "tone": "humorous",
+    "question": "Tear gas makes people cry and laughing gas makes people giggle, what other kinds of gases do you wish existed?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What about modern society baffles you?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What are some red flags and green flags for a new friendship?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What are the benefits and drawbacks of diversity in society?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What benefits does art provide society? Does art hurt society in any way?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do a lot of people have very strong opinions about, even though they know very little about it?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do a lot of people hope will happen but is just not going to happen?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do you contribute back to society?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do you think the long-term effects of so many people being glued to their screens will be?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do you think the people in charge at your job or school could be doing better?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What do you think you do better than 90% of people?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What does the opposite sex do that you wish that you could do, but it’s not anatomically feasible or it’s socially frowned upon?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What is a mythological god or goddess you think you could actually be friends with?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What is something that unnerves you but the majority people don’t seem to be bothered by?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What is the biggest threat to the social contract in our country?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What kind of people do you surround yourself with?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What nicknames do you have for people in your life?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What qualities do all your friends have in common?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What social stigma does society need to get over?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What unethical experiment would have the biggest positive impact on society as a whole?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What will be/are some of the by-products to society of everyone having the ability to take pictures or a video at any time?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s a common experience for many people that you’ve never experienced?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s some insider knowledge that only people in your line of work have?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s something people don’t worry about but really should?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s something that all your friends agree on?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s something that people think makes them look cool, but actually has the opposite effect?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "What’s the weirdest thing about modern life that people just accept as normal?"
+  },
+  {
+    "theme": "social",
+    "tone": "thoughtful",
+    "question": "Why do you think in western society it has been relatively uncommon for men to wear make up?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Without religion would people become more, less, or be equally morally corrupt?"
+  },
+  {
+    "theme": "social",
+    "tone": "conversational",
+    "question": "Would you want the ability to hear the thoughts of people near you if you couldn’t turn the ability off?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Assume that in the future there will be huge leaps in human augmentation. Given a scale from completely human to completely machine, how far would you choose to augment yourself with robotics? What parts would you augment and why?"
+  },
+  {
+    "theme": "technology",
+    "tone": "speculative",
+    "question": "Considering that the technology exists to enable a real democracy, would a true democracy (every single person can vote on every single legislation) be advantageous or detrimental?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Do you think that humans as a species have changed much in the last 2000 years? Not human technology but humans themselves. Why or why not?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Have you ever or would you ever dye your hair a wild color?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "How comfortable are you being without a phone?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "How do you think the internet would change if all advertising was banned on the internet?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "How do you think you’d fair in prison?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "How much faith do you put in humanity?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "How much of your body would you cybernetically enhance if you could?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "How much time do you spend on your phone?"
+  },
+  {
+    "theme": "technology",
+    "tone": "speculative",
+    "question": "If emotions are the product of biochemical reactions, then in the future we will be theoretically able to control them. If we could control emotions through technology, should we?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "If every neuron in a human was accurately simulated in a computer, would it result in human consciousness?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If everyone said what they were actually thinking, what would happen to society?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If it was discovered that personality traits were partly genetic and could be removed with gene therapy, would it be ethical to edit out negative character traits that harm others like extreme aggression, compulsive lying, or cruelty?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could automatically download a book's contents into your brain, which book would you pick?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could be a bender from Avatar: The Last Airbender, which element would you bend?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could be a character in a cyberpunk world, what cybernetic enhancement would you get?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could be a character in a horror movie, would you be the hero, the villain, or the first to die?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could be the captain of a pirate ship or a space ship, which would you choose?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could control one element (Fire, Water, Earth, Air), which one would you choose?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could control plants, would you be a superhero or an eco-villain?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could erase one movie from your memory just to watch it again for the first time, what would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could hack into any one computer, which computer would you choose?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a HUD (Heads Up Display) for real life, what is the one stat you would want to see above people's heads?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a HUD (Heads Up Display) in real life, what stats would you want to see?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a HUD (Heads Up Display) that showed the probability of one thing, what would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a coffee with any fictional villain, who would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a conversation with your pet for exactly 5 minutes, what would you explain to them?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a dinner party with three fictional villains, who are you inviting?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a house that was fully automated by an AI, would you trust it?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a library containing every book ever written, would you want it?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a magic backpack that always produced the snack you were craving, would you ever cook again?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a robot servant do one chore for you forever, what would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a shield that could reflect any attack, what would you defend against?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have a tailored suit/dress made of any material, what would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have an all-expenses paid trip to see any famous world monument, which monument would you choose?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have any vehicle from fiction (e.g., The Batmobile, The Mystery Machine), which one would you drive daily?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could have any voice actor record your voicemail greeting, who would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could instantly learn every shortcut key for every program on a computer, would you?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could live in a world where magic exists but there is no internet, would you take the deal?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could live inside a painting, which one would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could own the original painting of any famous artwork, which would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could physically enter the internet like in 'Wreck-It Ralph', what website would you visit first?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could replace the main character of a movie with yourself, which movie would it be?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could replace your arm with a robotic arm that had gadgets, would you?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you could swap the main characters of two different TV shows, which swap would cause the most chaos?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you had a HUD that showed three stats about any person you looked at, what three stats would you want it to show?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you had to explain the internet to a medieval peasant, what is the first thing you would show them?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you had to give up the internet or air conditioning/heating, which would you choose?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you were a Sim, what would be your dominant personality trait?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you were a cryptic quest giver, where would you hide to wait for the hero?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If you were the villain in a story, what would be your motivation?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "If your job gave you a surprise three day paid break to rest and recuperate, what would you do with those three days?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Is a life that focuses on avoiding pain and seeking out pleasure a good and worthwhile life? Why or why not?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Is happiness just chemicals flowing through your brain or something more?"
+  },
+  {
+    "theme": "technology",
+    "tone": "creative",
+    "question": "Is the human tendency to create groups an overall positive or a negative trait in terms of general human flourishing?"
+  },
+  {
+    "theme": "technology",
+    "tone": "creative",
+    "question": "Is there a limit to what humans can create through technology and science?"
+  },
+  {
+    "theme": "technology",
+    "tone": "speculative",
+    "question": "Is true artificial intelligence possible with our current technology and methods of programming?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Should full access to the internet be a fundamental human right?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What are some red flags to watch out for in daily life?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What are you waiting for?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What do you attribute the biggest successes in your life to? How about your largest failures?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What food is delicious but a pain to eat?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is a movie trailer that was actually better than the movie itself?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is a paradox that hurts your brain to think about?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is a song that instantly makes you feel like the main character?"
+  },
+  {
+    "theme": "technology",
+    "tone": "speculative",
+    "question": "What is a technology from science fiction that you wish existed today?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is a villain song that hits harder than the hero's theme?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the best way for a person to attain happiness?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the best way to spend a rainy day?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the best way to train people to see the gradients in the world around them instead of just a simplistic “this is good, that is wrong” view of the world?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the best way to travel (car, train, plane, boat)?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the most physically painful thing you have ever experienced?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the most useful item you keep in your bag/pockets daily?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What is the worst haircut you have ever had?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What is your favorite fast food chain?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing about modern technology?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What is your favorite thing to do on a rainy day?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What smartphone feature would you actually be excited for a company to implement?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What were you completely certain of until you found out you were wrong?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What would be some of the downsides of certain superpowers?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What would be the click-bait titles of some popular movies?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What’s the cutest thing you can imagine? Something so cute it’s almost painful."
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What’s the most comfortable bed or chair you’ve ever been in?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What’s the most physically painful thing you’ve ever experienced?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What’s the weirdest text or email you’ve gotten?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What’s the worst hairstyle you’ve ever had?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "What’s your best story of you or someone else trying to be sneaky and failing miserably?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What’s your favorite TV show currently on air?"
+  },
+  {
+    "theme": "technology",
+    "tone": "nostalgic",
+    "question": "What’s your favorite way to spend a rainy day?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "When was the last time you immediately regretted something you said?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Who did you use to look up to, but they screwed up and you lost faith in them?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Who has zero filter between their brain and mouth?"
+  },
+  {
+    "theme": "technology",
+    "tone": "speculative",
+    "question": "Who in your life is the worst at using technology?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Why did technology progress more slowly in the past than it does now?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Why do people expect a universe full of randomness to be fair?"
+  },
+  {
+    "theme": "technology",
+    "tone": "thoughtful",
+    "question": "Why don’t we as a species take more advantage of the fact that we have almost infinite knowledge available to us?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Would you rather AI and scientists oversee a country’s policies or politicians?"
+  },
+  {
+    "theme": "technology",
+    "tone": "conversational",
+    "question": "Your perception of the world is just what your brain constructs for you from the signals sent by your senses. Plus, there is a slight delay, so you aren’t even experiencing the simulation in real time. What would it be like if humans could perceive what the world is actually like and do it in real time? Also, what are the ramifications of every single person’s reality being a little different and unique to them?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Are all individuals morally obligated to save another person’s life if they are able? What if that person lives in another country?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Have you found your place in the world? How common or uncommon do you think it is to feel like you’ve found your place in the world?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "How replaceable are you?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "How would your country change if everyone, regardless of age, could vote?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If cartoon physics suddenly replaced real physics, what are some things you would want to try?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If the transporters in Star Trek existed and you used it, your particles would be disassembled and then reassembled, do you die every single time? Are you ever alive at two places at once? Are you ever completely dead?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could have a 'save point' in real life that you could return to once, where would you place it?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could live in a floating city in the sky or an underwater city, which would you pick?"
+  },
+  {
+    "theme": "travel",
+    "tone": "thoughtful",
+    "question": "If you could rename your country or state, what would you rename it and why?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could replace one body part with a bionic enhancement, what would it be?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could replace the moon with any other planet, which one would look the coolest?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could start a country from scratch, what would it be like?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you could turn into a bird and fly anywhere, where is the first place you would go?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you had to replace your hands with objects, what objects would you choose?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you were given the ability to reform how your country’s leaders were chosen and how they serve, what would you change?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "If you were moving to another country, but could only pack one carry-on sized bag, what would you pack?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Is it just and right to deny entry to a country when doing so probably means death for the immigrant and their family?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Is there a country you’ve really been wanting to visit?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What are some of the best vacations you’ve had?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What are the biggest moral dilemmas your country is facing now?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What country is the strangest from your cultural stand point?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What do you do to make the world a better place?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What do you like and dislike about your city or town?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What famous person is actually making the world a better place?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What is your dream vacation?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "What’s the best and worst thing about the country you are from?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Where are some unusual places you’ve been?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Where is the best place you’ve been for taking walks?"
+  },
+  {
+    "theme": "travel",
+    "tone": "nostalgic",
+    "question": "Where is your favorite place to take a walk?"
+  },
+  {
+    "theme": "travel",
+    "tone": "thoughtful",
+    "question": "Why have many societies begun to place such a high value on emotions and being emotional?"
+  },
+  {
+    "theme": "travel",
+    "tone": "conversational",
+    "question": "Would the world be a better or worse place if everyone looked the same?"
+  }
+]

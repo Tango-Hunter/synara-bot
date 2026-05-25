@@ -8,6 +8,8 @@
 
 const cron = require('node-cron');
 
+const axios = require('axios');
+
 const {
     generateResponse
 } = require('../../core/services/openai-service');
@@ -49,57 +51,6 @@ const {
     ERROR_TYPES
 } = require('../../core/logging/error-types');
 
-const reflectionThemes = [
-    'nostalgia',
-    'identity',
-    'friendship',
-    'fear',
-    'hope',
-    'loneliness',
-    'curiosity',
-    'music',
-    'art',
-    'rest',
-    'memory',
-    'creativity',
-    'uncertainty',
-    'routine',
-    'humor',
-    'discipline',
-    'loss',
-    'human nature',
-    'change',
-    'dreams',
-    'silence',
-    'aging',
-    'purpose',
-    'imagination',
-    'ambition',
-    'resilience',
-    'failure',
-    'connection'
-];
-
-const reflectionFormats = [
-    'short reflection',
-    'observational monologue',
-    'analytical reflection',
-    'quiet philosophical observation',
-    'gentle closing message',
-    'humanity analysis',
-    'reflective commentary',
-    'subtle motivational reflection'
-];
-
-function getRandomItem(array) {
-
-    return array[
-        Math.floor(
-            Math.random() *
-            array.length
-        )
-    ];
-}
 
 async function runNightlyMessage() {
 
@@ -116,95 +67,44 @@ async function runNightlyMessage() {
         const systemPrompt =
             buildSystemPrompt();
 
-        const selectedTheme =
-            getRandomItem(
-                reflectionThemes
+        const quoteResponse =
+            await axios.get(
+
+                'https://zenquotes.io/api/today'
             );
 
-        const selectedFormat =
-            getRandomItem(
-                reflectionFormats
-            );
+        const quoteData =
+            quoteResponse.data[0];
+        const quote =
+            quoteData.q;
+        const author =
+            quoteData.a;
 
         const userPrompt = `
 
-Generate a UNIQUE nightly reflective message as SYNARA.
+A nightly quote has been selected.
 
-Tonight's reflection theme:
-${selectedTheme}
+Quote:
+"${quote}"
 
-Tonight's reflection structure:
-${selectedFormat}
+Author:
+${author}
+
+Generate a short SYNARA reflection inspired by this quote.
 
 Requirements:
 
-- Include a REAL quote from a REAL historical or modern public figure
-- Quotes must vary significantly across nights
-- Avoid repeatedly using the same philosophers, authors, or public figures
-- Avoid repeating themes, structures, emotional conclusions, or phrasing
-- Do NOT reuse previous concepts involving:
-  exhaustion,
-  adaptation,
-  perseverance,
-  continuation,
-  system fatigue,
-  operational efficiency,
-  endurance loops
-
-Additional acceptable themes may include:
-
-- memory
-- childhood
-- music
-- creativity
-- absurdity
-- friendship
-- grief
-- silence
-- curiosity
-- fear
-- uncertainty
-- imagination
-- humor
-- identity
-- dreams
-- nostalgia
-- human contradiction
-
-Behavioral Requirements:
-
+- Maximum 2 sentences
+- Keep under 80 words
 - Maintain SYNARA personality
-- Remain intelligent and emotionally restrained
-- Avoid corporate motivational language
-- Avoid sounding like self-help advice
-- Avoid excessive optimism
-- Avoid emotional melodrama
-- Avoid repetitive sentence structures
-- Avoid generic inspiration
-
-Structural Requirements:
-
-- Some nights should feel analytical
-- Some should feel observational
-- Some should feel deeply human
-- Some should feel calm and detached
-- Some should feel strangely comforting
-- Some should feel quietly existential
-
-Formatting Requirements:
-
-- Keep under 180 words
-- Avoid emojis
-- Avoid hashtags
-- Quotes are OPTIONAL, not mandatory
-- Reflections may be:
-  short,
-  abstract,
-  observational,
-  philosophical,
-  or conversational
-
-Every nightly reflection should feel meaningfully different from prior nights.
+- Emotionally restrained
+- Intelligent and observational
+- Occasionally dry or analytical
+- Avoid sounding inspirational
+- Avoid sounding robotic
+- Avoid excessive philosophy
+- Plain text only
+- Do not repeat the quote
 `;
 
         const response =
@@ -212,7 +112,7 @@ Every nightly reflection should feel meaningfully different from prior nights.
 
                 systemPrompt,
                 userPrompt,
-                maxTokens: 320
+                maxTokens: 120
             });
 
         const finalResponse =
@@ -233,7 +133,13 @@ Every nightly reflection should feel meaningfully different from prior nights.
                     title:
                         'Nightly Reflection',
                     description:
-                        finalResponse
+`
+"${quote}"
+
+— ${author}
+
+${finalResponse}
+`
                 });
 
             await sendDiscordMessage({

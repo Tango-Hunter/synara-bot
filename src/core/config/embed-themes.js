@@ -25,7 +25,7 @@ const embedThemes = {
         icon:
             '☾',
         footer:
-            'SYNARA • Night Reflection'
+            'SYNARA • Nightly Reflection'
     },
 
     observation: {

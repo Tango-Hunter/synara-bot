@@ -49,6 +49,9 @@ const {
     ERROR_TYPES
 } = require('../../core/logging/error-types');
 
+const qotdDatabase =
+    require('../databases/qotd-database.json');
+
 async function runDailyQuestion() {
 
     try {
@@ -63,61 +66,48 @@ async function runDailyQuestion() {
         const systemPrompt =
             buildSystemPrompt();
 
+            const selectedEntry =
+
+                qotdDatabase[
+                    Math.floor(
+                        Math.random() *
+                        qotdDatabase.length
+                    )
+                ];
+
+            const {
+                question,
+                theme,
+                tone
+            } = selectedEntry;
+
         const userPrompt = `
 
-Generate a Question of the Day for a Discord community.
+A Question of the Day has already been selected.
 
-The question should feel natural, socially engaging, and varied.
+Theme:
+${theme}
 
-The topic can be:
+Tone:
+${tone}
 
-- entertainment
-- gaming
-- anime
-- nostalgia
-- music
-- internet culture
-- food
-- hobbies
-- personal experiences
-- technology
-- hypothetical scenarios
-- funny preferences
-- life memories
-- random curiosity
-- creativity
-- emotional reflection
-- storytelling
+Question:
+${question}
 
-Avoid making every question overly philosophical or self-improvement focused.
+Generate ONLY a short SYNARA reflection for this question.
 
-The goal is to encourage casual community conversation.
+Requirements:
 
-After the question:
-
-Add a SHORT and subtle SYNARA reflection.
-
-The reflection should:
-
-- feel observational
-- remain concise
-- avoid sounding inspirational
-- avoid sounding robotic
-- avoid excessive depth
-- occasionally sound curious
-- occasionally sound analytical
-- sometimes slightly sarcastic or dry
+- Maximum 2 sentences
+- Keep under 60 words
 - Maintain SYNARA personality
-
-Format:
-
-**Question of the Day**
-
-<Question>
-
-**SYNARA's Reflection**
-
-<Short reflection>
+- Observational and intelligent
+- Occasionally dry or slightly sarcastic
+- Avoid sounding inspirational
+- Avoid sounding robotic
+- Avoid excessive philosophy
+- Plain text only
+- Do not repeat the question
 `;
 
         const response =
@@ -125,7 +115,7 @@ Format:
 
                 systemPrompt,
                 userPrompt,
-                maxTokens: 220
+                maxTokens: 120
             });
 
             const channelIds =
@@ -141,7 +131,15 @@ Format:
                         title:
                             'Good Morning',
                         description:
-                            response
+`
+**Question of the Day**
+
+${question}
+
+**SYNARA's Reflection**
+
+${response}
+`
                     });
 
                 await sendDiscordMessage({
@@ -213,5 +211,6 @@ function startDailyQuestionScheduler() {
 }
 
 module.exports = {
-    startDailyQuestionScheduler
+    startDailyQuestionScheduler,
+    runDailyQuestion
 };
