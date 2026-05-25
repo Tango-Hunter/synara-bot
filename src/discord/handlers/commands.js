@@ -173,6 +173,8 @@ async function executeCommand(
                 });
             }
 
+            return true;
+
         } else {
 
             await message.reply(

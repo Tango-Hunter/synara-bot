@@ -120,7 +120,7 @@ async function handleTriviaReply(
         correctAnswer
     ) {
 
-        addWin(
+        await addWin(
             message.author.id
         );
 
@@ -146,7 +146,7 @@ async function handleTriviaReply(
     ============================
     */
 
-    breakStreak(
+    await breakStreak(
         message.author.id
     );
 

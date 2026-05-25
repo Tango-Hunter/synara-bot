@@ -21,10 +21,10 @@ async function handleLeaderboardCommand({
 }) {
 
     const leaderboard =
-        getLeaderboard();
+        await getLeaderboard();
 
     const userStats =
-        getUserStats(
+        await getUserStats(
 
             userId
         );
@@ -42,24 +42,18 @@ async function handleLeaderboardCommand({
             leaderboard
 
                 .map(
-
                     (
                         entry,
                         index
                     ) => {
 
-                        const [
-                            userId,
-                            stats
-                        ] = entry;
-
                         return `${
 
                             index + 1
 
-                        }. <@${userId}> — ${
+                        }. <@${entry.user_id}> — ${
 
-                            stats.score
+                            entry.score
 
                         } points`;
                     }
