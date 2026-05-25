@@ -52,30 +52,35 @@ function buildModal1() {
         [
             'name',
             'Discord Username',
+            'Enter your Discord username.',
             TextInputStyle.Short
         ],
 
         [
             'age',
             'Age',
+            'Enter your age.',
             TextInputStyle.Short
         ],
 
         [
             'timezone',
             'Timezone',
+            'Enter your timezone.',
             TextInputStyle.Short
         ],
 
         [
             'languages',
             'Primary Language(s)',
+            'List languages you speak comfortably.',
             TextInputStyle.Short
         ],
 
         [
             'availability',
             'Availability',
+            'Describe when you are typically active.',
             TextInputStyle.Paragraph
         ]
     ];
@@ -93,8 +98,12 @@ function buildModal1() {
                     field[1]
                 )
 
-                .setStyle(
+                .setPlaceholder(
                     field[2]
+                )
+
+                .setStyle(
+                    field[3]
                 )
 
                 .setRequired(
@@ -131,31 +140,36 @@ function buildModal2() {
 
         [
             'experience',
-            'Previous moderation experience',
+            'Moderation Experience',
+            'Describe previous moderation or leadership experience.',
             TextInputStyle.Paragraph
         ],
 
         [
             'approach',
-            'Moderation style & approach',
+            'Moderation Style',
+            'Describe your moderation style and approach.',
             TextInputStyle.Paragraph
         ],
 
         [
             'boundaries',
-            'Professionalism & fairness',
+            'Professionalism',
+            'How would you remain fair and professional?',
             TextInputStyle.Paragraph
         ],
 
         [
             'deescalation',
-            'Conflict de-escalation strategy',
+            'Conflict De-escalation',
+            'Describe how you would de-escalate conflict.',
             TextInputStyle.Paragraph
         ],
 
         [
             'scenario',
-            'Handling argumentative members',
+            'Argumentative Members',
+            'How would you handle argumentative members?',
             TextInputStyle.Paragraph
         ]
     ];
@@ -173,8 +187,12 @@ function buildModal2() {
                     field[1]
                 )
 
-                .setStyle(
+                .setPlaceholder(
                     field[2]
+                )
+
+                .setStyle(
+                    field[3]
                 )
 
                 .setRequired(
@@ -211,31 +229,36 @@ function buildModal3() {
 
         [
             'judgment',
-            'Moderator intervention judgment',
+            'Moderator Judgment',
+            'When should moderators intervene?',
             TextInputStyle.Paragraph
         ],
 
         [
             'conflict',
-            'Moderator disagreement handling',
+            'Moderator Disagreements',
+            'How would you handle disagreements with staff?',
             TextInputStyle.Paragraph
         ],
 
         [
             'motivation',
-            'Why do you want to moderate?',
+            'Motivation',
+            'Why do you want to moderate here?',
             TextInputStyle.Paragraph
         ],
 
         [
             'observations',
-            'Server strengths & improvements',
+            'Server Observations',
+            'What does this server do well? What could improve?',
             TextInputStyle.Paragraph
         ],
 
         [
             'bonus',
-            'Anything else?',
+            'Additional Notes',
+            'Anything else the staff should know?',
             TextInputStyle.Paragraph
         ]
     ];
@@ -253,8 +276,12 @@ function buildModal3() {
                     field[1]
                 )
 
-                .setStyle(
+                .setPlaceholder(
                     field[2]
+                )
+
+                .setStyle(
+                    field[3]
                 )
 
                 .setRequired(
@@ -284,12 +311,6 @@ async function handleApplicationInteraction(
     interaction
 ) {
 
-    /*
-    ============================
-    START APPLICATION
-    ============================
-    */
-
     if (
 
         interaction.isButton() &&
@@ -307,12 +328,6 @@ async function handleApplicationInteraction(
         );
     }
 
-    /*
-    ============================
-    CONTINUE TO MODAL 2
-    ============================
-    */
-
     if (
 
         interaction.isButton() &&
@@ -326,12 +341,6 @@ async function handleApplicationInteraction(
         );
     }
 
-    /*
-    ============================
-    CONTINUE TO MODAL 3
-    ============================
-    */
-
     if (
 
         interaction.isButton() &&
@@ -344,12 +353,6 @@ async function handleApplicationInteraction(
             buildModal3()
         );
     }
-
-    /*
-    ============================
-    MODAL 1 SUBMIT
-    ============================
-    */
 
     if (
 
@@ -424,12 +427,6 @@ async function handleApplicationInteraction(
         });
     }
 
-    /*
-    ============================
-    MODAL 2 SUBMIT
-    ============================
-    */
-
     if (
 
         interaction.isModalSubmit() &&
@@ -502,12 +499,6 @@ async function handleApplicationInteraction(
                 MessageFlags.Ephemeral
         });
     }
-
-    /*
-    ============================
-    MODAL 3 SUBMIT
-    ============================
-    */
 
     if (
 

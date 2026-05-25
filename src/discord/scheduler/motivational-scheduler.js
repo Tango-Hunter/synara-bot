@@ -82,13 +82,13 @@ async function runNightlyMessage() {
 
         const userPrompt = `
 
-A nightly quote has been selected.
+Generate a unique nightly reflection as SYNARA.
 
-Quote:
-"${quote}"
+Theme:
+${selectedTheme}
 
-Author:
-${author}
+Structure:
+${selectedFormat}
 
 Generate a short SYNARA reflection inspired by this quote.
 
