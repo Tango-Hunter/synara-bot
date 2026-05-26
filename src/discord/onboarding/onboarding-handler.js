@@ -1,0 +1,315 @@
+/**
+ * Title: onboarding-handler.js
+ * Author: Tango Hunter
+ * Date Created: 5/26/26
+ * Date Modified: 5/26/26
+ * Description: Handles all onboarding traffic.
+ */
+
+const {
+    getGuildOnboardingConfig
+} = require('./onboarding-config');
+
+const {
+    buildWelcomeEmbed,
+    buildRulesEmbed
+} = require('./onboarding-embed');
+
+const {
+    buildVerificationModal
+} = require('./onboarding-modal');
+
+const {
+    storeOnboardingMessage,
+    getOnboardingMessage,
+    removeOnboardingMessage
+} = require('./onboarding-session-manager');
+
+
+async function handleNewMember(
+    member
+) {
+
+    const guildConfig =
+
+        getGuildOnboardingConfig(
+            member.guild.id
+        );
+
+    if (
+        !guildConfig
+    ) {
+
+        return;
+    }
+
+    const channel =
+
+        await member.guild.channels.fetch(
+
+            guildConfig.welcomeChannelId
+        );
+
+    const {
+
+        embed,
+
+        buttonRow
+
+    } = buildWelcomeEmbed(
+        member
+    );
+
+    const sentMessage =
+
+        await channel.send({
+
+            embeds: [
+                embed
+            ],
+
+            components: [
+                buttonRow
+            ]
+        });
+
+    storeOnboardingMessage({
+
+        userId:
+            member.id,
+
+        messageId:
+            sentMessage.id
+    });
+}
+
+async function handleOnboardingInteraction(
+    interaction
+) {
+
+    const guildConfig =
+        getGuildOnboardingConfig(
+            interaction.guild.id
+        );
+
+    /*
+    ============================
+    BEGIN ONBOARDING
+    ============================
+    */
+
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId.startsWith(
+
+            'begin_onboarding_'
+        )
+    ) {
+
+        const targetUserId =
+
+            interaction.customId.split(
+                '_'
+            )[2];
+
+        if (
+            interaction.user.id !==
+            targetUserId
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'This onboarding prompt does not belong to you.',
+
+                flags: 64
+            });
+        }
+
+        const {
+
+            embed,
+
+            buttonRow
+
+        } = buildRulesEmbed();
+
+        return await interaction.reply({
+
+            embeds: [
+                embed
+            ],
+
+            components: [
+                buttonRow
+            ],
+
+            flags: 64
+        });
+    }
+
+    /*
+    ============================
+    OPEN MODAL
+    ============================
+    */
+
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId ===
+        'open_verification_modal'
+    ) {
+
+        return await interaction.showModal(
+
+            buildVerificationModal()
+        );
+    }
+
+    /*
+    ============================
+    MODAL SUBMIT
+    ============================
+    */
+
+    if (
+
+        interaction.isModalSubmit()
+
+        &&
+
+        interaction.customId ===
+        'verification_modal'
+    ) {
+
+        const response =
+
+            interaction.fields
+
+                .getTextInputValue(
+                    'verification_response'
+                )
+
+                .trim()
+
+                .toLowerCase();
+
+        if (
+            response !==
+            'i understand'
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Verification failed. Please type: I understand',
+
+                flags: 64
+            });
+        }
+
+        const member =
+            interaction.member;
+
+        if (
+
+            member.roles.cache.has(
+
+                guildConfig.verifiedRoleId
+            )
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Verification already completed.',
+
+                flags: 64
+            });
+        }
+
+        await member.roles.add(
+
+            guildConfig.verifiedRoleId
+        );
+
+        await interaction.reply({
+
+            content:
+                'Verification complete. Welcome to this system.',
+
+            flags: 64
+        });
+
+        await finalizeOnboarding(
+            member
+        );
+    }
+}
+
+async function finalizeOnboarding(
+    member
+) {
+
+    const guildConfig =
+
+        getGuildOnboardingConfig(
+            member.guild.id
+        );
+
+    if (
+        !guildConfig
+    ) {
+
+        return;
+    }
+
+    const messageId =
+
+        getOnboardingMessage(
+            member.id
+        );
+
+    if (
+        !messageId
+    ) {
+
+        return;
+    }
+
+    const channel =
+
+        await member.guild.channels.fetch(
+
+            guildConfig.welcomeChannelId
+        );
+
+    const message =
+
+        await channel.messages.fetch(
+            messageId
+        );
+
+    await message.edit({
+
+        components: []
+    });
+
+    removeOnboardingMessage(
+        member.id
+    );
+}
+
+module.exports = {
+    handleNewMember,
+    handleOnboardingInteraction,
+    finalizeOnboarding
+};

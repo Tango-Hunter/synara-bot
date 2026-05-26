@@ -34,6 +34,11 @@ const {
 const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
+const {
+    handleNewMember,
+    handleOnboardingInteraction,
+    finalizeOnboarding
+} = require('./discord/onboarding/onboarding-handler');
 
 app.use(express.json());
 app.use(
@@ -69,9 +74,83 @@ client.once('clientReady', async () => {
 // ===============================
 client.on('interactionCreate', async interaction => {
 
+        await handleOnboardingInteraction(
+            interaction
+        );
+
         await routeInteraction(
             interaction
         );
+
+    }
+);
+
+// ===============================
+// New member joins
+// ===============================
+client.on(
+
+    'guildMemberAdd',
+
+    async member => {
+
+        await handleNewMember(
+            member
+        );
+    }
+);
+
+// ===============================
+// New member completes onboarding
+// ===============================
+client.on(
+
+    'guildMemberUpdate',
+
+    async (
+
+        oldMember,
+        newMember
+
+    ) => {
+
+        const guildConfig =
+
+            getGuildOnboardingConfig(
+                newMember.guild.id
+            );
+
+        if (
+            !guildConfig
+        ) {
+
+            return;
+        }
+
+        const hadRole =
+
+            oldMember.roles.cache.has(
+
+                guildConfig.verifiedRoleId
+            );
+
+        const hasRole =
+
+            newMember.roles.cache.has(
+
+                guildConfig.verifiedRoleId
+            );
+
+        if (
+            !hadRole
+            &&
+            hasRole
+        ) {
+
+            await finalizeOnboarding(
+                newMember
+            );
+        }
     }
 );
 
