@@ -1,6 +1,11 @@
 {
   "cSpell.words": [
     "modapps",
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGPORT",
+    "PGUSER",
     "qotd",
     "roleplay"
   ]

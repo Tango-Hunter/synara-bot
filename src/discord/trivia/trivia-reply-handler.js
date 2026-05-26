@@ -12,6 +12,11 @@ const {
 } = require('./trivia-session-manager');
 
 const {
+    getRandomCorrectResponse,
+    getRandomIncorrectResponse
+} = require('./trivia-responses');
+
+const {
     addWin,
     breakStreak
 } = require('./leaderboard-service');
@@ -120,7 +125,7 @@ async function handleTriviaReply(
         correctAnswer
     ) {
 
-        addWin(
+        await addWin(
             message.author.id
         );
 
@@ -134,7 +139,7 @@ async function handleTriviaReply(
 
         await message.reply(
 
-            'Correct. Pattern recognition remains operational.'
+            getRandomCorrectResponse()
         );
 
         return true;
@@ -146,13 +151,13 @@ async function handleTriviaReply(
     ============================
     */
 
-    breakStreak(
+    await breakStreak(
         message.author.id
     );
 
     await message.reply(
 
-        'Incorrect. Additional attempts remain available.'
+        getRandomIncorrectResponse()
     );
 
     return true;
