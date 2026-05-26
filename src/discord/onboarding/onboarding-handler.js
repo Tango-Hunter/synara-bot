@@ -7,8 +7,8 @@
  */
 
 const {
-    getGuildOnboardingConfig
-} = require('./onboarding-config');
+    getGuildConfig
+} = require('../../core/config/guild-config');
 
 const {
     buildWelcomeEmbed,
@@ -32,7 +32,7 @@ async function handleNewMember(
 
     const guildConfig =
 
-        getGuildOnboardingConfig(
+        getGuildConfig(
             member.guild.id
         );
 
@@ -88,7 +88,7 @@ async function handleOnboardingInteraction(
 ) {
 
     const guildConfig =
-        getGuildOnboardingConfig(
+        getGuildConfig(
             interaction.guild.id
         );
 
@@ -261,7 +261,7 @@ async function finalizeOnboarding(
 
     const guildConfig =
 
-        getGuildOnboardingConfig(
+        getGuildConfig(
             member.guild.id
         );
 

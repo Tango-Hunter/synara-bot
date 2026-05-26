@@ -40,8 +40,8 @@ const {
     finalizeOnboarding
 } = require('./discord/onboarding/onboarding-handler');
 const {
-    getGuildOnboardingConfig
-} = require('./discord/onboarding/onboarding-config');
+    getGuildConfig
+} = require('./core/config/guild-config');
 
 app.use(express.json());
 app.use(
@@ -132,7 +132,7 @@ client.on(
 
             const guildConfig =
 
-                getGuildOnboardingConfig(
+                getGuildConfig(
 
                     newMember.guild.id
                 );
