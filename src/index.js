@@ -39,6 +39,9 @@ const {
     handleOnboardingInteraction,
     finalizeOnboarding
 } = require('./discord/onboarding/onboarding-handler');
+const {
+    getGuildOnboardingConfig
+} = require('./discord/onboarding/onboarding-config');
 
 app.use(express.json());
 app.use(
@@ -94,9 +97,20 @@ client.on(
 
     async member => {
 
-        await handleNewMember(
-            member
-        );
+        try {
+
+            await handleNewMember(
+                member
+            );
+            console.log(`[ONBOARDING] New member detected: ${member.user.tag}`);
+
+        } catch (error) {
+
+            console.error(
+                '[ONBOARDING ERROR]',
+                error
+            );
+        }
     }
 );
 
@@ -114,41 +128,54 @@ client.on(
 
     ) => {
 
-        const guildConfig =
+        try {
 
-            getGuildOnboardingConfig(
-                newMember.guild.id
-            );
+            const guildConfig =
 
-        if (
-            !guildConfig
-        ) {
+                getGuildOnboardingConfig(
 
-            return;
-        }
+                    newMember.guild.id
+                );
 
-        const hadRole =
+            if (
+                !guildConfig
+            ) {
 
-            oldMember.roles.cache.has(
+                return;
+            }
 
-                guildConfig.verifiedRoleId
-            );
+            const hadRole =
 
-        const hasRole =
+                oldMember.roles.cache.has(
 
-            newMember.roles.cache.has(
+                    guildConfig.verifiedRoleId
+                );
 
-                guildConfig.verifiedRoleId
-            );
+            const hasRole =
 
-        if (
-            !hadRole
-            &&
-            hasRole
-        ) {
+                newMember.roles.cache.has(
 
-            await finalizeOnboarding(
-                newMember
+                    guildConfig.verifiedRoleId
+                );
+
+            if (
+                !hadRole
+                &&
+                hasRole
+            ) {
+
+                await finalizeOnboarding(
+                    newMember
+                );
+            }
+
+        } catch (error) {
+
+            console.error(
+
+                '[ONBOARDING UPDATE ERROR]',
+
+                error
             );
         }
     }
