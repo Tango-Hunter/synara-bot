@@ -47,7 +47,9 @@ async function handleNewMember(
 
         await member.guild.channels.fetch(
 
-            guildConfig.welcomeChannelId
+            guildConfig
+                .onboarding
+                .welcomeChannelId
         );
 
     const {
@@ -223,7 +225,9 @@ async function handleOnboardingInteraction(
 
             member.roles.cache.has(
 
-                guildConfig.verifiedRoleId
+                guildConfig
+                    .onboarding
+                    .verifiedRoleId
             )
         ) {
 
@@ -238,7 +242,9 @@ async function handleOnboardingInteraction(
 
         await member.roles.add(
 
-            guildConfig.verifiedRoleId
+            guildConfig
+                .onboarding
+                .verifiedRoleId
         );
 
         await interaction.reply({
@@ -289,7 +295,9 @@ async function finalizeOnboarding(
 
         await member.guild.channels.fetch(
 
-            guildConfig.welcomeChannelId
+            guildConfig
+                .onboarding
+                .welcomeChannelId
         );
 
     const message =

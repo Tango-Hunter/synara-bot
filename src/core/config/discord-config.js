@@ -8,21 +8,6 @@
 
 const discordConfig = {
 
-    channels: {
-
-        qotd: [
-
-            '1430018485408366740', // Void Army #general
-            '1416462288575135746'  // Hunter's Lodge #general
-        ],
-
-        nightlyMessages: [
-
-            '1430018485408366740', // Void Army #general
-            '1416462288575135746'  // Hunter's Lodge #general
-        ]
-    },
-
     cooldowns: {
 
         commands: 10,

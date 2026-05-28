@@ -33,8 +33,8 @@ const {
 } = require('../../core/config/scheduler-config');
 
 const {
-    discordConfig
-} = require('../../core/config/discord-config');
+    getGuildConfig
+} = require('../../core/config/guild-config');
 
 const {
     featureFlags
@@ -118,19 +118,41 @@ Requirements:
                 maxTokens: 120
             });
 
-            const channelIds =
-                discordConfig.channels.qotd;
+        const guildIds = [
 
-            for (const channelId of channelIds) {
+            '1416462287341883477',
+            '1430018484775030919'
+        ];
 
-                const embed =
-                    buildEmbed({
+        for (const guildId of guildIds) {
 
-                        type:
-                            'qotd',
-                        title:
-                            'Good Morning',
-                        description:
+            const guildConfig =
+
+                getGuildConfig(
+                    guildId
+                );
+
+            if (
+                !guildConfig
+            ) {
+
+                continue;
+            }
+
+            const channelId =
+
+                guildConfig
+                    .schedulers
+                    .nightlyChannelId;
+
+            const embed =
+                buildEmbed({
+
+                    type:
+                        'qotd',
+                    title:
+                        'Good Morning',
+                    description:
 `
 **Question of the Day**
 

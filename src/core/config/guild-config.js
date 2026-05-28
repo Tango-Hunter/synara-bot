@@ -81,7 +81,7 @@ const guildConfig = {
     ============================
     */
 
-    'GUILD_ID_2': {
+    '1430018484775030919': {
 
         name:
             'Void Army',
@@ -108,13 +108,14 @@ const guildConfig = {
 
             adminRoleIds: [
 
-                '1433485270472331335', // Void Commanders
-                '1430210622242689147'  // Void Captains
+                '1432358756376645632', // Owner
+                '1433485270472331335', // Co-Owners / Void Commanders
+                '1430210622242689147'  // Admins / Void Captains
             ],
 
             moderatorRoleIds: [
 
-                '1433452708106338447'  // Void Sergeants
+                '1433452708106338447'  // Mods / Void Sergeants
             ]
         },
 

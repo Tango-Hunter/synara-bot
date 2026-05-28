@@ -18,8 +18,8 @@ const {
 } = require('discord.js');
 
 const {
-    applicationConfig
-} = require('../../core/config/application-config');
+    getGuildConfig
+} = require('../../core/config/guild-config');
 
 const {
     createSession,
@@ -311,6 +311,18 @@ async function handleApplicationInteraction(
     interaction
 ) {
 
+    const guildConfig =
+        getGuildConfig(
+            interaction.guild.id
+        );
+
+    if (
+        !guildConfig
+    ) {
+
+        return;
+    }
+
     if (
 
         interaction.isButton() &&
@@ -549,14 +561,16 @@ async function handleApplicationInteraction(
         const reviewChannel =
             await interaction.client.channels.fetch(
 
-                applicationConfig.reviewChannelId
+                guildConfig
+                    .moderation
+                    .modappSubmissionsChannelId
             );
 
         const identityEmbed =
             new EmbedBuilder()
 
                 .setColor(
-                    applicationConfig.embedColors.identity
+                    0x4A90E2
                 )
 
                 .setTitle(
@@ -626,7 +640,7 @@ ${interaction.user.id}
             new EmbedBuilder()
 
                 .setColor(
-                    applicationConfig.embedColors.philosophy
+                    0x9B59B6
                 )
 
                 .setTitle(
@@ -687,7 +701,7 @@ ${interaction.user.id}
             new EmbedBuilder()
 
                 .setColor(
-                    applicationConfig.embedColors.perspective
+                    0x95A5A6
                 )
 
                 .setTitle(
