@@ -6,6 +6,10 @@
  * Description: Displays available admin slash commands.
  */
 
+const {
+    MessageFlags
+} = require('discord.js');
+
 async function handleAdminCommands(
     interaction
 ) {
@@ -26,8 +30,7 @@ Close moderator applications.
 Display available administrative commands.
 `,
 
-        ephemeral:
-            true
+        flags: MessageFlags.Ephemeral
     });
 }
 

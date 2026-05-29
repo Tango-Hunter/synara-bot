@@ -37,6 +37,7 @@ const observationConfig = {
         '1432372596367822858', // stream-schedule
         '1432387780377317589', // announcements
         '1432886666367991930', // dbd-codes
+        '1434233508942975049'  // vent
         
     ]
 };

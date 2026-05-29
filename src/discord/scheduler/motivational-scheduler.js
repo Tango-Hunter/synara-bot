@@ -35,8 +35,8 @@ const {
 } = require('../../core/config/scheduler-config');
 
 const {
-    discordConfig
-} = require('../../core/config/discord-config');
+    getGuildConfig
+} = require('../../core/config/guild-config');
 
 const {
     featureFlags
@@ -114,10 +114,32 @@ Requirements:
 
             'Night cycle acknowledged. Reflection data unavailable.';
 
-        const channelIds =
-            discordConfig.channels.nightlyMessages;
+        const guildIds = [
 
-        for (const channelId of channelIds) {
+            '1416462287341883477',
+            '1430018484775030919'
+        ];
+
+        for (const guildId of guildIds) {
+
+            const guildConfig =
+
+                getGuildConfig(
+                    guildId
+                );
+
+            if (
+                !guildConfig
+            ) {
+
+                continue;
+            }
+
+            const channelId =
+
+                guildConfig
+                    .schedulers
+                    .nightlyChannelId;
 
             const embed =
                 buildEmbed({
