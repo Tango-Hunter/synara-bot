@@ -175,7 +175,7 @@ Application Sections:
 
 🔹 Identity & Availability
 🔸 Moderation Philosophy
-◇  Perspective & Judgment
+🔺 Perspective & Judgment
 
 Press the button below to begin.
 `)
