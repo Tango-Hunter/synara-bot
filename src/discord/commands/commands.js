@@ -32,9 +32,6 @@ Get a neat fact.
 !joke
 SYNARA's version of humor.
 
-!leaderboard
-Check the Trivia Game Leaderboard and view your stats.
-
 !motivate
 Motivational Message.
 
@@ -49,6 +46,12 @@ View current SYNARA system status.
 
 !trivia
 Compete in the Trivia game.
+
+!leaderboard
+Check the Trivia Game Leaderboard and view your stats.
+
+!linkTwitch, !myTwitch, !unlinkTwitch
+These are for linking, checking, or unlinking your Twitch account for live alerts.
 
 
 `

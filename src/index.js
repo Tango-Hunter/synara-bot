@@ -32,6 +32,9 @@ const {
     initializeDatabase
 } = require('./core/database/init-database');
 const {
+    initializeTwitchTables
+} = require('./core/database/init-twitch-tables');
+const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
 const {
@@ -55,6 +58,7 @@ app.use(
 client.once('clientReady', async () => {
 
     await initializeDatabase();
+    await initializeTwitchTables();
 
     console.log(`SYNARA online as ${client.user.tag}`);
 

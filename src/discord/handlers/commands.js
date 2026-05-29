@@ -40,6 +40,20 @@ const triviaCommand =
     require('../commands/trivia');
 
 const {
+
+    handleLinkTwitch
+
+} = require('../commands/linktwitch');
+
+const {
+    handleUnlinkTwitch
+} = require('../commands/unlinktwitch');
+
+const {
+    handleMyTwitch
+} = require('../commands/mytwitch');
+
+const {
     formatCommandResponse
 } = require('../../shared/utils/command-formatter');
 
@@ -97,13 +111,49 @@ const commandRegistry = {
     },
 
     '!trivia':
-        triviaCommand
+        triviaCommand,
+
+    // ===============================
+    // Twitch Link Commands
+    // ===============================
+    '!linktwitch': {
+        title:
+            'TWITCH',
+        execute:
+            ({ message, args }) =>
+                handleLinkTwitch(
+                    message,
+                    args
+                )
+    },
+
+    '!unlinktwitch': {
+        title:
+            'TWITCH',
+        execute:
+            ({ message }) =>
+                handleUnlinkTwitch(
+                    message
+                )
+    },
+
+    '!mytwitch': {
+        title:
+            'TWITCH',
+        execute:
+            ({ message }) =>
+
+                handleMyTwitch(
+                    message
+                )
+    },
 };
 
 async function executeCommand(
     message,
     commandConfig,
-    commandName
+    commandName,
+    args = []
 ) {
 
     try {
@@ -122,10 +172,16 @@ async function executeCommand(
 
                 username:
                     message.author.username,
+
                 userId:
                     message.author.id,
+
                 platform:
-                    'Discord'
+                    'Discord',
+
+                message,
+
+                args
             });
 
         if (
@@ -212,13 +268,22 @@ async function executeCommand(
 
 async function handleCommands(message) {
 
-    const content =
+    const parts =
         message.content
-            .toLowerCase()
-            .trim();
+            .trim()
+            .split(/\s+/);
+
+    const commandName =
+        parts[0]
+            .toLowerCase();
+
+    const args =
+        parts.slice(1);
 
     const commandConfig =
-        commandRegistry[content];
+        commandRegistry[
+            commandName
+        ];
 
     if (!commandConfig) {
         return false;
@@ -228,7 +293,8 @@ async function handleCommands(message) {
 
         message,
         commandConfig,
-        content
+        commandName,
+        args
     );
 
     return true;
