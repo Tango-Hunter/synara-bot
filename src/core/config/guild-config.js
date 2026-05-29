@@ -34,7 +34,7 @@ const guildConfig = {
                 '1429878832327950397', // #roles
 
             modappApplyMessageId:
-                'MESSAGE_ID',
+                '1509947114581659828',
 
             modappSubmissionsChannelId:
                 '1508895532444291282', // #mod-submissions
