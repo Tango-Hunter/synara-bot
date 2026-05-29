@@ -16,7 +16,7 @@ const {
 
 const {
     getGuildConfig
-} = require('../../core/config/guild-config');
+} = require('../../../core/config/guild-config');
 
 async function getApplicationMessage(
     interaction,
