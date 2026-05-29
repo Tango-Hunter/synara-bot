@@ -41,7 +41,7 @@ Channel:
 ${user.twitch_display_name}
 
 URL:
-https://twitch.tv/${user.twitch_login}
+<https://twitch.tv/${user.twitch_login}>
 
 Notifications:
 ${user.notifications_enabled ? 'Enabled' : 'Disabled'}`
