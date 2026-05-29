@@ -26,19 +26,14 @@ async function handleMyTwitch(
     ) {
 
         return {
-
-            success: false,
-
-            response:
+            message:
                 'No Twitch account linked.'
         };
     }
 
     return {
 
-        success: true,
-
-        response:
+        message:
 
 `Linked Twitch Account
 

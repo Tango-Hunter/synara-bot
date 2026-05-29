@@ -21,10 +21,7 @@ async function handleUnlinkTwitch(
     );
 
     return {
-
-        success: true,
-
-        response:
+        message:
             'Twitch notifications disabled.'
     };
 }

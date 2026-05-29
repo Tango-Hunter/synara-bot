@@ -28,11 +28,8 @@ async function handleLinkTwitch(
     ) {
 
         return {
-
-            success: false,
-
-            response:
-                'Usage: !linktwitch <channel>'
+            message:
+                'Unable to locate that Twitch channel.'
         };
     }
 
@@ -47,10 +44,7 @@ async function handleLinkTwitch(
     ) {
 
         return {
-
-            success: false,
-
-            response:
+            message:
                 'Unable to locate that Twitch channel.'
         };
     }
@@ -80,11 +74,7 @@ async function handleLinkTwitch(
     });
 
     return {
-
-        success: true,
-
-        response:
-
+        message:
             `Twitch account linked: ${twitchUser.display_name}`
     };
 }
