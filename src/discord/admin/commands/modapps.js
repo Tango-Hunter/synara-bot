@@ -2,7 +2,7 @@
  * Title: modapps.js
  * Author: Tango Hunter
  * Date Created: 5/24/26
- * Date Modified: 5/24/26
+ * Date Modified: 5/28/26
  * Description: Opens/closes moderator applications.
  */
 
@@ -10,31 +10,137 @@ const {
     EmbedBuilder,
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonStyle
+    ButtonStyle,
+    MessageFlags
 } = require('discord.js');
 
-const APPLICATION_CHANNEL_ID = '1504828980161810442';
+const {
+    getGuildConfig
+} = require('../../core/config/guild-config');
 
-const APPLICATION_MESSAGE_ID = '1507825511676641372';
+async function getApplicationMessage(
+    interaction,
+    guildConfig
+) {
 
-const VOID_SOLDIERS_ROLE_ID = '1431758489784684693';
+    const channel =
+
+        await interaction.client.channels.fetch(
+
+            guildConfig
+                .moderation
+                .modappApplyChannelId
+        );
+
+    /*
+    ============================
+    EXISTING MESSAGE
+    ============================
+    */
+
+    const messageId =
+
+        guildConfig
+            .moderation
+            .modappApplyMessageId;
+
+    if (
+        messageId
+    ) {
+
+        try {
+
+            const message =
+
+                await channel.messages.fetch(
+                    messageId
+                );
+
+            return {
+                channel,
+                message
+            };
+
+        } catch {
+
+            console.log(
+
+                '[MOD APPS] Stored application message not found. Creating replacement.'
+            );
+        }
+    }
+
+    /*
+    ============================
+    CREATE NEW MESSAGE
+    ============================
+    */
+
+    const placeholderMessage =
+
+        await channel.send({
+
+            content:
+                'Initializing moderator applications...'
+        });
+
+    console.log(
+
+        '[MOD APPS] New application message created.'
+    );
+
+    console.log(
+
+        `[MOD APPS] Save this Message ID into guild-config.js: ${placeholderMessage.id}`
+    );
+
+    return {
+
+        channel,
+
+        message:
+            placeholderMessage
+    };
+}
 
 async function handleModAppsCommand(
     interaction
 ) {
 
+    const guildConfig =
+
+        getGuildConfig(
+            interaction.guild.id
+        );
+
+    if (
+        !guildConfig
+    ) {
+
+        return await interaction.reply({
+
+            content:
+                'Guild configuration not found.',
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
     const subcommand =
         interaction.options.getSubcommand();
 
-    const channel =
-        await interaction.client.channels.fetch(
-            APPLICATION_CHANNEL_ID
-        );
+    const {
+        channel,
+        message
+    } = await getApplicationMessage(
 
-    const message =
-        await channel.messages.fetch(
-            APPLICATION_MESSAGE_ID
-        );
+        interaction,
+        guildConfig
+    );
+
+    const guildName =
+        guildConfig.name;
 
     /*
     ============================
@@ -54,7 +160,7 @@ async function handleModAppsCommand(
                 )
 
                 .setTitle(
-                    'Void Army Moderator Applications'
+                    `${guildName} Moderator Applications`
                 )
 
                 .setDescription(`
@@ -69,7 +175,7 @@ Application Sections:
 
 🔹 Identity & Availability
 🔸 Moderation Philosophy
-⚪ Perspective & Judgment
+◇  Perspective & Judgment
 
 Press the button below to begin.
 `)
@@ -92,9 +198,11 @@ Press the button below to begin.
                         .setCustomId(
                             'start_mod_application'
                         )
+
                         .setLabel(
                             'Apply'
                         )
+
                         .setStyle(
                             ButtonStyle.Primary
                         )
@@ -102,22 +210,36 @@ Press the button below to begin.
 
         await message.edit({
 
-            embeds: [embed],
-            components: [row]
+            embeds: [
+                embed
+            ],
+
+            components: [
+                row
+            ],
+
+            content: null
         });
+
+        const verifiedRoleId =
+
+            guildConfig
+                .onboarding
+                .verifiedRoleId;
 
         await channel.send({
 
             content:
-                `<@&${VOID_SOLDIERS_ROLE_ID}> Moderator applications are now OPEN.`
+                `<@&${verifiedRoleId}> Moderator applications are now OPEN.`
         });
 
         return await interaction.reply({
 
             content:
                 'Moderator applications opened successfully.',
-            ephemeral:
-                true
+
+            flags:
+                MessageFlags.Ephemeral
         });
     }
 
@@ -139,7 +261,7 @@ Press the button below to begin.
                 )
 
                 .setTitle(
-                    'Void Army Moderator Applications'
+                    `${guildName} Moderator Applications`
                 )
 
                 .setDescription(`
@@ -169,12 +291,15 @@ Please monitor future announcements for reopening information.
                         .setCustomId(
                             'applications_closed'
                         )
+
                         .setLabel(
                             'Applications Closed'
                         )
+
                         .setStyle(
                             ButtonStyle.Secondary
                         )
+
                         .setDisabled(
                             true
                         )
@@ -182,16 +307,24 @@ Please monitor future announcements for reopening information.
 
         await message.edit({
 
-            embeds: [embed],
-            components: [row]
+            embeds: [
+                embed
+            ],
+
+            components: [
+                row
+            ],
+
+            content: null
         });
 
         return await interaction.reply({
 
             content:
                 'Moderator applications closed successfully.',
-            ephemeral:
-                true
+
+            flags:
+                MessageFlags.Ephemeral
         });
     }
 }
