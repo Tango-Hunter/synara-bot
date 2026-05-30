@@ -50,6 +50,15 @@ const guildConfig = {
             ]
         },
 
+        streaming: {
+
+            leadershipLiveChannelId:
+                '1429842283984851026',
+
+            selfPromoChannelId:
+                '1429853723789889618'
+        },
+
         schedulers: {
 
             qotdChannelId:
@@ -117,6 +126,15 @@ const guildConfig = {
 
                 '1433452708106338447'  // Mods / Void Sergeants
             ]
+        },
+
+        streaming: {
+
+            leadershipLiveChannelId:
+                '1431762127936557066',
+
+            selfPromoChannelId:
+                '1432706292811694110'
         },
 
         schedulers: {
