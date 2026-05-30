@@ -43,6 +43,18 @@ router.post(
         res
     ) => {
 
+        /*console.log(
+            'EVENTSUB REQUEST RECEIVED'
+        );
+
+        console.log(
+            JSON.stringify(
+                req.body,
+                null,
+                2
+            )
+        );*/
+
         const messageType =
 
             req.header(

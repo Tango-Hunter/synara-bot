@@ -31,7 +31,14 @@ async function ensureEventSubSubscription({
     if (
         existing
     ) {
+// Temp Log
+        console.log(
 
+            '[EVENTSUB EXISTS]',
+
+            twitchUserId
+        );
+// End Temp Log
         return;
     }
 
@@ -94,7 +101,16 @@ async function ensureEventSubSubscription({
     const subscription =
 
         response.data.data[0];
+// Temp Log
+    console.log(
 
+        '[EVENTSUB CREATED]',
+
+        subscription.id,
+
+        twitchUserId
+    );
+// End Temp Log
     await saveSubscription({
 
         twitchUserId,
