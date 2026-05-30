@@ -183,7 +183,36 @@ async function disableNotifications(
     );
 }
 
+async function getEnabledUsersByTwitchUserId(
+    twitchUserId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT *
+            FROM twitch_users
+
+            WHERE
+
+                twitch_user_id = $1
+
+            AND
+
+                notifications_enabled = TRUE
+            `,
+            [
+                twitchUserId
+            ]
+        );
+
+    return result.rows;
+}
+
 module.exports = {
+    getEnabledUsersByTwitchUserId,
     getTwitchUserByDiscordId,
     upsertTwitchUser,
     disableNotifications

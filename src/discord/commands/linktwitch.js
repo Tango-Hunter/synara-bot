@@ -14,6 +14,10 @@ const {
     upsertTwitchUser
 } = require('../../core/database/twitch-repository');
 
+const {
+    ensureEventSubSubscription
+} = require('../../twitch/services/eventsub-service');
+
 
 async function handleLinkTwitch(
     message,
@@ -77,6 +81,11 @@ async function handleLinkTwitch(
         message:
             `Twitch account linked: ${twitchUser.display_name}`
     };
+
+    await ensureEventSubSubscription({
+        twitchUserId:
+            twitchUser.id
+    });
 }
 
 module.exports = {

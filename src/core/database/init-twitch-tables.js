@@ -85,6 +85,20 @@ async function initializeTwitchTables() {
         );
 
     `);
+
+    await pool.query(`
+
+            CREATE TABLE IF NOT EXISTS twitch_eventsub (
+
+            twitch_user_id TEXT PRIMARY KEY,
+
+            subscription_id TEXT NOT NULL,
+
+            created_at TIMESTAMP DEFAULT NOW(),
+
+            updated_at TIMESTAMP DEFAULT NOW()
+        );
+    `);
 }
 
 module.exports = {

@@ -19,6 +19,8 @@ const client =
     require('./core/config/discord-client');
 const createMessageRoutes =
     require('./discord/routes/messages');
+const twitchRoutes =
+    require('./routes/twitch');
 const {
     discordMessageHandler
 } = require('./discord/handlers/message-handler');
@@ -50,6 +52,10 @@ app.use(express.json());
 app.use(
     '/',
     createMessageRoutes(client)
+);
+app.use(
+    '/twitch',
+    twitchRoutes
 );
 
 // ===============================
