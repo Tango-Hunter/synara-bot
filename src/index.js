@@ -19,6 +19,9 @@ const client =
     require('./core/config/discord-client');
 const createMessageRoutes =
     require('./discord/routes/messages');
+const twitchRoutes =
+    require('./routes/twitch');
+
 const {
     discordMessageHandler
 } = require('./discord/handlers/message-handler');
@@ -31,6 +34,9 @@ const {
 const {
     initializeDatabase
 } = require('./core/database/init-database');
+const {
+    initializeTwitchTables
+} = require('./core/database/init-twitch-tables');
 const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
@@ -48,6 +54,11 @@ app.use(
     '/',
     createMessageRoutes(client)
 );
+app.use(
+    '/twitch',
+    twitchRoutes
+);
+
 
 // ===============================
 // Starts the SYNARA presence within Discord
@@ -55,6 +66,7 @@ app.use(
 client.once('clientReady', async () => {
 
     await initializeDatabase();
+    await initializeTwitchTables();
 
     console.log(`SYNARA online as ${client.user.tag}`);
 
@@ -148,14 +160,18 @@ client.on(
 
                 oldMember.roles.cache.has(
 
-                    guildConfig.verifiedRoleId
+                    guildConfig
+                        .onboarding
+                        .verifiedRoleId
                 );
 
             const hasRole =
 
                 newMember.roles.cache.has(
 
-                    guildConfig.verifiedRoleId
+                    guildConfig
+                        .onboarding
+                        .verifiedRoleId
                 );
 
             if (
