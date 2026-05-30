@@ -21,6 +21,7 @@ const createMessageRoutes =
     require('./discord/routes/messages');
 const twitchRoutes =
     require('./routes/twitch');
+
 const {
     discordMessageHandler
 } = require('./discord/handlers/message-handler');
@@ -57,6 +58,7 @@ app.use(
     '/twitch',
     twitchRoutes
 );
+
 
 // ===============================
 // Starts the SYNARA presence within Discord
@@ -158,14 +160,18 @@ client.on(
 
                 oldMember.roles.cache.has(
 
-                    guildConfig.verifiedRoleId
+                    guildConfig
+                        .onboarding
+                        .verifiedRoleId
                 );
 
             const hasRole =
 
                 newMember.roles.cache.has(
 
-                    guildConfig.verifiedRoleId
+                    guildConfig
+                        .onboarding
+                        .verifiedRoleId
                 );
 
             if (
