@@ -51,9 +51,8 @@ const {
     handleMyTwitch
 } = require('../commands/mytwitch');
 
-const {
-    handleTwitchStatsCommand
-} = require('../commands/twitchstats');
+const handleTwitchStatsCommand = 
+    require('../commands/twitchstats');
 
 const {
     formatCommandResponse
