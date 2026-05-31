@@ -8,91 +8,137 @@
 
 const express = require('express');
 
-const router =
-    express.Router();
-
 const {
     handleEventSub
 } = require('../twitch/services/eventsub-handler');
 
+module.exports = (
+    client
+) => {
+    const router =
+        express.Router();
 
-router.get(
+    router.get(
 
-    '/health',
+        '/health',
 
-    (
-        req,
-        res
-    ) => {
+        (
+            req,
+            res
+        ) => {
 
-        res.status(200).json({
+            res.status(200).json({
 
-            status:
-                'online'
-        });
-    }
-);
+                status:
+                    'online'
+            });
+        }
+    );
 
-router.post(
+    router.post(
 
-    '/eventsub',
+        '/eventsub',
 
-    async (
+        async (
 
-        req,
-        res
-    ) => {
+            req,
+            res
+        ) => {
 
-        /*console.log(
-            'EVENTSUB REQUEST RECEIVED'
-        );
-
-        console.log(
-            JSON.stringify(
-                req.body,
-                null,
-                2
-            )
-        );*/
-
-        const messageType =
-
-            req.header(
-
-                'Twitch-Eventsub-Message-Type'
+            console.log(
+                'EVENTSUB REQUEST RECEIVED'
             );
 
-        if (
+            console.log(
+                JSON.stringify(
+                    req.body,
+                    null,
+                    2
+                )
+            );
 
-            messageType ===
-            'webhook_callback_verification'
+            const messageType =
 
-        ) {
+                req.header(
 
-            return res
-                .status(200)
-                .send(
-
-                    req.body.challenge
+                    'Twitch-Eventsub-Message-Type'
                 );
+
+            if (
+
+                messageType ===
+                'webhook_callback_verification'
+
+            ) {
+
+                return res
+                    .status(200)
+                    .send(
+
+                        req.body.challenge
+                    );
+            }
+
+            if (
+
+                messageType ===
+                'notification'
+
+            ) {
+
+                await handleEventSub(
+                    req.body,
+                    client
+                );
+            }
+
+            res.sendStatus(200);
         }
+    );
+    // Test
+    router.post(
 
-        if (
+        '/test-online',
 
-            messageType ===
-            'notification'
+        async (
 
-        ) {
+            req,
+
+            res
+        ) => {
 
             await handleEventSub(
 
-                req.body
+                {
+
+                    subscription: {
+
+                        type:
+                            'stream.online'
+                    },
+
+                    event: {
+
+                        broadcaster_user_id:
+                            req.body
+                                .twitchUserId,
+
+                        title:
+                            'SYNARA EventSub Test',
+
+                        category_name:
+                            'Testing'
+                    }
+                },
+
+                client
+            );
+
+            res.sendStatus(
+                200
             );
         }
+    );
 
-        res.sendStatus(200);
-    }
-);
-
-module.exports =
-    router;
+    return router;
+};

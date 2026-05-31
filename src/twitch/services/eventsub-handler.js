@@ -10,9 +10,18 @@ const {
     getEnabledUsersByTwitchUserId
 } = require('../../core/database/twitch-repository');
 
+const {
+    postLiveNotifications
+} = require('./stream-notifications');
+
+const {
+    createOrUpdateLiveStatus
+} = require('../database/twitch-live-repository');
+
 
 async function handleStreamOnline(
-    payload
+    payload,
+    client
 ) {
 
     const twitchUserId =
@@ -23,7 +32,6 @@ async function handleStreamOnline(
     const users =
 
         await getEnabledUsersByTwitchUserId(
-
             twitchUserId
         );
 
@@ -34,21 +42,63 @@ async function handleStreamOnline(
         return;
     }
 
-    console.log(
+    for (
+        const user
+        of users
+    ) {
 
-        'STREAM ONLINE:',
+        const messageIds =
 
-        twitchUserId
-    );
+            await postLiveNotifications({
 
-    /*
-    Notification logic
-    added next phase.
-    */
+                client,
+
+                guildIds:
+                    user.guild_ids,
+
+                discordUserId:
+                    user.discord_user_id,
+
+                twitchLogin:
+                    user.twitch_login,
+
+                profileImageUrl:
+                    user.twitch_profile_image_url,
+
+                streamTitle:
+                    payload.event.title ||
+                    'Live on Twitch',
+
+                streamCategory:
+                    payload.event.category_name ||
+                    'Unknown'
+            });
+
+        await createOrUpdateLiveStatus({
+
+            discordUserId:
+                user.discord_user_id,
+
+            messageIds,
+
+            streamCategory:
+                payload.event.category_name,
+
+            streamTitle:
+                payload.event.title,
+
+            thumbnailUrl:
+                null,
+
+            startedAt:
+                new Date()
+        });
+    }
 }
 
 async function handleEventSub(
-    payload
+    payload,
+    client
 ) {
 
     switch (
@@ -60,7 +110,8 @@ async function handleEventSub(
         case 'stream.online':
 
             await handleStreamOnline(
-                payload
+                payload,
+                client
             );
 
             break;
