@@ -86,7 +86,19 @@ const embedThemes = {
             '★',
         footer:
             'SYNARA • Trivia Leaderboard'
-    }
+    },
+
+    twitchStats: {
+
+        color:
+            0x9146FF,
+
+        icon:
+            '📊',
+
+        footer:
+            'SYNARA • Twitch Statistics'
+    },
 };
 
 module.exports = {

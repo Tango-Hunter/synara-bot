@@ -93,6 +93,31 @@ async function updateStatistics({
     );
 }
 
+async function getStatistics(
+    discordUserId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT *
+            FROM twitch_statistics
+
+            WHERE
+
+                discord_user_id = $1
+            `,
+            [
+                discordUserId
+            ]
+        );
+
+    return result.rows[0] || null;
+}
+
 module.exports = {
-    updateStatistics
+    updateStatistics,
+    getStatistics
 };

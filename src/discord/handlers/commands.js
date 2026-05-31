@@ -40,9 +40,7 @@ const triviaCommand =
     require('../commands/trivia');
 
 const {
-
     handleLinkTwitch
-
 } = require('../commands/linktwitch');
 
 const {
@@ -52,6 +50,10 @@ const {
 const {
     handleMyTwitch
 } = require('../commands/mytwitch');
+
+const {
+    handleTwitchStats
+} = require('../commands/twitchstats');
 
 const {
     formatCommandResponse
@@ -146,6 +148,11 @@ const commandRegistry = {
                 handleMyTwitch(
                     message
                 )
+    },
+    
+    '!twitchstats': {
+        title: 'TWITCH STATS',
+        execute: handleTwitchStats
     },
 };
 
