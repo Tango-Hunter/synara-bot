@@ -19,6 +19,13 @@ function formatDuration(
     seconds
 ) {
 
+    if (
+        !seconds
+    ) {
+
+        return '0h 0m';
+    }
+
     const hours =
 
         Math.floor(
@@ -36,15 +43,15 @@ function formatDuration(
     return `${hours}h ${minutes}m`;
 }
 
-async function handleTwitchStats(
-    message
-) {
+async function handleTwitchStatsCommand({
+
+    userId
+}) {
 
     const stats =
 
         await getStatistics(
-
-            message.author.id
+            userId
         );
 
     if (
@@ -62,7 +69,9 @@ async function handleTwitchStats(
 
         stats.total_streams > 0
 
-            ? Math.floor(
+            ?
+
+            Math.floor(
 
                 stats.total_stream_duration_seconds
 
@@ -71,108 +80,46 @@ async function handleTwitchStats(
                 stats.total_streams
             )
 
-            : 0;
+            :
+
+            0;
 
     const embed =
 
-        new EmbedBuilder()
+        buildEmbed({
 
-            .setColor(
-                0x9146FF
-            )
+            type:
+                'twitchStats',
 
-            .setTitle(
-                '📊 Twitch Statistics'
-            )
+            title:
+                'Twitch Statistics',
 
-            .addFields(
+            description:
+`
+Total Streams:
+${stats.total_streams}
 
-                {
+Total Stream Time:
+${formatDuration(
+    stats.total_stream_duration_seconds
+)}
 
-                    name:
-                        'Total Streams',
+Average Stream Length:
+${formatDuration(
+    averageDuration
+)}
 
-                    value:
-                        String(
-                            stats.total_streams
-                        ),
+Longest Stream:
+${formatDuration(
+    stats.longest_stream_duration_seconds
+)}
 
-                    inline:
-                        true
-                },
-
-                {
-
-                    name:
-                        'Total Stream Time',
-
-                    value:
-
-                        formatDuration(
-
-                            stats.total_stream_duration_seconds
-                        ),
-
-                    inline:
-                        true
-                },
-
-                {
-
-                    name:
-                        'Average Stream',
-
-                    value:
-
-                        formatDuration(
-
-                            averageDuration
-                        ),
-
-                    inline:
-                        true
-                },
-
-                {
-
-                    name:
-                        'Longest Stream',
-
-                    value:
-
-                        formatDuration(
-
-                            stats.longest_stream_duration_seconds
-                        ),
-
-                    inline:
-                        true
-                },
-
-                {
-
-                    name:
-                        'Last Stream',
-
-                    value:
-
-                        formatDuration(
-
-                            stats.last_stream_duration_seconds
-                        ),
-
-                    inline:
-                        true
-                }
-            )
-
-            .setFooter({
-
-                text:
-                    'SYNARA • Twitch Statistics'
-            })
-
-            .setTimestamp();
+Last Stream:
+${formatDuration(
+    stats.last_stream_duration_seconds
+)}
+`
+        });
 
     return {
         embed
@@ -180,5 +127,8 @@ async function handleTwitchStats(
 }
 
 module.exports = {
-    handleTwitchStats
+    name:
+        'twitchstats',
+    execute:
+        handleTwitchStatsCommand
 };
