@@ -21,7 +21,11 @@ async function ensureEventSubSubscription({
 
     twitchUserId
 }) {
-
+// Temp Log
+    console.log(
+        '[EVENTSUB] FUNCTION CALLED'
+    );
+// End Temp Log
     const existing =
 
         await getSubscription(
