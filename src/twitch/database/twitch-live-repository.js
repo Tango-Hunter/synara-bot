@@ -157,8 +157,38 @@ async function markOffline({
     );
 }
 
+async function getActiveLiveStatusByDiscordId(
+    discordUserId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT *
+
+            FROM twitch_live_status
+
+            WHERE
+
+                discord_user_id = $1
+
+            AND
+
+                live_now = TRUE
+            `,
+            [
+                discordUserId
+            ]
+        );
+
+    return result.rows[0] || null;
+}
+
 module.exports = {
     createOrUpdateLiveStatus,
     getLiveStatus,
+    getActiveLiveStatusByDiscordId,
     markOffline
 };

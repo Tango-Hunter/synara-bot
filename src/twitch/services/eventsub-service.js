@@ -71,6 +71,16 @@ const accessToken =
             `${process.env.PUBLIC_URL}/twitch/eventsub`
         );
 
+        for (
+            const eventType
+            of [
+
+                'stream.online',
+
+                'stream.offline'
+            ]
+        ) {
+
         response =
 
             await axios.post(
@@ -79,7 +89,7 @@ const accessToken =
                 {
 
                     type:
-                        'stream.online',
+                        eventType,
 
                     version:
                         '1',
@@ -121,6 +131,7 @@ const accessToken =
                     }
                 }
             );
+        }
 
     } catch (error) {
 
@@ -147,93 +158,6 @@ const accessToken =
 
         response.data.data[0];
 
-/*
-    try {
-
-        console.log(
-
-            '[EVENTSUB CALLBACK]',
-
-            `${process.env.PUBLIC_URL}/twitch/eventsub`
-        );
-
-        const response =
-
-            await axios.post(
-
-                'https://api.twitch.tv/helix/eventsub/subscriptions',
-
-                {
-
-                    type:
-                        'stream.online',
-
-                    version:
-                        '1',
-
-                    condition: {
-
-                        broadcaster_user_id:
-                            twitchUserId
-                    },
-
-                    transport: {
-
-                        method:
-                            'webhook',
-
-                        callback:
-
-                            `${process.env.PUBLIC_URL}/twitch/eventsub`,
-
-                        secret:
-
-                            process.env
-                                .TWITCH_EVENTSUB_SECRET
-                    }
-                },
-
-                {
-
-                    headers: {
-
-                        Authorization:
-                            `Bearer ${accessToken}`,
-
-                        'Client-Id':
-                            process.env.TWITCH_CLIENT_ID,
-
-                        'Content-Type':
-                            'application/json'
-                    }
-                }
-            );
-
-    } catch (error) {
-
-        console.error(
-
-            '[EVENTSUB ERROR FULL]',
-
-            JSON.stringify(
-
-                error.response?.data ||
-
-                error.message,
-
-                null,
-
-                2
-            )
-        );
-
-        throw error;
-    }
-
-    const subscription =
-
-        response.data.data[0];
-*/
 // Temp Log
     console.log(
 

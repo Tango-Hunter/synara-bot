@@ -95,6 +95,46 @@ module.exports = (
             res.sendStatus(200);
         }
     );
+
+    router.post(
+
+        '/test-offline',
+
+        async (
+
+            req,
+
+            res
+        ) => {
+
+            await handleEventSub(
+
+                {
+
+                    subscription: {
+
+                        type:
+                            'stream.offline'
+                    },
+
+                    event: {
+
+                        broadcaster_user_id:
+
+                            req.body
+                                .twitchUserId
+                    }
+                },
+
+                client
+            );
+
+            res.sendStatus(
+                200
+            );
+        }
+    );
+
     // Test
     router.post(
 
