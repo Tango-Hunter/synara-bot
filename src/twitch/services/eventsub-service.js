@@ -45,16 +45,12 @@ async function ensureEventSubSubscription({
 // End Temp Log
         return;
     }
-
-    const accessToken =
-
-        await getAccessToken();
-
+// Temp Log
     console.log(
 
     '[EVENTSUB] REQUESTING ACCESS TOKEN'
 );
-
+// End Temp Log
 const accessToken =
 
     await getAccessToken();
