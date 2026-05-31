@@ -52,7 +52,7 @@ const {
 } = require('../commands/mytwitch');
 
 const {
-    handleTwitchStats
+    handleTwitchStatsCommand
 } = require('../commands/twitchstats');
 
 const {
@@ -152,7 +152,7 @@ const commandRegistry = {
     
     '!twitchstats': {
         title: 'TWITCH STATS',
-        execute: handleTwitchStats
+        execute: handleTwitchStatsCommand
     },
 };
 
