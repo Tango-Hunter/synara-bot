@@ -10,6 +10,11 @@ const {
     getStatistics
 } = require('../../twitch/database/twitch-statistics-repository');
 
+const {
+    buildEmbed
+} = require('../services/embed-builder');
+
+
 function formatDuration(
     seconds
 ) {
