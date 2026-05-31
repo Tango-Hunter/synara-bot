@@ -6,7 +6,7 @@
  * Description: Create, retrieve, and end live status.
  */
 
-const pool = require('../../core/database/database');
+const pool = require('../../core/database/postgres');
 
 
 async function createOrUpdateLiveStatus({
