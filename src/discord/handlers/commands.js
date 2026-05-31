@@ -150,10 +150,8 @@ const commandRegistry = {
                 )
     },
     
-    '!twitchstats': {
-        title: 'TWITCH STATS',
-        execute: handleTwitchStatsCommand
-    },
+    '!twitchstats':
+        handleTwitchStatsCommand,
 };
 
 async function executeCommand(
