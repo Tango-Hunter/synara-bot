@@ -77,15 +77,15 @@ async function handleLinkTwitch(
             twitchUser.profile_image_url
     });
 
-    return {
-        message:
-            `Twitch account linked: ${twitchUser.display_name}`
-    };
-
     await ensureEventSubSubscription({
         twitchUserId:
             twitchUser.id
     });
+
+    return {
+        message:
+            `Twitch account linked: ${twitchUser.display_name}`
+    };
 }
 
 module.exports = {

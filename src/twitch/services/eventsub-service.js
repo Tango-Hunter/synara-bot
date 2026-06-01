@@ -21,7 +21,11 @@ async function ensureEventSubSubscription({
 
     twitchUserId
 }) {
-
+// Temp Log
+    console.log(
+        '[EVENTSUB] FUNCTION CALLED'
+    );
+// End Temp Log
     const existing =
 
         await getSubscription(
@@ -41,66 +45,119 @@ async function ensureEventSubSubscription({
 // End Temp Log
         return;
     }
+// Temp Log
+    console.log(
 
-    const accessToken =
+    '[EVENTSUB] REQUESTING ACCESS TOKEN'
+);
+// End Temp Log
+const accessToken =
 
-        await getAccessToken();
+    await getAccessToken();
 
-    const response =
+    console.log(
 
-        await axios.post(
+        '[EVENTSUB] ACCESS TOKEN RECEIVED'
+    );
 
-            'https://api.twitch.tv/helix/eventsub/subscriptions',
+    let response;
 
-            {
+    try {
 
-                type:
-                    'stream.online',
+        console.log(
 
-                version:
-                    '1',
+            '[EVENTSUB CALLBACK]',
 
-                condition: {
+            `${process.env.PUBLIC_URL}/twitch/eventsub`
+        );
 
-                    broadcaster_user_id:
-                        twitchUserId
+        for (
+            const eventType
+            of [
+
+                'stream.online',
+
+                'stream.offline'
+            ]
+        ) {
+
+        response =
+
+            await axios.post(
+                'https://api.twitch.tv/helix/eventsub/subscriptions',
+
+                {
+
+                    type:
+                        eventType,
+
+                    version:
+                        '1',
+
+                    condition: {
+
+                        broadcaster_user_id:
+                            twitchUserId
+                    },
+
+                    transport: {
+
+                        method:
+                            'webhook',
+
+                        callback:
+
+                            `${process.env.PUBLIC_URL}/twitch/eventsub`,
+
+                        secret:
+
+                            process.env
+                                .TWITCH_EVENTSUB_SECRET
+                    }
                 },
 
-                transport: {
+                {
 
-                    method:
-                        'webhook',
+                    headers: {
 
-                    callback:
+                        Authorization:
+                            `Bearer ${accessToken}`,
 
-                        `${process.env.PUBLIC_URL}/twitch/eventsub`,
+                        'Client-Id':
+                            process.env.TWITCH_CLIENT_ID,
 
-                    secret:
-
-                        process.env
-                            .TWITCH_EVENTSUB_SECRET
+                        'Content-Type':
+                            'application/json'
+                    }
                 }
-            },
+            );
+        }
 
-            {
+    } catch (error) {
 
-                headers: {
+        console.error(
 
-                    Authorization:
-                        `Bearer ${accessToken}`,
+            '[EVENTSUB ERROR FULL]',
 
-                    'Client-Id':
-                        process.env.TWITCH_CLIENT_ID,
+            JSON.stringify(
 
-                    'Content-Type':
-                        'application/json'
-                }
-            }
+                error.response?.data ||
+
+                error.message,
+
+                null,
+
+                2
+            )
         );
+
+        throw error;
+    }
 
     const subscription =
 
         response.data.data[0];
+
 // Temp Log
     console.log(
 

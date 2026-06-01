@@ -19,7 +19,7 @@ const client =
     require('./core/config/discord-client');
 const createMessageRoutes =
     require('./discord/routes/messages');
-const twitchRoutes =
+const createTwitchRoutes =
     require('./routes/twitch');
 
 const {
@@ -56,7 +56,9 @@ app.use(
 );
 app.use(
     '/twitch',
-    twitchRoutes
+    createTwitchRoutes(
+        client
+    )
 );
 
 
