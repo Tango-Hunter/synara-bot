@@ -23,6 +23,14 @@ const {
 } = require('../../core/observation/observation-generator');
 
 const {
+    recordActivity
+} = require('../../core/database/activity-repository');
+
+const {
+    observationConfig
+} = require('../../core/config/observational-config');
+
+const {
     logError
 } = require('../../core/logging/logger');
 
@@ -61,6 +69,19 @@ function discordMessageHandler(client) {
             ) {
 
                 return;
+            }
+
+            // Activity Check
+            if (
+                !observationConfig
+                    .ignoredChannels
+                    .includes(
+                        message.channel.id
+                    )
+            ) {
+                await recordActivity(
+                    message.author.id
+                );
             }
 
             trackMessage(message);

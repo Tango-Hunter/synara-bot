@@ -17,7 +17,10 @@ const schedulerConfig = {
             '0 8 * * *',
 
         nightlyMessage:
-            '0 20 * * *'
+            '0 20 * * *',
+
+        activityAudit:
+            '5 0 * * *'
     }
 };
 

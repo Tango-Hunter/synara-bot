@@ -32,11 +32,17 @@ const {
     startNightlyMessageScheduler
 } = require('./discord/scheduler/motivational-scheduler');
 const {
+    startActivityScheduler
+} = require('./discord/scheduler/activity-scheduler');
+const {
     initializeDatabase
 } = require('./core/database/init-database');
 const {
     initializeTwitchTables
 } = require('./core/database/init-twitch-tables');
+const {
+    initializeActivityTable
+} = require('./core/database/init-activity-table');
 const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
@@ -69,11 +75,13 @@ client.once('clientReady', async () => {
 
     await initializeDatabase();
     await initializeTwitchTables();
+    await initializeActivityTable();
 
     console.log(`SYNARA online as ${client.user.tag}`);
 
     startDailyQuestionScheduler();
     startNightlyMessageScheduler();
+    startActivityScheduler();
 
     client.user.setPresence({
         activities: [
