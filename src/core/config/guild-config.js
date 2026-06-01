@@ -25,7 +25,13 @@ const guildConfig = {
                 '1429898326370816020', // Member
 
             welcomeChannelId:
-                '1416462288575135746' // #general
+                '1416462288575135746', // #general
+            
+            rolesChannelId:
+                '1429878832327950397', // #roles
+
+            introChannelId:
+                '1430195687953268746'  // #introductions
         },
 
         moderation: {
@@ -101,7 +107,13 @@ const guildConfig = {
                 '1431758489784684693', // Void Soldiers
 
             welcomeChannelId:
-                '1430018485408366740'  // #general
+                '1430018485408366740', // #general
+            
+            rolesChannelId:
+                '1440738723171143743', // #roles
+
+            introChannelId:
+                '1440381569356529815'  // #introductions
         },
 
         moderation: {

@@ -7,6 +7,10 @@
  */
 
 const {
+    EmbedBuilder
+} = require('discord.js');
+
+const {
     getGuildConfig
 } = require('../../core/config/guild-config');
 
@@ -306,7 +310,57 @@ async function finalizeOnboarding(
             messageId
         );
 
+    const rolesMention =
+
+        `<#${guildConfig.onboarding.rolesChannelId}>`;
+
+    const introMention =
+
+        `<#${guildConfig.onboarding.introChannelId}>`;
+
+    const completedEmbed =
+
+        new EmbedBuilder()
+
+            .setColor(
+                0x1ABC9C
+            )
+
+            .setTitle(
+                '◉ Welcome to the Server'
+            )
+
+            .setDescription(
+`
+Welcome <@${member.id}>.
+
+**Verification complete.**
+
+Access has been granted.
+
+**Next Steps**
+
+• Visit ${rolesMention} to configure your community interests.
+
+• Introduce yourself in ${introMention}.
+
+• Explore available channels and begin participating.
+
+The collective recognizes your presence.
+`
+            )
+
+            .setFooter({
+
+                text:
+                    'SYNARA • Onboarding Complete'
+            });
+
     await message.edit({
+
+        embeds: [
+            completedEmbed
+        ],
 
         components: []
     });
