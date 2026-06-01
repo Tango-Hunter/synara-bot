@@ -164,12 +164,14 @@ async function executeCommand(
 
         await message.channel.sendTyping();
 
-        logCommand(
-
-            commandName,
-            message.author.username,
-            message.channel.id
-        );
+        logCommand({
+            command:
+                commandName,
+            username:
+                message.author.username,
+            channelId:
+                message.channel.id
+        });
 
         const response =
             await commandConfig.execute({

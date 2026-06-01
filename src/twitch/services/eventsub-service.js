@@ -135,21 +135,30 @@ const accessToken =
 
     } catch (error) {
 
+        const twitchError =
+            error.response?.data;
+
         console.error(
-
             '[EVENTSUB ERROR FULL]',
-
             JSON.stringify(
-
-                error.response?.data ||
-
-                error.message,
-
+                twitchError,
                 null,
-
                 2
             )
         );
+
+        if (
+
+            error.response?.status === 409
+
+        ) {
+
+            console.log(
+                '[EVENTSUB] Subscription already exists'
+            );
+
+            return;
+        }
 
         throw error;
     }
