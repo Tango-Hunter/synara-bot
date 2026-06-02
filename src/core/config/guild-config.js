@@ -324,7 +324,7 @@ const guildConfig = {
                 '1448483511467114589', // #mod-applications
 
             modappApplyMessageId:
-                '',
+                '1511429367228796970',
 
             modappSubmissionsChannelId:
                 '1511404977153900655', // #mod-submissions
@@ -352,13 +352,13 @@ const guildConfig = {
         schedulers: {
 
             qotdChannelId:
-                '1365571082387722383',  // #general
+                '1511430822002036877',  // #qotd
 
             nightlyChannelId:
-                '1365571082387722383',  // #general
+                '1365883797454717019',  // #positivity-boost
 
             logsChannelId:
-                '1511405031826653315'  // #synara-logs
+                '1365733928685797568'  // #server-updates
         },
 
         features: {
