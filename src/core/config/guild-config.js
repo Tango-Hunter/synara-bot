@@ -6,13 +6,111 @@
  * Description: Centralized configuration for server features.
  */
 
+/*
+Discord Server Template. Copy and paste at end of list then input correct ID's
+
+,
+    
+    // ============================
+    // guildName
+    // ============================
+    
+    'guildID': {
+
+        name:
+            'guildName',
+
+        onboarding: {
+
+            verifiedRoleId:
+                'roleID', // verifiedRole
+
+            welcomeChannelId:
+                'channelID', // #general
+            
+            rolesChannelId:
+                'channelID', // #roles
+
+            introChannelId:
+                'channelID'  // #introductions
+        },
+
+        moderation: {
+
+            modappApplyChannelId:
+                'channelID', // #mod-applications
+
+            modappApplyMessageId:
+                'messageID',
+
+            modappSubmissionsChannelId:
+                'channelID', // #mod-submissions
+
+            adminRoleIds: [
+
+                'roleID'  // Admins
+            ],
+
+            moderatorRoleIds: [
+
+                'roleID'  // Mods
+            ]
+        },
+
+        streaming: {
+
+            leadershipLiveChannelId:
+                'channelID',
+
+            selfPromoChannelId:
+                'channelID'
+        },
+
+        schedulers: {
+
+            qotdChannelId:
+                'channelID',  // #general
+
+            nightlyChannelId:
+                'channelID',  // #general
+
+            logsChannelId:
+                'channelID'  // #synara-logs
+        },
+
+        features: {
+
+            onboardingEnabled:
+                true,
+
+            triviaEnabled:
+                true,
+
+            modApplicationsEnabled:
+                false,
+
+            observations:
+                true,
+
+            qotdScheduler:
+                true,
+
+            motivationalScheduler:
+                true,
+
+            twitchMonitoring:
+                true
+        }
+    }
+
+*/
+
+
 const guildConfig = {
 
-    /*
-    ============================
-    Hunter's Lodge
-    ============================
-    */
+    // ============================
+    // Hunter's Lodge
+    // ============================
 
     '1416462287341883477': {
 
@@ -86,15 +184,25 @@ const guildConfig = {
                 true,
 
             modApplicationsEnabled:
-                false
+                false,
+
+            observations:
+                true,
+
+            qotdScheduler:
+                true,
+
+            motivationalScheduler:
+                true,
+
+            twitchMonitoring:
+                true
         }
     },
 
-    /*
-    ============================
-    Void Army
-    ============================
-    */
+    // ============================
+    // Void Army
+    // ============================
 
     '1430018484775030919': {
 
@@ -170,7 +278,111 @@ const guildConfig = {
                 true,
 
             modApplicationsEnabled:
-                false
+                false,
+
+            observations:
+                true,
+
+            qotdScheduler:
+                true,
+
+            motivationalScheduler:
+                true,
+
+            twitchMonitoring:
+                true
+        }
+    },
+    
+    // ============================
+    // Ghosty's Clubhouse
+    // ============================
+    
+    '1365571082387722380': {
+
+        name:
+            "Ghosty's Clubhouse",
+
+        onboarding: {
+
+            verifiedRoleId:
+                '1365763423920717986', // Club Members
+
+            welcomeChannelId:
+                '1365717743562788874', // #welcome
+            
+            rolesChannelId:
+                '1365717818909135000', // #roles
+
+            introChannelId:
+                '1365887878327959614'  // #introductions
+        },
+
+        moderation: {
+
+            modappApplyChannelId:
+                '1448483511467114589', // #mod-applications
+
+            modappApplyMessageId:
+                '',
+
+            modappSubmissionsChannelId:
+                '1511404977153900655', // #mod-submissions
+
+            adminRoleIds: [
+
+                '1365572568806985819'  // Admins
+            ],
+
+            moderatorRoleIds: [
+
+                '1438929415194017944'  // Mods
+            ]
+        },
+
+        streaming: {
+
+            leadershipLiveChannelId:
+                '1365831678869897257',
+
+            selfPromoChannelId:
+                '1365832165211766857'
+        },
+
+        schedulers: {
+
+            qotdChannelId:
+                '1365571082387722383',  // #general
+
+            nightlyChannelId:
+                '1365571082387722383',  // #general
+
+            logsChannelId:
+                '1511405031826653315'  // #synara-logs
+        },
+
+        features: {
+
+            onboardingEnabled:
+                true,
+
+            triviaEnabled:
+                true,
+
+            modApplicationsEnabled:
+                false,
+
+            observations:
+                true,
+
+            qotdScheduler:
+                true,
+
+            motivationalScheduler:
+                true,
+
+            twitchMonitoring:
+                true
         }
     }
 };
