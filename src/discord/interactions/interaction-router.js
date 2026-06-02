@@ -45,15 +45,22 @@ async function routeInteraction(
 
     } catch (error) {
 
-        logError({
+        console.error(
+            '[INTERACTION ERROR FULL]',
+            error
+        );
 
+        logError({
             type:
                 ERROR_TYPES.SYSTEM_ERROR,
             source:
                 'interaction-router',
             message:
-                error.message
+                error.message,
+            details:
+                error.stack
         });
+
     }
 }
 

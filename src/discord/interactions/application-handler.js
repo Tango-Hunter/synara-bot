@@ -90,25 +90,17 @@ function buildModal1() {
         const input =
             new TextInputBuilder()
 
-                .setCustomId(
-                    field[0]
-                )
+                .setCustomId(field[0])
 
-                .setLabel(
-                    field[1]
-                )
+                .setLabel(field[1])
 
-                .setPlaceholder(
-                    field[2]
-                )
+                .setPlaceholder(field[2])
 
-                .setStyle(
-                    field[3]
-                )
+                .setStyle(field[3])
 
-                .setRequired(
-                    true
-                );
+                .setRequired(true)
+
+                .setMaxLength(800);
 
         modal.addComponents(
 
@@ -179,25 +171,17 @@ function buildModal2() {
         const input =
             new TextInputBuilder()
 
-                .setCustomId(
-                    field[0]
-                )
+                .setCustomId(field[0])
 
-                .setLabel(
-                    field[1]
-                )
+                .setLabel(field[1])
 
-                .setPlaceholder(
-                    field[2]
-                )
+                .setPlaceholder(field[2])
 
-                .setStyle(
-                    field[3]
-                )
+                .setStyle(field[3])
 
-                .setRequired(
-                    true
-                );
+                .setRequired(true)
+
+                .setMaxLength(800);
 
         modal.addComponents(
 
@@ -268,25 +252,17 @@ function buildModal3() {
         const input =
             new TextInputBuilder()
 
-                .setCustomId(
-                    field[0]
-                )
+                .setCustomId(field[0])
 
-                .setLabel(
-                    field[1]
-                )
+                .setLabel(field[1])
 
-                .setPlaceholder(
-                    field[2]
-                )
+                .setPlaceholder(field[2])
 
-                .setStyle(
-                    field[3]
-                )
+                .setStyle(field[3])
 
-                .setRequired(
-                    true
-                );
+                .setRequired(true)
+
+                .setMaxLength(800);
 
         modal.addComponents(
 
