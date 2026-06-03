@@ -80,14 +80,11 @@ Discord Server Template. Copy and paste at end of list then input correct ID's
 
         features: {
 
-            onboardingEnabled:
+            onboarding:
                 true,
 
-            triviaEnabled:
+            modApplications:
                 true,
-
-            modApplicationsEnabled:
-                false,
 
             observations:
                 true,
@@ -177,14 +174,11 @@ const guildConfig = {
 
         features: {
 
-            onboardingEnabled:
+            onboarding:
                 true,
 
-            triviaEnabled:
+            modApplications:
                 true,
-
-            modApplicationsEnabled:
-                false,
 
             observations:
                 true,
@@ -271,14 +265,11 @@ const guildConfig = {
 
         features: {
 
-            onboardingEnabled:
+            onboarding:
                 true,
 
-            triviaEnabled:
+            modApplications:
                 true,
-
-            modApplicationsEnabled:
-                false,
 
             observations:
                 true,
@@ -363,14 +354,11 @@ const guildConfig = {
 
         features: {
 
-            onboardingEnabled:
+            onboarding:
                 true,
 
-            triviaEnabled:
+            modApplications:
                 true,
-
-            modApplicationsEnabled:
-                false,
 
             observations:
                 true,

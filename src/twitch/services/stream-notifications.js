@@ -73,6 +73,13 @@ async function postLiveNotifications({
                 guildId
             );
 
+        if (
+            !guildConfig?.features
+                ?.twitchMonitoring
+        ) {
+            continue;
+        }
+
         let channelId =
 
             guildConfig
@@ -194,6 +201,13 @@ async function deleteLiveNotifications({
             getGuildConfig(
                 guildId
             );
+
+        if (
+            !guildConfig?.features
+                ?.twitchMonitoring
+        ) {
+            continue;
+        }
 
         const channels = [
 

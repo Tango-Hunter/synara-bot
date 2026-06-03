@@ -10,6 +10,10 @@ const {
     observationConfig
 } = require('../config/observational-config');
 
+const {
+    getGuildConfig
+} = require('../config/guild-config');
+
 const activityMap = new Map();
 
 let lastObservation =
@@ -18,6 +22,17 @@ let lastObservation =
 function trackMessage(
     message
 ) {
+
+    const guildConfig =
+        getGuildConfig(
+            message.guild.id
+        );
+
+    if (
+        !guildConfig?.features?.observations
+    ) {
+        return;
+    }
 
     if (
 

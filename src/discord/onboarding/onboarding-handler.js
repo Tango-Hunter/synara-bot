@@ -41,6 +41,13 @@ async function handleNewMember(
         );
 
     if (
+        !guildConfig?.features?.onboarding
+
+    ) {
+        return;
+    }
+
+    if (
         !guildConfig
     ) {
 
@@ -97,6 +104,12 @@ async function handleOnboardingInteraction(
         getGuildConfig(
             interaction.guild.id
         );
+    
+    if (
+        !guildConfig?.features?.onboarding
+    ) {
+        return;
+    }
 
     /*
     ============================

@@ -114,6 +114,20 @@ async function handleModAppsCommand(
         );
 
     if (
+        !guildConfig?.features?.modApplications
+    ) {
+
+        return await interaction.reply({
+
+            content:
+                'Moderator applications are disabled for this server.',
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    if (
         !guildConfig
     ) {
 

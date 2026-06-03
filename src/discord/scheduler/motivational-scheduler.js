@@ -130,8 +130,10 @@ Requirements:
 
             if (
                 !guildConfig
+                ||
+                !guildConfig.features
+                    ?.motivationalScheduler
             ) {
-
                 continue;
             }
 

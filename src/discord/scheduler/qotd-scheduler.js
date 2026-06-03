@@ -134,8 +134,10 @@ Requirements:
 
             if (
                 !guildConfig
+                ||
+                !guildConfig.features
+                    ?.qotdScheduler
             ) {
-
                 continue;
             }
 
