@@ -10,6 +10,12 @@ const {
     disableNotifications
 } = require('../../core/database/twitch-repository');
 
+const {
+    discordLog
+} = require(
+    '../services/discord-logger'
+);
+
 
 async function handleUnlinkTwitch(
     message
@@ -19,6 +25,20 @@ async function handleUnlinkTwitch(
 
         message.author.id
     );
+
+    await discordLog({
+
+        guildId,
+
+        category:
+            'TWITCH UNLINK',
+
+        details:
+            `Twitch notifications disabled for ${message.author.id}`,
+
+        status:
+            'SUCCESS'
+    });
 
     return {
         message:
