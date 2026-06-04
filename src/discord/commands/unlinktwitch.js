@@ -35,7 +35,7 @@ async function handleUnlinkTwitch(
             'TWITCH UNLINK',
 
         details:
-            `Twitch notifications disabled for ${message.author.id}`,
+            `Twitch notifications disabled for <@${message.author.id}>`,
 
         status:
             'SUCCESS'
