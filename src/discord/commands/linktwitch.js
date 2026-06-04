@@ -18,6 +18,10 @@ const {
     ensureEventSubSubscription
 } = require('../../twitch/services/eventsub-service');
 
+const {
+    getSubscription
+} = require('../../core/database/twitch-eventsub-repository');
+
 
 async function handleLinkTwitch(
     message,
@@ -77,10 +81,29 @@ async function handleLinkTwitch(
             twitchUser.profile_image_url
     });
 
-    await ensureEventSubSubscription({
-        twitchUserId:
+    const existingSubscription =
+
+        await getSubscription(
             twitchUser.id
-    });
+        );
+    if (
+
+        !existingSubscription
+
+    ) {
+
+        await ensureEventSubSubscription({
+            twitchUserId:
+                twitchUser.id
+        });
+    }
+    else {
+
+        console.log(
+
+            '[LINKTWITCH] EventSub already exists'
+        );
+    }
 
     return {
         message:
