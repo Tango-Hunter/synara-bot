@@ -86,6 +86,13 @@ async function handleLinkTwitch(
         await getSubscription(
             twitchUser.id
         );
+
+    console.log(
+        '[LINKTWITCH SUB LOOKUP]',
+        twitchUser.id,
+        existingSubscription
+    );
+
     if (
 
         !existingSubscription
