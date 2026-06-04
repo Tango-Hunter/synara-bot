@@ -1,0 +1,212 @@
+/**
+ * Title: discord-logger.js
+ * Author: Tango Hunter
+ * Date Created: 6/2/26
+ * Date Modified: 6/40/26
+ * Description: Centralized Discord logging service.
+ */
+
+const {
+    EmbedBuilder
+} = require('discord.js');
+
+const client =
+    require('../../core/config/discord-client');
+
+const {
+    getGuildConfig
+} = require('../../core/config/guild-config');
+
+// ===============================
+// Status settings
+// ===============================
+const STATUS_COLORS = {
+
+    SUCCESS:
+        0x2ECC71,
+
+    WARNING:
+        0xF1C40F,
+
+    ERROR:
+        0xE74C3C,
+
+    INFO:
+        0x3498DB
+};
+
+const STATUS_ICONS = {
+
+    SUCCESS:
+        '◉',
+
+    WARNING:
+        '⚠',
+
+    ERROR:
+        '✖',
+
+    INFO:
+        '☾'
+};
+
+// ===============================
+// Main Logging function within Discord
+// ===============================
+async function discordLog({
+
+    guildId,
+
+    category,
+
+    details,
+
+    status = 'INFO'
+}) {
+
+    try {
+
+        const guildConfig =
+
+            getGuildConfig(
+                guildId
+            );
+
+        if (
+
+            !guildConfig
+
+            ||
+
+            !guildConfig.schedulers
+                ?.logsChannelId
+
+        ) {
+
+            return;
+        }
+
+        const channel =
+
+            await client.channels.fetch(
+
+                guildConfig
+                    .schedulers
+                    .logsChannelId
+            );
+
+        if (
+            !channel
+        ) {
+
+            return;
+        }
+
+        const embed =
+
+            new EmbedBuilder()
+
+                .setColor(
+
+                    STATUS_COLORS[
+                        status
+                    ]
+
+                    ||
+
+                    STATUS_COLORS.INFO
+                )
+
+                .setTitle(
+
+                    `${
+
+                        STATUS_ICONS[
+                            status
+                        ]
+
+                        ||
+
+                        STATUS_ICONS.INFO
+
+                    } ${category}`
+                )
+
+                .addFields(
+
+                    {
+
+                        name:
+                            'Category',
+
+                        value:
+                            category,
+
+                        inline:
+                            false
+                    },
+
+                    {
+
+                        name:
+                            'Details',
+
+                        value:
+                            details,
+
+                        inline:
+                            false
+                    },
+
+                    {
+
+                        name:
+                            'Status',
+
+                        value:
+                            status,
+
+                        inline:
+                            false
+                    }
+                )
+
+                .setFooter({
+
+                    text:
+
+                        `SYNARA • ${
+                            new Date()
+                                .toLocaleString(
+                                    'en-US',
+                                    {
+                                        timeZone:
+                                            'America/New_York'
+                                    }
+                                )
+                        }`
+                })
+
+                .setTimestamp();
+
+        await channel.send({
+
+            embeds: [
+                embed
+            ]
+        });
+
+    } catch (error) {
+
+        console.error(
+
+            '[DISCORD LOGGER ERROR]',
+
+            error
+        );
+    }
+}
+
+module.exports = {
+    discordLog
+};

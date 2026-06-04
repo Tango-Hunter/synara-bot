@@ -10,6 +10,11 @@ const {
     getTwitchUserByDiscordId
 } = require('../../core/database/twitch-repository');
 
+const {
+    discordLog
+} = require('../services/discord-logger');
+
+
 async function handleMyTwitch(
     message
 ) {
@@ -30,6 +35,20 @@ async function handleMyTwitch(
                 'No Twitch account linked.'
         };
     }
+
+    await discordLog({
+
+        guildId,
+
+        category:
+            'SYSTEM',
+
+        details:
+            'Discord logger initialized successfully.',
+
+        status:
+            'INFO'
+    });
 
     return {
 
