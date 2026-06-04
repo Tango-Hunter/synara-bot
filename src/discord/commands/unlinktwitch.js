@@ -28,7 +28,8 @@ async function handleUnlinkTwitch(
 
     await discordLog({
 
-        guildId,
+        guildId:
+            message.guild.id,
 
         category:
             'TWITCH UNLINK',
