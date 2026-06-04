@@ -21,6 +21,11 @@ async function ensureEventSubSubscription({
 
     twitchUserId
 }) {
+
+    console.trace(
+        '[EVENTSUB TRACE]'
+    );
+
 // Temp Log
     console.log(
         '[EVENTSUB] FUNCTION CALLED'
@@ -40,7 +45,10 @@ async function ensureEventSubSubscription({
 
             '[EVENTSUB EXISTS]',
 
-            twitchUserId
+            twitchUserId,
+
+            existing
+
         );
 // End Temp Log
         return;
