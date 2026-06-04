@@ -22,15 +22,6 @@ async function ensureEventSubSubscription({
     twitchUserId
 }) {
 
-    console.trace(
-        '[EVENTSUB TRACE]'
-    );
-
-// Temp Log
-    console.log(
-        '[EVENTSUB] FUNCTION CALLED'
-    );
-// End Temp Log
     const existing =
 
         await getSubscription(
@@ -40,33 +31,13 @@ async function ensureEventSubSubscription({
     if (
         existing
     ) {
-// Temp Log
-        console.log(
 
-            '[EVENTSUB EXISTS]',
-
-            twitchUserId,
-
-            existing
-
-        );
-// End Temp Log
         return;
     }
-// Temp Log
-    console.log(
 
-    '[EVENTSUB] REQUESTING ACCESS TOKEN'
-);
-// End Temp Log
 const accessToken =
 
     await getAccessToken();
-
-    console.log(
-
-        '[EVENTSUB] ACCESS TOKEN RECEIVED'
-    );
 
     let response;
 
@@ -155,19 +126,6 @@ const accessToken =
             )
         );
 
-        if (
-
-            error.response?.status === 409
-
-        ) {
-
-            console.log(
-                '[EVENTSUB] Subscription already exists'
-            );
-
-            return;
-        }
-
         throw error;
     }
 
@@ -175,16 +133,6 @@ const accessToken =
 
         response.data.data[0];
 
-// Temp Log
-    console.log(
-
-        '[EVENTSUB CREATED]',
-
-        subscription.id,
-
-        twitchUserId
-    );
-// End Temp Log
     await saveSubscription({
 
         twitchUserId,

@@ -87,18 +87,10 @@ async function handleLinkTwitch(
             twitchUser.id
         );
 
-    console.log(
-        '[LINKTWITCH SUB LOOKUP]',
-        twitchUser.id,
-        existingSubscription
-    );
-
     if (
-
         !existingSubscription
 
     ) {
-
         await ensureEventSubSubscription({
             twitchUserId:
                 twitchUser.id
