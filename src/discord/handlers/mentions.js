@@ -157,7 +157,7 @@ ${cleanedMessage}
         });
 
     if (
-        Math.random() < 0.15
+        Math.random() < 0.10
     ) {
 
         aiResponse += `\n\nEfficiency reassessment: ${updatedScore}%`;

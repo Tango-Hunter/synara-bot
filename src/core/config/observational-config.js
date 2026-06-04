@@ -10,7 +10,7 @@ const observationConfig = {
 
     enabled: true,
     minimumMessages: 12,
-    observationChance: 0.1,
+    observationChance: 0.05,
     cooldownMinutes: 10,
     ignoredChannels: [
 
