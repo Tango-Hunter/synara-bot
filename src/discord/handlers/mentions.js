@@ -36,7 +36,7 @@ const {
 } = require('../services/channel-awareness');
 
 const {
-    logInfo
+    logFeature
 } = require('../../core/logging/logger');
 
 async function handleMention(
@@ -133,12 +133,37 @@ ${cleanedMessage}
             cleanedMessage
     });
 
-    logInfo({
+    logFeature({
 
-        source:
-            'mentions-handler',
+        category:
+            'MENTION',
+
         message:
-            `AI response generated for ${message.author.username}`
+            'AI response generated',
+
+        details: {
+
+            guildName:
+                message.guild.name,
+
+            guildId:
+                message.guild.id,
+
+            channelName:
+                message.channel.name,
+
+            channelId:
+                message.channel.id,
+
+            userId:
+                message.author.id,
+
+            username:
+                message.author.username,
+
+            responseLength:
+                aiResponse.length
+        }
     });
 
     const efficiencyShift =

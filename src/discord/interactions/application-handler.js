@@ -28,6 +28,15 @@ const {
     clearSession
 } = require('../../core/applications/application-session-store');
 
+const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 /*
 ====================================
 MODAL BUILDERS
@@ -310,6 +319,45 @@ async function handleApplicationInteraction(
         createSession(
             interaction.user.id
         );
+
+        await discordLog({
+
+            guildId:
+                interaction.guild.id,
+
+            category:
+                'MOD_APP',
+
+            details:
+                `Moderator application started by <@${interaction.user.id}>`,
+
+            status:
+                'STARTED'
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Application started',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username
+            }
+        });
 
         return await interaction.showModal(
             buildModal1()
@@ -758,6 +806,45 @@ ${interaction.user.id}
         clearSession(
             interaction.user.id
         );
+
+        await discordLog({
+
+            guildId:
+                interaction.guild.id,
+
+            category:
+                'MOD_APP',
+
+            details:
+                `Moderator application submitted by <@${interaction.user.id}>`,
+
+            status:
+                'SUCCESS'
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Application submitted',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username
+            }
+        });
 
         return await interaction.reply({
 

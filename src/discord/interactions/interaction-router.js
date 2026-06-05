@@ -16,7 +16,8 @@ const {
 } = require('../admin/admin-command-router');
 
 const {
-    logError
+    logError,
+    logFeature
 } = require('../../core/logging/logger');
 
 const {
@@ -43,12 +44,37 @@ async function routeInteraction(
             interaction
         );
 
-    } catch (error) {
+        if (
 
-        console.error(
-            '[INTERACTION ERROR FULL]',
-            error
-        );
+            interaction.isButton() ||
+
+            interaction.isModalSubmit()
+
+        ) {
+
+            logFeature({
+
+                category:
+                    'INTERACTION',
+
+                message:
+                    'Interaction processed',
+
+                details: {
+
+                    guildId:
+                        interaction.guild?.id,
+
+                    userId:
+                        interaction.user?.id,
+
+                    interactionId:
+                        interaction.customId
+                }
+            });
+        }
+
+    } catch (error) {
 
         logError({
             type:
@@ -57,8 +83,23 @@ async function routeInteraction(
                 'interaction-router',
             message:
                 error.message,
-            details:
-                error.stack
+            details: {
+
+                error:
+                    error.message,
+
+                stack:
+                    error.stack,
+
+                guildId:
+                    interaction.guild?.id,
+
+                userId:
+                    interaction.user?.id,
+
+                interactionId:
+                    interaction.customId
+            }
         });
 
     }

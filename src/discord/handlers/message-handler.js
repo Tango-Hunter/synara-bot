@@ -31,7 +31,8 @@ const {
 } = require('../../core/config/observational-config');
 
 const {
-    logError
+    logError,
+    logFeature
 } = require('../../core/logging/logger');
 
 const {
@@ -97,6 +98,27 @@ function discordMessageHandler(client) {
                 handledTrivia
             ) {
 
+                logFeature({
+
+                    category:
+                        'TRIVIA',
+
+                    message:
+                        'Trivia response processed',
+
+                    details: {
+
+                        guildId:
+                            message.guild.id,
+
+                        channelId:
+                            message.channel.id,
+
+                        userId:
+                            message.author.id
+                    }
+                });
+
                 return;
             }
 
@@ -107,6 +129,30 @@ function discordMessageHandler(client) {
                 );
 
             if (commandHandled) {
+
+                logFeature({
+
+                    category:
+                        'COMMAND',
+
+                    message:
+                        'Command processed',
+
+                    details: {
+
+                        guildId:
+                            message.guild.id,
+
+                        channelId:
+                            message.channel.id,
+
+                        userId:
+                            message.author.id,
+
+                        command:
+                            message.content.split(' ')[0]
+                    }
+                });
 
                 return;
             }
