@@ -10,7 +10,7 @@ const axios = require('axios');
 
 const {
     getAccessToken
-} = require('./eventsub-service');
+} = require('../../core/services/twitch-service');
 
 
 async function getLiveStreamData(
