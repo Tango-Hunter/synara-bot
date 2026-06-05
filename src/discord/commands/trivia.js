@@ -18,6 +18,10 @@ const {
     createTriviaSession
 } = require('../trivia/trivia-session-manager');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function handleTriviaCommand({
 
@@ -111,6 +115,26 @@ ${answerText}
 Reply directly to this message with your answer.
 `
         });
+
+    logFeature({
+
+        category:
+            'TRIVIA',
+
+        message:
+            'Trivia session created',
+
+        details: {
+
+            userId,
+
+            category:
+                trivia.category,
+
+            difficulty:
+                trivia.difficulty
+        }
+    });
 
     return {
 

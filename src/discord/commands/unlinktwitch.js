@@ -12,9 +12,11 @@ const {
 
 const {
     discordLog
-} = require(
-    '../../core/logging/discord-logger'
-);
+} = require('../../core/logging/discord-logger');
+
+const {
+    logFeature
+} = require('../../core/logging/logger');
 
 
 async function handleUnlinkTwitch(
@@ -39,6 +41,30 @@ async function handleUnlinkTwitch(
 
         status:
             'SUCCESS'
+    });
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Twitch notifications disabled',
+
+        details: {
+
+            guildName:
+                message.guild.name,
+
+            guildId:
+                message.guild.id,
+
+            discordUserId:
+                message.author.id,
+
+            discordUsername:
+                message.author.username
+        }
     });
 
     return {

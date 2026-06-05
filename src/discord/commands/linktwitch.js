@@ -22,6 +22,14 @@ const {
     getSubscription
 } = require('../../core/database/twitch-eventsub-repository');
 
+const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function handleLinkTwitch(
     message,
@@ -34,6 +42,27 @@ async function handleLinkTwitch(
     if (
         !channelName
     ) {
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Link attempt failed',
+
+            details: {
+
+                guildId:
+                    message.guild.id,
+
+                discordUserId:
+                    message.author.id,
+
+                reason:
+                    'No channel supplied'
+            }
+        });
 
         return {
             message:
@@ -50,6 +79,30 @@ async function handleLinkTwitch(
     if (
         !twitchUser
     ) {
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Link attempt failed',
+
+            details: {
+
+                guildId:
+                    message.guild.id,
+
+                discordUserId:
+                    message.author.id,
+
+                requestedChannel:
+                    channelName,
+
+                reason:
+                    'Twitch user not found'
+            }
+        });
 
         return {
             message:
@@ -98,11 +151,78 @@ async function handleLinkTwitch(
     }
     else {
 
-        console.log(
+        logFeature({
 
-            '[LINKTWITCH] EventSub already exists'
-        );
+            category:
+                'TWITCH',
+
+            message:
+                'Existing EventSub detected',
+
+            details: {
+
+                guildId:
+                    message.guild.id,
+
+                discordUserId:
+                    message.author.id,
+
+                twitchUserId:
+                    twitchUser.id,
+
+                twitchLogin:
+                    twitchUser.login
+            }
+        });
     }
+
+    await discordLog({
+
+        guildId:
+            message.guild.id,
+
+        category:
+            'TWITCH',
+
+        details:
+            `Twitch account linked for <@${message.author.id}>`,
+
+        status:
+            'SUCCESS'
+    });
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Twitch account linked',
+
+        details: {
+
+            guildName:
+                message.guild.name,
+
+            guildId:
+                message.guild.id,
+
+            discordUserId:
+                message.author.id,
+
+            discordUsername:
+                message.author.username,
+
+            twitchUserId:
+                twitchUser.id,
+
+            twitchLogin:
+                twitchUser.login,
+
+            twitchDisplayName:
+                twitchUser.display_name
+        }
+    });
 
     return {
         message:

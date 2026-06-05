@@ -8,6 +8,10 @@
 
 const axios = require('axios');
 
+const {
+    logFeature
+} = require('../logging/logger');
+
 
 let cachedToken = null;
 
@@ -56,6 +60,21 @@ async function getAccessToken() {
     cachedToken =
         response.data.access_token;
 
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Access token refreshed',
+
+        details: {
+
+            expiresIn:
+                response.data.expires_in
+        }
+    });
+
     tokenExpiresAt =
 
         now +
@@ -101,6 +120,20 @@ async function getTwitchUser(
                 }
             }
         );
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'User lookup completed',
+
+        details: {
+
+            login
+        }
+    });
 
     return response.data.data[0] || null;
 }

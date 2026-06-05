@@ -18,6 +18,15 @@ const {
     getGuildConfig
 } = require('../../../core/config/guild-config');
 
+const {
+    logFeature
+} = require('../../../core/logging/logger');
+
+const {
+    discordLog
+} = require('../../../core/logging/discord-logger');
+
+
 async function getApplicationMessage(
     interaction,
     guildConfig
@@ -48,26 +57,15 @@ async function getApplicationMessage(
         messageId
     ) {
 
-        try {
-
-            const message =
-
-                await channel.messages.fetch(
-                    messageId
-                );
-
-            return {
-                channel,
-                message
-            };
-
-        } catch {
-
-            console.log(
-
-                '[MOD APPS] Stored application message not found. Creating replacement.'
+        const message =
+            await channel.messages.fetch(
+                messageId
             );
-        }
+
+        return {
+            channel,
+            message
+        };
     }
 
     /*
@@ -84,15 +82,26 @@ async function getApplicationMessage(
                 'Initializing moderator applications...'
         });
 
-    console.log(
+    logFeature({
 
-        '[MOD APPS] New application message created.'
-    );
+        category:
+            'MOD_APP',
 
-    console.log(
+        message:
+            'Replacement application message created',
 
-        `[MOD APPS] Save this Message ID into guild-config.js: ${placeholderMessage.id}`
-    );
+        details: {
+
+            guildName:
+                interaction.guild.name,
+
+            guildId:
+                interaction.guild.id,
+
+            messageId:
+                placeholderMessage.id
+        }
+    });
 
     return {
 
@@ -247,6 +256,45 @@ Press the button below to begin.
                 `<@&${verifiedRoleId}> Moderator applications are now OPEN.`
         });
 
+        await discordLog({
+
+            guildId:
+                interaction.guild.id,
+
+            category:
+                'MOD_APP',
+
+            details:
+                `Moderator applications opened by <@${interaction.user.id}>`,
+
+            status:
+                'SUCCESS'
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Applications opened',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username
+            }
+        });
+
         return await interaction.reply({
 
             content:
@@ -330,6 +378,45 @@ Please monitor future announcements for reopening information.
             ],
 
             content: null
+        });
+
+        await discordLog({
+
+            guildId:
+                interaction.guild.id,
+
+            category:
+                'MOD_APP',
+
+            details:
+                `Moderator applications closed by <@${interaction.user.id}>`,
+
+            status:
+                'SUCCESS'
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Applications closed',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                    userId:
+                        interaction.user.id,
+
+                    username:
+                        interaction.user.username
+            }
         });
 
         return await interaction.reply({

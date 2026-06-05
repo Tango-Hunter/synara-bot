@@ -27,7 +27,8 @@ const {
 } = require('./response-validator');
 const {
     logError,
-    logInfo
+    logInfo,
+    logFeature
 } = require('../logging/logger');
 const {
     ERROR_TYPES
@@ -71,7 +72,7 @@ async function generateResponse({
                 source:
                     'openai-service',
                 message:
-                    `Attempt ${attempt}/${MAX_RETRIES}`
+                    `OpenAI request attempt ${attempt}/${MAX_RETRIES}`
             });
 
             const completion =
@@ -118,31 +119,28 @@ async function generateResponse({
                 completion?.choices?.[0]?.message?.content
                 ||
                 '';
-/*
-            console.log(
-                '\n========== RAW OPENAI RESPONSE =========='
-            );
 
-            console.dir(
-                completion,
-                {
-                    depth: null
-                }
-            );
-
-            console.log(
-                'TYPEOF RESPONSE:',
-                typeof response
-            );
-
-            console.log(
-                '========================================\n'
-            );
-*/
             const validatedResponse =
                 validateResponse(
                     rawResponse
                 );
+
+            logFeature({
+
+                category:
+                    'OPENAI',
+
+                message:
+                    'Response generated',
+
+                details: {
+
+                    model:
+                        openaiConfig.model,
+
+                    attempt
+                }
+            });
 
             return validatedResponse;
 
@@ -193,7 +191,7 @@ async function generateResponse({
                 source:
                     'openai-service',
                 message:
-                    `Retrying in ${retryDelay}ms`
+                    `Retry scheduled in ${retryDelay}ms`
             });
 
             await delay(

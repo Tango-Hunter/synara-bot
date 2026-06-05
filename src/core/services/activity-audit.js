@@ -8,6 +8,11 @@
 
 const pool = require('../database/postgres');
 
+const {
+    logFeature
+} = require('../logging/logger');
+
+
 async function runActivityAudit() {
 
     //
@@ -120,11 +125,6 @@ async function runActivityAudit() {
         FROM community_activity
     `);
 
-    console.log(
-        '[ACTIVITY AUDIT USERS]',
-        activityResult.rows
-    );
-
     const twitchResult = await pool.query(`
 
         SELECT
@@ -134,11 +134,24 @@ async function runActivityAudit() {
 
         FROM twitch_users
     `);
+    
+    logFeature({
 
-    console.log(
-        '[TWITCH STATUS]',
-        twitchResult.rows
-    );
+        category:
+            'ACTIVITY',
+
+        message:
+            'Activity audit completed',
+
+        details: {
+
+            activityUsers:
+                activityResult.rowCount,
+
+            twitchUsers:
+                twitchResult.rowCount
+        }
+    });
 }
 
 module.exports = {

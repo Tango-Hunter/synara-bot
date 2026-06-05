@@ -24,6 +24,11 @@ const {
     hasAdminPermissions
 } = require('./permission-check');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 async function routeAdminCommand(
     interaction
 ) {
@@ -52,6 +57,33 @@ async function routeAdminCommand(
             interaction
         )
     ) {
+
+        logFeature({
+
+            category:
+                'ADMIN',
+
+            message:
+                'Administrative command denied',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username,
+
+                command:
+                    interaction.commandName
+            }
+        });
 
         return await interaction.reply({
 

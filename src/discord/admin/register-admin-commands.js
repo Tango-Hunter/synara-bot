@@ -14,6 +14,11 @@ const {
 
 require('dotenv').config();
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 const commands = [
 
     new SlashCommandBuilder()
@@ -77,9 +82,20 @@ const rest =
 
     try {
 
-        console.log(
-            'Registering admin slash commands...'
-        );
+        logFeature({
+
+            category:
+                'SYSTEM',
+
+            message:
+                'Registering admin commands',
+
+            details: {
+
+                commandCount:
+                    commands.length
+            }
+        });
 
         await rest.put(
 
@@ -96,9 +112,20 @@ const rest =
             }
         );
 
-        console.log(
-            'Admin slash commands registered.'
-        );
+        logFeature({
+
+            category:
+                'SYSTEM',
+
+            message:
+                'Admin commands registered',
+
+            details: {
+
+                commandCount:
+                    commands.length
+            }
+        });
 
     } catch (error) {
 
