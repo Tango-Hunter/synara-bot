@@ -43,8 +43,13 @@ const {
 } = require('../../core/config/feature-flags');
 
 const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
     logInfo,
-    logError
+    logError,
+    logFeature
 } = require('../../core/logging/logger');
 
 const {
@@ -166,12 +171,34 @@ ${finalResponse}
                 embed
             });
 
-            logInfo({
+            await discordLog({
 
-                source:
-                    'motivational-scheduler',
+                guildId,
+
+                category:
+                    'NIGHTLY',
+
+                details:
+                    'Nightly reflection posted',
+
+                status:
+                    'SUCCESS'
+            });
+
+            logFeature({
+
+                category:
+                    'NIGHTLY',
+
                 message:
-                    `Nightly message posted to ${channelId}`
+                    'Nightly reflection posted',
+
+                details: {
+
+                    guildId,
+
+                    channelId
+                }
             });
         }
 

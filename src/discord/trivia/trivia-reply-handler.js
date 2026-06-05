@@ -25,6 +25,10 @@ const {
     normalizeAnswer
 } = require('./normalize-answer');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function handleTriviaReply(
     message
@@ -129,6 +133,27 @@ async function handleTriviaReply(
             message.author.id
         );
 
+        logFeature({
+
+            category:
+                'TRIVIA',
+
+            message:
+                'Correct answer submitted',
+
+            details: {
+
+                channelId:
+                    message.channel.id,
+
+                userId:
+                    message.author.id,
+
+                answer:
+                    resolvedAnswer
+            }
+        });
+
         clearTimeout(
             session.timeoutId
         );
@@ -154,6 +179,27 @@ async function handleTriviaReply(
     await breakStreak(
         message.author.id
     );
+
+    logFeature({
+
+        category:
+            'TRIVIA',
+
+        message:
+            'Incorrect answer submitted',
+
+        details: {
+
+            channelId:
+                message.channel.id,
+
+            userId:
+                message.author.id,
+
+            answer:
+                resolvedAnswer
+        }
+    });
 
     await message.reply(
 

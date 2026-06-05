@@ -11,7 +11,8 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    logError
+    logError,
+    logFeature
 } = require('../../core/logging/logger');
 
 const {
@@ -46,6 +47,23 @@ module.exports = (client) => {
             }
 
             await channel.send(message);
+
+            logFeature({
+
+                category:
+                    'API',
+
+                message:
+                    'Message delivered',
+
+                details: {
+
+                    channelId,
+
+                    messageLength:
+                        message.length
+                }
+            });
 
             return res.status(200).json({
                 success: true

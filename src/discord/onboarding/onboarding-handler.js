@@ -29,6 +29,14 @@ const {
     removeOnboardingMessage
 } = require('./onboarding-session-manager');
 
+const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function handleNewMember(
     member
@@ -94,6 +102,33 @@ async function handleNewMember(
         messageId:
             sentMessage.id
     });
+
+    logFeature({
+
+        category:
+            'ONBOARDING',
+
+        message:
+            'Welcome message created',
+
+        details: {
+
+            guildName:
+                member.guild.name,
+
+            guildId:
+                member.guild.id,
+
+            userId:
+                member.id,
+
+            username:
+                member.user.username,
+
+            messageId:
+                sentMessage.id
+        }
+    });
 }
 
 async function handleOnboardingInteraction(
@@ -128,6 +163,30 @@ async function handleOnboardingInteraction(
             'begin_onboarding_'
         )
     ) {
+
+        logFeature({
+
+            category:
+                'ONBOARDING',
+
+            message:
+                'Onboarding started',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username
+            }
+        });
 
         const targetUserId =
 
@@ -226,6 +285,30 @@ async function handleOnboardingInteraction(
             'i understand'
         ) {
 
+            logFeature({
+
+                category:
+                    'ONBOARDING',
+
+                message:
+                    'Verification failed',
+
+                details: {
+
+                    guildName:
+                        interaction.guild.name,
+
+                    guildId:
+                        interaction.guild.id,
+
+                    userId:
+                        interaction.user.id,
+
+                    username:
+                        interaction.user.username
+                }
+            });
+
             return await interaction.reply({
 
                 content:
@@ -263,6 +346,33 @@ async function handleOnboardingInteraction(
                 .onboarding
                 .verifiedRoleId
         );
+
+        logFeature({
+
+            category:
+                'ONBOARDING',
+
+            message:
+                'Verified role assigned',
+
+            details: {
+
+                guildName:
+                    interaction.guild.name,
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    interaction.user.id,
+
+                username:
+                    interaction.user.username,
+
+                roleId:
+                    guildConfig.onboarding.verifiedRoleId
+            }
+        });
 
         await interaction.reply({
 
@@ -376,6 +486,45 @@ The collective recognizes your presence.
         ],
 
         components: []
+    });
+
+    await discordLog({
+
+        guildId:
+            member.guild.id,
+
+        category:
+            'ONBOARDING',
+
+        details:
+            `Verification completed for <@${member.id}>`,
+
+        status:
+            'SUCCESS'
+    });
+
+    logFeature({
+
+        category:
+            'ONBOARDING',
+
+        message:
+            'Onboarding completed',
+
+        details: {
+
+            guildName:
+                member.guild.name,
+
+            guildId:
+                member.guild.id,
+
+            userId:
+                member.id,
+
+            username:
+                member.user.username
+        }
     });
 
     removeOnboardingMessage(

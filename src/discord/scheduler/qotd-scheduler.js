@@ -41,8 +41,13 @@ const {
 } = require('../../core/config/feature-flags');
 
 const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
     logInfo,
-    logError
+    logError,
+    logFeature
 } = require('../../core/logging/logger');
 
 const {
@@ -51,6 +56,7 @@ const {
 
 const qotdDatabase =
     require('../databases/qotd-database.json');
+
 
 async function runDailyQuestion() {
 
@@ -145,7 +151,7 @@ Requirements:
 
                 guildConfig
                     .schedulers
-                    .nightlyChannelId;
+                    .qotdChannelId;
 
             const embed =
                 buildEmbed({
@@ -172,14 +178,39 @@ ${response}
 
                     embed
                 });
-            }
 
-        logInfo({
-            source:
-                'qotd-scheduler',
-            message:
-                'Question of the day posted successfully.'
-        });
+                await discordLog({
+
+                    guildId,
+
+                    category:
+                        'QOTD',
+
+                    details:
+                        'Question of the Day posted',
+
+                    status:
+                        'SUCCESS'
+                });
+
+                logFeature({
+
+                    category:
+                        'QOTD',
+
+                    message:
+                        'Question posted',
+
+                    details: {
+
+                        guildId,
+
+                        channelId,
+
+                        theme
+                    }
+                });
+            }
 
     } catch (error) {
 

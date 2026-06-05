@@ -9,6 +9,11 @@
 const activeTriviaSessions =
     new Map();
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 function createTriviaSession({
 
     channelId,
@@ -51,10 +56,39 @@ function createTriviaSession({
 
                 } catch (error) {
 
-                    console.error(
-                        error
-                    );
+                    logFeature({
+
+                        category:
+                            'TRIVIA',
+
+                        message:
+                            'Trivia expiration failed',
+
+                        details: {
+
+                            channelId,
+
+                            error:
+                                error.message
+                        }
+                    });
                 }
+
+                logFeature({
+
+                    category:
+                        'TRIVIA',
+
+                    message:
+                        'Trivia session expired',
+
+                    details: {
+
+                        channelId,
+
+                        userId
+                    }
+                });
 
                 activeTriviaSessions.delete(
                     channelId
@@ -64,6 +98,24 @@ function createTriviaSession({
 
             5 * 60 * 1000
         );
+
+    logFeature({
+
+        category:
+            'TRIVIA',
+
+        message:
+            'Trivia session created',
+
+        details: {
+
+            channelId,
+
+            userId,
+
+            messageId
+        }
+    });
 
     activeTriviaSessions.set(
 

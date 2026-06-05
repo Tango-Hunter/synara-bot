@@ -10,6 +10,11 @@ const axios = require('axios');
 
 const he = require('he');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 async function fetchTriviaQuestion() {
 
     const endpoints = [
@@ -38,6 +43,27 @@ async function fetchTriviaQuestion() {
 
     const question =
         response.data.results[0];
+
+    logFeature({
+
+        category:
+            'TRIVIA',
+
+        message:
+            'Trivia question retrieved',
+
+        details: {
+
+            category:
+                question.category,
+
+            difficulty:
+                question.difficulty,
+
+            type:
+                question.type
+        }
+    });
 
     return {
 

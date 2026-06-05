@@ -16,6 +16,16 @@ const {
     schedulerConfig
 } = require('../../core/config/scheduler-config');
 
+const {
+    logFeature,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
+
 function startActivityScheduler() {
 
     cron.schedule(
@@ -26,40 +36,85 @@ function startActivityScheduler() {
 
         async () => {
 
+            logFeature({
+
+                category:
+                    'ACTIVITY',
+
+                message:
+                    'Activity scheduler registered',
+
+                details: {
+
+                    schedule:
+                        schedulerConfig.schedules.activityAudit,
+
+                    timezone:
+                        schedulerConfig.timezone
+                }
+            });
+
             try {
 
-                console.log(
-                    '[ACTIVITY AUDIT] Starting'
-                );
+                logFeature({
+
+                    category:
+                        'ACTIVITY',
+
+                    message:
+                        'Activity audit started',
+
+                    details: {
+
+                        schedule:
+                            schedulerConfig.schedules.activityAudit
+                    }
+                });
 
                 await runActivityAudit();
 
-                console.log(
-                    '[ACTIVITY AUDIT] Complete'
-                );
+                logFeature({
+
+                    category:
+                        'ACTIVITY',
+
+                    message:
+                        'Activity audit completed',
+
+                    details: {
+
+                        schedule:
+                            schedulerConfig.schedules.activityAudit
+                    }
+                });
 
             } catch (
                 error
             ) {
+                logError({
 
-                console.error(
-                    '[ACTIVITY AUDIT ERROR]',
-                    error
-                );
+                    type:
+                        ERROR_TYPES.SCHEDULER_ERROR,
+
+                    source:
+                        'activity-scheduler',
+
+                    message:
+                        error.message,
+
+                    details: {
+
+                        schedule:
+                            schedulerConfig.schedules.activityAudit
+                    }
+                });
             }
-
         },
-
         {
-
             timezone:
                 schedulerConfig
                     .timezone
         }
-    );
-
-    console.log(
-        `[ACTIVITY AUDIT] Scheduled: ${schedulerConfig.schedules.activityAudit} (${schedulerConfig.timezone})`
     );
 }
 
