@@ -30,8 +30,7 @@ const {
 } = require('../efficiency/efficiency-manager');
 
 const {
-    logInfo,
-    logError
+    logFeature
 } = require('../logging/logger');
 
 const {
@@ -203,13 +202,34 @@ async function tryObservation(
         response
     );
 
-    logInfo({
+    logFeature({
 
-        source:
-            'observation-system',
+        category:
+            'OBSERVATION',
 
         message:
-            `Observation generated in ${message.channel.name}`
+            'Observation generated',
+
+        details: {
+
+            guildName:
+                message.guild.name,
+
+            guildId:
+                message.guild.id,
+
+            channelName:
+                message.channel.name,
+
+            channelId:
+                message.channel.id,
+
+            userId:
+                message.author.id,
+
+            efficiencyScore:
+                updatedScore
+        }
     });
 }
 

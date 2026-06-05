@@ -11,11 +11,11 @@ const {
 } = require('discord.js');
 
 const client =
-    require('../../core/config/discord-client');
+    require('../config/discord-client');
 
 const {
     getGuildConfig
-} = require('../../core/config/guild-config');
+} = require('../config/guild-config');
 
 // ===============================
 // Status settings

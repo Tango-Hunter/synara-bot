@@ -191,8 +191,53 @@ function logCommand({
     );
 }
 
+// Railway Logs
+function logFeature({
+    category,
+    message,
+    details
+}) {
+
+    if (
+        !category
+    ) {
+        throw new Error(
+            'logFeature requires category'
+        );
+    }
+
+    if (
+        !message
+    ) {
+        throw new Error(
+            'logFeature requires message'
+        );
+    }
+
+    if (
+        !details
+    ) {
+        throw new Error(
+            'logFeature requires details'
+        );
+    }
+
+    console.log(
+        `[${category}] ${message}`
+    );
+
+    console.log(
+        JSON.stringify(
+            details,
+            null,
+            2
+        )
+    );
+}
+
 module.exports = {
     logError,
     logInfo,
-    logCommand
+    logCommand,
+    logFeature
 };

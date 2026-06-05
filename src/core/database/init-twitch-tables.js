@@ -9,6 +9,11 @@
 const pool
      = require('./postgres');
 
+const {
+    logFeature
+} = require('../logging/logger');
+
+
 async function initializeTwitchTables() {
 
     await pool.query(`
@@ -99,6 +104,29 @@ async function initializeTwitchTables() {
             updated_at TIMESTAMP DEFAULT NOW()
         );
     `);
+
+    logFeature({
+
+        category:
+            'SYSTEM',
+
+        message:
+            'Twitch tables initialized',
+
+        details: {
+
+            tables: [
+
+                'twitch_users',
+
+                'twitch_live_status',
+
+                'twitch_statistics',
+
+                'twitch_eventsub'
+            ]
+        }
+    });
 }
 
 module.exports = {

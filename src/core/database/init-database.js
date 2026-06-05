@@ -9,6 +9,11 @@
 const pool =
     require('./postgres');
 
+const {
+    logFeature
+} = require('../logging/logger');
+
+
 async function initializeDatabase() {
 
     await pool.query(`
@@ -26,9 +31,20 @@ async function initializeDatabase() {
 
     `);
 
-    console.log(
-        'Database initialized.'
-    );
+    logFeature({
+
+        category:
+            'SYSTEM',
+
+        message:
+            'Database initialized',
+
+        details: {
+
+            table:
+                'trivia_leaderboard'
+        }
+    });
 }
 
 module.exports = {
