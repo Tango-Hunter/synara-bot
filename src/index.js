@@ -54,6 +54,13 @@ const {
 const {
     getGuildConfig
 } = require('./core/config/guild-config');
+const {
+    logFeature,
+    logError
+} = require('./core/logging/logger');
+const {
+    ERROR_TYPES
+} = require('./core/logging/error-types');
 
 app.use(express.json());
 app.use(
@@ -73,12 +80,27 @@ app.use(
 // ===============================
 client.once('clientReady', async () => {
 
+    // Databases
     await initializeDatabase();
     await initializeTwitchTables();
     await initializeActivityTable();
 
-    console.log(`SYNARA online as ${client.user.tag}`);
+    logFeature({
 
+        category:
+            'SYSTEM',
+
+        message:
+            'SYNARA online',
+
+        details: {
+
+            bot:
+                client.user.tag
+        }
+    });
+
+    // Scheduled Tasks
     startDailyQuestionScheduler();
     startNightlyMessageScheduler();
     startActivityScheduler();
@@ -124,14 +146,46 @@ client.on(
             await handleNewMember(
                 member
             );
-            console.log(`[ONBOARDING] New member detected: ${member.user.tag}`);
+            logFeature({
+
+                category:
+                    'ONBOARDING',
+
+                message:
+                    'New member joined',
+
+                details: {
+
+                    guildId:
+                        member.guild.id,
+
+                    userId:
+                        member.id,
+
+                    username:
+                        member.user.username
+                }
+            });
 
         } catch (error) {
 
-            console.error(
-                '[ONBOARDING ERROR]',
-                error
-            );
+            logError({
+
+                type:
+                    ERROR_TYPES.ONBOARDING_ERROR,
+
+                source:
+                    'guildMemberAdd',
+
+                message:
+                    error.message,
+
+                details: {
+
+                    guildId:
+                        member.guild.id
+                }
+            });
         }
     }
 );
@@ -197,12 +251,23 @@ client.on(
 
         } catch (error) {
 
-            console.error(
+            logError({
 
-                '[ONBOARDING UPDATE ERROR]',
+                type:
+                    ERROR_TYPES.ONBOARDING_ERROR,
 
-                error
-            );
+                source:
+                    'guildMemberUpdate',
+
+                message:
+                    error.message,
+
+                details: {
+
+                    guildId:
+                        newMember.guild.id
+                }
+            });
         }
     }
 );
@@ -219,7 +284,18 @@ client.login(process.env.DISCORD_TOKEN);
 
 app.listen(PORT, () => {
 
-    console.log(
-        `API server running on port ${PORT}`
-    );
+    logFeature({
+
+        category:
+            'SYSTEM',
+
+        message:
+            'API server started',
+
+        details: {
+
+            port:
+                PORT
+        }
+    });
 });

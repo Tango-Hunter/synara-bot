@@ -29,6 +29,10 @@ const {
     getLiveStreamData
 } = require('./twitch-stream-service');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function handleStreamOnline(
     payload,
@@ -56,6 +60,26 @@ async function handleStreamOnline(
 
         return;
     }
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Stream online detected',
+
+        details: {
+
+            twitchUserId,
+
+            title:
+                streamData.title,
+
+            category:
+                streamData.category
+        }
+    });
 
     if (
         users.length === 0
@@ -116,6 +140,24 @@ async function handleStreamOnline(
             startedAt:
                 new Date()
         });
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Live notifications posted',
+
+            details: {
+
+                discordUserId:
+                    user.discord_user_id,
+
+                guildCount:
+                    user.guild_ids.length
+            }
+        });
     }
 }
 
@@ -166,6 +208,20 @@ async function handleStreamOffline(
 
         return;
     }
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Stream offline detected',
+
+        details: {
+
+            twitchUserId
+        }
+    });
 
     for (
         const user
@@ -220,6 +276,23 @@ async function handleStreamOffline(
 
             streamDurationSeconds:
                 durationSeconds
+        });
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Stream statistics updated',
+
+            details: {
+
+                discordUserId:
+                    user.discord_user_id,
+
+                durationSeconds
+            }
         });
 
         await markOffline({

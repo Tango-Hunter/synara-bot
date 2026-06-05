@@ -17,6 +17,15 @@ const {
     saveSubscription
 } = require('../../core/database/twitch-eventsub-repository');
 
+const {
+    logFeature,
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 
 async function ensureEventSubSubscription({
 
@@ -24,7 +33,6 @@ async function ensureEventSubSubscription({
 }) {
 
     const existing =
-
         await getSubscription(
             twitchUserId
         );
@@ -32,6 +40,20 @@ async function ensureEventSubSubscription({
     if (
         existing
     ) {
+
+        logFeature({
+
+            category:
+                'EVENTSUB',
+
+            message:
+                'Existing EventSub found',
+
+            details: {
+
+                twitchUserId
+            }
+        });
 
         return;
     }
@@ -43,13 +65,6 @@ const accessToken =
     let response;
 
     try {
-
-        console.log(
-
-            '[EVENTSUB CALLBACK]',
-
-            `${process.env.PUBLIC_URL}/twitch/eventsub`
-        );
 
         for (
             const eventType
@@ -115,17 +130,25 @@ const accessToken =
 
     } catch (error) {
 
-        const twitchError =
-            error.response?.data;
+        logError({
 
-        console.error(
-            '[EVENTSUB ERROR FULL]',
-            JSON.stringify(
-                twitchError,
-                null,
-                2
-            )
-        );
+            type:
+                ERROR_TYPES.TWITCH_ERROR,
+
+            source:
+                'eventsub-service',
+
+            message:
+                error.message,
+
+            details: {
+
+                twitchUserId,
+
+                twitchResponse:
+                    error.response?.data
+            }
+        });
 
         throw error;
     }
@@ -140,6 +163,23 @@ const accessToken =
 
         subscriptionId:
             subscription.id
+    });
+
+    logFeature({
+
+        category:
+            'EVENTSUB',
+
+        message:
+            'EventSub subscription created',
+
+        details: {
+
+            twitchUserId,
+
+            subscriptionId:
+                subscription.id
+        }
     });
 }
 

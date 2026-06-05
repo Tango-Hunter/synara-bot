@@ -12,6 +12,16 @@ const {
     handleEventSub
 } = require('../twitch/services/eventsub-handler');
 
+const {
+    logFeature,
+    logError
+} = require('../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../core/logging/error-types');
+
+
 module.exports = (
     client
 ) => {
@@ -45,18 +55,6 @@ module.exports = (
             res
         ) => {
 
-            console.log(
-                'EVENTSUB REQUEST RECEIVED'
-            );
-
-            console.log(
-                JSON.stringify(
-                    req.body,
-                    null,
-                    2
-                )
-            );
-
             const messageType =
 
                 req.header(
@@ -70,6 +68,21 @@ module.exports = (
                 'webhook_callback_verification'
 
             ) {
+
+                logFeature({
+
+                    category:
+                        'EVENTSUB',
+
+                    message:
+                        'Webhook verification received',
+
+                    details: {
+
+                        challenge:
+                            'received'
+                    }
+                });
 
                 return res
                     .status(200)
@@ -86,16 +99,61 @@ module.exports = (
 
             ) {
 
-                await handleEventSub(
-                    req.body,
-                    client
-                );
+                logFeature({
+
+                    category:
+                        'EVENTSUB',
+
+                    message:
+                        'Notification received',
+
+                    details: {
+
+                        type:
+                            req.body.subscription?.type,
+
+                        broadcasterId:
+                            req.body.event?.broadcaster_user_id
+                    }
+                });
+
+                try {
+
+                    await handleEventSub(
+                        req.body,
+                        client
+                    );
+
+                } catch (error) {
+
+                    logError({
+
+                        type:
+                            ERROR_TYPES.API_ERROR,
+
+                        source:
+                            'eventsub-route',
+
+                        message:
+                            error.message,
+
+                        details: {
+
+                            subscriptionType:
+                                req.body.subscription?.type,
+
+                            broadcasterId:
+                                req.body.event?.broadcaster_user_id
+                        }
+                    });
+                }
             }
 
             res.sendStatus(200);
         }
     );
 
+    // Offline Test
     router.post(
 
         '/test-offline',
@@ -135,7 +193,7 @@ module.exports = (
         }
     );
 
-    // Test
+    // Online Test
     router.post(
 
         '/test-online',

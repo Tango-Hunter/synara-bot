@@ -14,6 +14,11 @@ const {
     buildLiveEmbed
 } = require('../embeds/live-embed-builder');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
+
 async function postLiveNotifications({
 
     client,
@@ -143,7 +148,6 @@ async function postLiveNotifications({
             });
 
         const sentMessage =
-
             await channel.send({
 
                 content:
@@ -155,6 +159,24 @@ async function postLiveNotifications({
                 embeds: [
                     embed
                 ]
+            });
+
+            logFeature({
+
+                category:
+                    'TWITCH',
+
+                message:
+                    'Live notification sent',
+
+                details: {
+
+                    guildId,
+
+                    channelId,
+
+                    discordUserId
+                }
             });
 
         messageIds[
@@ -251,6 +273,22 @@ async function deleteLiveNotifications({
                     );
 
                 await message.delete();
+
+                logFeature({
+
+                    category:
+                        'TWITCH',
+
+                    message:
+                        'Live notification removed',
+
+                    details: {
+
+                        guildId,
+
+                        messageId
+                    }
+                });
 
             } catch {
 

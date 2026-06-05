@@ -12,6 +12,10 @@ const {
     getAccessToken
 } = require('../../core/services/twitch-service');
 
+const {
+    logFeature
+} = require('../../core/logging/logger');
+
 
 async function getLiveStreamData(
     twitchUserId
@@ -55,6 +59,26 @@ async function getLiveStreamData(
 
         return null;
     }
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Live stream data retrieved',
+
+        details: {
+
+            twitchUserId,
+
+            title:
+                stream.title,
+
+            category:
+                stream.game_name
+        }
+    });
 
     return {
 
