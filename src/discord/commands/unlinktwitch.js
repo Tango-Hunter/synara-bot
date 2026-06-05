@@ -13,7 +13,7 @@ const {
 const {
     discordLog
 } = require(
-    '../services/discord-logger'
+    '../../core/logging/discord-logger'
 );
 
 
