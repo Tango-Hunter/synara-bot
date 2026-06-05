@@ -28,7 +28,9 @@ async function postLiveNotifications({
 
     streamTitle,
 
-    streamCategory
+    streamCategory,
+
+    thumbnailUrl
 }) {
 
     const messageIds = {};
@@ -135,7 +137,9 @@ async function postLiveNotifications({
 
                 profileImageUrl,
 
-                twitchLogin
+                twitchLogin,
+
+                thumbnailUrl
             });
 
         const sentMessage =

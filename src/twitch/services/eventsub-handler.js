@@ -25,6 +25,10 @@ const {
     updateStatistics
 } = require('../database/twitch-statistics-repository');
 
+const {
+    getLiveStreamData
+} = require('./twitch-stream-service');
+
 
 async function handleStreamOnline(
     payload,
@@ -37,10 +41,21 @@ async function handleStreamOnline(
             .broadcaster_user_id;
 
     const users =
-
         await getEnabledUsersByTwitchUserId(
             twitchUserId
         );
+
+    const streamData =
+        await getLiveStreamData(
+            twitchUserId
+        );
+
+    if (
+        !streamData
+    ) {
+
+        return;
+    }
 
     if (
         users.length === 0
@@ -73,12 +88,13 @@ async function handleStreamOnline(
                     user.twitch_profile_image_url,
 
                 streamTitle:
-                    payload.event.title ||
-                    'Live on Twitch',
+                    streamData.title,
 
                 streamCategory:
-                    payload.event.category_name ||
-                    'Unknown'
+                    streamData.category,
+                    
+                thumbnailUrl:
+                    streamData.thumbnailUrl
             });
 
         await createOrUpdateLiveStatus({
@@ -89,13 +105,13 @@ async function handleStreamOnline(
             messageIds,
 
             streamCategory:
-                payload.event.category_name,
+                streamData.category,
 
             streamTitle:
-                payload.event.title,
+                streamData.title,
 
             thumbnailUrl:
-                null,
+                streamData.thumbnailUrl,
 
             startedAt:
                 new Date()

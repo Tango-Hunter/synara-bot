@@ -17,6 +17,7 @@ const {
     saveSubscription
 } = require('../../core/database/twitch-eventsub-repository');
 
+
 async function ensureEventSubSubscription({
 
     twitchUserId
@@ -143,5 +144,6 @@ const accessToken =
 }
 
 module.exports = {
-    ensureEventSubSubscription
+    ensureEventSubSubscription,
+    getAppAccessToken
 };

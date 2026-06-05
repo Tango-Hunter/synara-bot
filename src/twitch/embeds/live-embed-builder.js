@@ -21,7 +21,9 @@ function buildLiveEmbed({
 
     profileImageUrl,
 
-    twitchLogin
+    twitchLogin,
+
+    thumbnailUrl
 }) {
 
     return new EmbedBuilder()
@@ -68,6 +70,10 @@ function buildLiveEmbed({
 
         .setThumbnail(
             profileImageUrl
+        )
+
+        .setImage(
+            thumbnailUrl
         )
 
         .setURL(
