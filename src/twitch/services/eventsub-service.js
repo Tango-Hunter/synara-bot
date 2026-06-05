@@ -145,5 +145,5 @@ const accessToken =
 
 module.exports = {
     ensureEventSubSubscription,
-    getAppAccessToken
+    getAccessToken
 };

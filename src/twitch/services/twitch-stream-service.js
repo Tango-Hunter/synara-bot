@@ -9,7 +9,7 @@
 const axios = require('axios');
 
 const {
-    getAppAccessToken
+    getAccessToken
 } = require('./eventsub-service');
 
 
@@ -18,7 +18,7 @@ async function getLiveStreamData(
 ) {
 
     const accessToken =
-        await getAppAccessToken();
+        await getAccessToken();
 
     const response =
 
