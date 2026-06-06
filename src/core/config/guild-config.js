@@ -361,7 +361,7 @@ const guildConfig = {
                 true,
 
             observations:
-                true,
+                false,
 
             qotdScheduler:
                 true,
@@ -385,6 +385,5 @@ function getGuildConfig(
 }
 
 module.exports = {
-
     getGuildConfig
 };

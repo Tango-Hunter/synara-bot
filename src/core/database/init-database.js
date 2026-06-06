@@ -3,7 +3,7 @@
  * Author: Tango Hunter
  * Date Created: 5/25/26
  * Date Modified: 5/25/26
- * Description:  Creates Database Initialization.
+ * Description:  Creates Discord Database Initialization.
  */
 
 const pool =
@@ -31,18 +31,45 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS feature_flags (
+
+            guild_id TEXT NOT NULL,
+
+            guild_name TEXT NOT NULL,
+
+            feature_name TEXT NOT NULL,
+
+            enabled BOOLEAN NOT NULL DEFAULT TRUE,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                feature_name
+            )
+        );
+
+    `);
+
     logFeature({
 
         category:
             'SYSTEM',
 
         message:
-            'Database initialized',
+            'Discord tables initialized',
 
         details: {
+            tables: [
 
-            table:
-                'trivia_leaderboard'
+                'trivia_leaderboard',
+
+                'feature_flags'
+            ] 
         }
     });
 }
