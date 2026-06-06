@@ -32,7 +32,6 @@ async function getFeatureFlag({
 
             AND feature_name = $2
             `,
-
             [
 
                 guildId,
@@ -50,6 +49,37 @@ async function getFeatureFlag({
     }
 
     return result.rows[0].enabled;
+}
+
+async function featureFlagExists({
+
+    guildId,
+
+    featureName
+}) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT 1
+
+            FROM feature_flags
+
+            WHERE guild_id = $1
+
+            AND feature_name = $2
+            `,
+            [
+
+                guildId,
+
+                featureName
+            ]
+        );
+
+    return result.rows.length > 0;
 }
 
 async function setFeatureFlag({
@@ -169,6 +199,7 @@ async function getGuildFeatures(
 async function initializeGuildFeatures({
 
     guildId,
+
     guildName
 }) {
 
@@ -187,7 +218,7 @@ async function initializeGuildFeatures({
 
         const exists =
 
-            await getFeatureFlag({
+            await featureFlagExists({
 
                 guildId,
 
@@ -196,7 +227,7 @@ async function initializeGuildFeatures({
 
         if (
 
-            exists === false
+            !exists
         ) {
 
             await setFeatureFlag({
@@ -208,24 +239,6 @@ async function initializeGuildFeatures({
                 featureName,
 
                 enabled: true
-            });
-
-            logFeature({
-
-                category:
-                    'FEATURE_FLAGS',
-
-                message:
-                    'Feature initialized',
-
-                details: {
-
-                    guildId,
-
-                    guildName,
-
-                    featureName
-                }
             });
         }
     }
@@ -256,22 +269,23 @@ async function initializeAllGuildFeatures(
 
     logFeature({
 
-      category:
-          'FEATURE_FLAGS',
+        category:
+            'FEATURE_FLAGS',
 
-      message:
-          'Feature flag verification completed',
+        message:
+            'Feature flag verification completed',
 
-      details: {
+        details: {
 
-          guildCount:
-              client.guilds.cache.size
-      }
-  });
+            guildCount:
+                client.guilds.cache.size
+        }
+    });
 }
 
 module.exports = {
     getFeatureFlag,
+    featureFlagExists,
     setFeatureFlag,
     getGuildFeatures,
     initializeGuildFeatures,
