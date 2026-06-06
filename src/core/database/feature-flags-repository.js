@@ -7,6 +7,10 @@
 
 const pool = require('./postgres');
 
+const {
+    logFeature
+} = require('../logging/logger');
+
 
 async function getFeatureFlag({
 
@@ -165,7 +169,6 @@ async function getGuildFeatures(
 async function initializeGuildFeatures({
 
     guildId,
-
     guildName
 }) {
 
@@ -182,22 +185,95 @@ async function initializeGuildFeatures({
         DEFAULT_FEATURE_FLAGS
     ) {
 
-        await setFeatureFlag({
+        const exists =
 
-            guildId,
+            await getFeatureFlag({
 
-            guildName,
+                guildId,
 
-            featureName,
+                featureName
+            });
 
-            enabled: true
+        if (
+
+            exists === false
+        ) {
+
+            await setFeatureFlag({
+
+                guildId,
+
+                guildName,
+
+                featureName,
+
+                enabled: true
+            });
+
+            logFeature({
+
+                category:
+                    'FEATURE_FLAGS',
+
+                message:
+                    'Feature initialized',
+
+                details: {
+
+                    guildId,
+
+                    guildName,
+
+                    featureName
+                }
+            });
+        }
+    }
+}
+
+async function initializeAllGuildFeatures(
+    client
+) {
+
+    for (
+
+        const guild
+
+        of
+
+        client.guilds.cache.values()
+    ) {
+
+        await initializeGuildFeatures({
+
+            guildId:
+                guild.id,
+
+            guildName:
+                guild.name
         });
     }
+
+    logFeature({
+
+      category:
+          'FEATURE_FLAGS',
+
+      message:
+          'Feature flag verification completed',
+
+      details: {
+
+          guildCount:
+              client.guilds.cache.size
+      }
+  });
 }
 
 module.exports = {
     getFeatureFlag,
     setFeatureFlag,
     getGuildFeatures,
-    initializeGuildFeatures
+    initializeGuildFeatures,
+    initializeAllGuildFeatures
 };
