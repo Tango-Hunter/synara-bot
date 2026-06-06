@@ -151,8 +151,5 @@ Reply directly to this message with your answer.
 }
 
 module.exports = {
-    name:
-        'trivia',
-    execute:
-        handleTriviaCommand
+    handleTriviaCommand
 };

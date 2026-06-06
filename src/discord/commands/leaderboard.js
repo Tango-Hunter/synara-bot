@@ -90,8 +90,5 @@ ${userStats.best_streak}
 }
 
 module.exports = {
-    name:
-        'leaderboard',
-    execute:
-        handleLeaderboardCommand
+    handleLeaderboardCommand
 };

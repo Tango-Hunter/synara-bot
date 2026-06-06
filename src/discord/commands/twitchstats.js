@@ -127,8 +127,5 @@ ${formatDuration(
 }
 
 module.exports = {
-    name:
-        'twitchstats',
-    execute:
-        handleTwitchStatsCommand
+    handleTwitchStatsCommand
 };

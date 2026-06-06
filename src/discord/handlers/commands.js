@@ -17,8 +17,9 @@ const {
     runJokeCommand
 } = require('../commands/joke');
 
-const leaderboardCommand =
-    require('../commands/leaderboard');
+const {
+    handleLeaderboardCommand 
+} = require('../commands/leaderboard');
 
 const {
     runMotivateCommand
@@ -36,8 +37,9 @@ const {
     runStatusCommand
 } = require('../commands/status');
 
-const triviaCommand =
-    require('../commands/trivia');
+const {
+    handleTriviaCommand
+ } = require('../commands/trivia');
 
 const {
     handleLinkTwitch
@@ -51,8 +53,9 @@ const {
     handleMyTwitch
 } = require('../commands/mytwitch');
 
-const handleTwitchStatsCommand = 
-    require('../commands/twitchstats');
+const {
+    handleTwitchStatsCommand 
+} = require('../commands/twitchstats');
 
 const {
     formatCommandResponse
@@ -88,9 +91,6 @@ const commandRegistry = {
         execute: runJokeCommand
     },
 
-    '!leaderboard':
-        leaderboardCommand,
-
     '!motivate': {
         title: 'MOTIVATION',
         execute: runMotivateCommand
@@ -111,8 +111,18 @@ const commandRegistry = {
         execute: runStatusCommand
     },
 
-    '!trivia':
-        triviaCommand,
+    // ===============================
+    // Trivia
+    // ===============================
+    '!trivia': {
+        title: 'TRIVIA',
+        execute: handleTriviaCommand
+    },
+
+    '!leaderboard': {
+        title: 'TRIVIA LEADERBOARD',
+        execute: handleLeaderboardCommand
+    },
 
     // ===============================
     // Twitch Link Commands
@@ -149,8 +159,10 @@ const commandRegistry = {
                 )
     },
     
-    '!twitchstats':
-        handleTwitchStatsCommand,
+    '!twitchstats': {
+        title: 'TWITCH STATISTICS',
+        execute: handleTwitchStatsCommand
+    },
 };
 
 async function executeCommand(
