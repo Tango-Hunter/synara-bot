@@ -121,8 +121,9 @@ Requirements:
 
         const guildIds = [
 
-            '1416462287341883477',
-            '1430018484775030919'
+            '1416462287341883477', //Hunters Lodge
+            '1430018484775030919', // Void Army
+            '1365571082387722380'  //Ghosty's Clubhouse
         ];
 
         for (const guildId of guildIds) {
