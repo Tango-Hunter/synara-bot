@@ -2,9 +2,7 @@
  * Title: observation-generator.js
  * Author: Tango Hunter
  * Date Created: 5/22/26
- * Date Modified: 5/22/26
- * Description:
- * Generates restrained autonomous observations.
+ * Description: Generates restrained autonomous observations.
  */
 
 const {
@@ -19,6 +17,10 @@ const {
     observationConfig,
     isObservationChannel
 } = require('../config/observational-config');
+
+const {
+    getFeatureFlag
+} = require('../database/feature-flags-repository');
 
 const {
     getChannelActivity,
@@ -44,6 +46,22 @@ async function tryObservation(
 
     if (
         !observationConfig.enabled
+    ) {
+        return;
+    }
+
+    const observationsEnabled =
+        await getFeatureFlag({
+
+            guildId:
+                message.guild.id,
+
+            featureName:
+                'observations'
+        });
+
+    if (
+        !observationsEnabled
     ) {
         return;
     }

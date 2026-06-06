@@ -2,7 +2,6 @@
  * Title: observation-manager.js
  * Author: Tango Hunter
  * Date Created: 5/22/26
- * Date Modified: 5/22/26
  * Description: Tracks passive environmental activity.
  */
 
@@ -12,25 +11,30 @@ const {
 } = require('../config/observational-config');
 
 const {
-    getGuildConfig
-} = require('../config/guild-config');
+    getFeatureFlag
+} = require('../database/feature-flags-repository');
 
 const activityMap = new Map();
 
 let lastObservation =
     0;
 
-function trackMessage(
+async function trackMessage(
     message
 ) {
 
-    const guildConfig =
-        getGuildConfig(
-            message.guild.id
-        );
+    const observationsEnabled =
+        await getFeatureFlag({
+
+            guildId:
+                message.guild.id,
+
+            featureName:
+                'observations'
+        });
 
     if (
-        !guildConfig?.features?.observations
+        !observationsEnabled
     ) {
         return;
     }
