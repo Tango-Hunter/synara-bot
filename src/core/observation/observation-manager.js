@@ -7,7 +7,8 @@
  */
 
 const {
-    observationConfig
+    observationConfig,
+    isObservationChannel
 } = require('../config/observational-config');
 
 const {
@@ -35,12 +36,10 @@ function trackMessage(
     }
 
     if (
-
-        observationConfig.ignoredChannels.includes(
-            message.channel.id
+        !isObservationChannel(
+            message.channel
         )
     ) {
-
         return;
     }
 

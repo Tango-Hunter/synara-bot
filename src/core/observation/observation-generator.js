@@ -16,7 +16,8 @@ const {
 } = require('../services/openai-service');
 
 const {
-    observationConfig
+    observationConfig,
+    isObservationChannel
 } = require('../config/observational-config');
 
 const {
@@ -44,14 +45,20 @@ async function tryObservation(
     if (
         !observationConfig.enabled
     ) {
+        return;
+    }
 
+    if (
+        !isObservationChannel(
+            message.channel
+        )
+    ) {
         return;
     }
 
     if (
         !canObserve()
     ) {
-
         return;
     }
 

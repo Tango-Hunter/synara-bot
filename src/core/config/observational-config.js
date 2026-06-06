@@ -6,6 +6,11 @@
  * Description: Controls autonomous observation behavior.
  */
 
+const {
+    ChannelType
+} = require('discord.js');
+
+
 const observationConfig = {
 
     enabled: true,
@@ -68,6 +73,39 @@ const observationConfig = {
     ]
 };
 
+function isObservationChannel(
+    channel
+) {
+
+    if (
+        observationConfig
+            .ignoredChannels
+            .includes(
+                channel.id
+            )
+    ) {
+        return false;
+    }
+
+    if (
+        channel.type ===
+        ChannelType.GuildVoice
+    ) {
+        return false;
+    }
+
+    if (
+
+        channel.type ===
+        ChannelType.GuildStageVoice
+    ) {
+        return false;
+    }
+
+    return channel.isTextBased();
+}
+
 module.exports = {
-    observationConfig
+    observationConfig,
+    isObservationChannel
 };
