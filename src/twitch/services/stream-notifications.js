@@ -15,6 +15,10 @@ const {
 } = require('../embeds/live-embed-builder');
 
 const {
+    getFeatureFlag
+} = require('../../core/database/feature-flags-repository');
+
+const {
     logFeature
 } = require('../../core/logging/logger');
 
@@ -41,12 +45,10 @@ async function postLiveNotifications({
     const messageIds = {};
 
     for (
-        const guildId
-        of guildIds
+        const guildId of guildIds
     ) {
 
         const guild =
-
             client.guilds.cache.get(
                 guildId
             );
@@ -54,12 +56,10 @@ async function postLiveNotifications({
         if (
             !guild
         ) {
-
             continue;
         }
 
         const member =
-
             await guild.members.fetch(
                 discordUserId
             )
@@ -70,31 +70,35 @@ async function postLiveNotifications({
         if (
             !member
         ) {
-
             continue;
         }
 
         const guildConfig =
-
             getGuildConfig(
                 guildId
             );
 
+        const twitchEnabled =
+            await getFeatureFlag({
+
+                guildId,
+
+                featureName:
+                    'twitchMonitoring'
+            });
+
         if (
-            !guildConfig?.features
-                ?.twitchMonitoring
+            !twitchEnabled
         ) {
             continue;
         }
 
         let channelId =
-
             guildConfig
                 .streaming
                 .selfPromoChannelId;
 
         const isLeadership =
-
             guildConfig
                 .moderation
                 .adminRoleIds
@@ -110,14 +114,12 @@ async function postLiveNotifications({
         ) {
 
             channelId =
-
                 guildConfig
                     .streaming
                     .leadershipLiveChannelId;
         }
 
         const channel =
-
             guild.channels.cache.get(
                 channelId
             );
@@ -125,12 +127,10 @@ async function postLiveNotifications({
         if (
             !channel
         ) {
-
             continue;
         }
 
         const embed =
-
             buildLiveEmbed({
 
                 user:
@@ -210,7 +210,6 @@ async function deleteLiveNotifications({
     ) {
 
         const guild =
-
             client.guilds.cache.get(
                 guildId
             );
@@ -218,19 +217,25 @@ async function deleteLiveNotifications({
         if (
             !guild
         ) {
-
             continue;
         }
 
         const guildConfig =
-
             getGuildConfig(
                 guildId
             );
 
+        const twitchEnabled =
+            await getFeatureFlag({
+
+                guildId,
+
+                featureName:
+                    'twitchMonitoring'
+            });
+
         if (
-            !guildConfig?.features
-                ?.twitchMonitoring
+            !twitchEnabled
         ) {
             continue;
         }
@@ -247,12 +252,10 @@ async function deleteLiveNotifications({
         ];
 
         for (
-            const channelId
-            of channels
+            const channelId of channels
         ) {
 
             const channel =
-
                 guild.channels.cache.get(
                     channelId
                 );
@@ -260,14 +263,12 @@ async function deleteLiveNotifications({
             if (
                 !channel
             ) {
-
                 continue;
             }
 
             try {
 
                 const message =
-
                     await channel.messages.fetch(
                         messageId
                     );
@@ -291,7 +292,6 @@ async function deleteLiveNotifications({
                 });
 
             } catch {
-
                 continue;
             }
         }

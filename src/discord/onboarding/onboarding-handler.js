@@ -30,6 +30,10 @@ const {
 } = require('./onboarding-session-manager');
 
 const {
+    getFeatureFlag
+} = require('../../core/database/feature-flags-repository');
+
+const {
     discordLog
 } = require('../../core/logging/discord-logger');
 
@@ -43,14 +47,22 @@ async function handleNewMember(
 ) {
 
     const guildConfig =
-
         getGuildConfig(
             member.guild.id
         );
 
-    if (
-        !guildConfig?.features?.onboarding
+    const onboardingEnabled =
+        await getFeatureFlag({
 
+            guildId:
+                member.guild.id,
+
+            featureName:
+                'onboarding'
+        });
+
+    if (
+        !onboardingEnabled
     ) {
         return;
     }
@@ -58,12 +70,10 @@ async function handleNewMember(
     if (
         !guildConfig
     ) {
-
         return;
     }
 
     const channel =
-
         await member.guild.channels.fetch(
 
             guildConfig
@@ -82,7 +92,6 @@ async function handleNewMember(
     );
 
     const sentMessage =
-
         await channel.send({
 
             embeds: [
@@ -140,8 +149,18 @@ async function handleOnboardingInteraction(
             interaction.guild.id
         );
     
+    const onboardingEnabled =
+        await getFeatureFlag({
+
+            guildId:
+                interaction.guild.id,
+
+            featureName:
+                'onboarding'
+        });
+
     if (
-        !guildConfig?.features?.onboarding
+        !onboardingEnabled
     ) {
         return;
     }
