@@ -196,6 +196,35 @@ async function getGuildFeatures(
     return features;
 }
 
+async function getEnabledGuilds(
+    featureName
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT guild_id
+
+            FROM feature_flags
+
+            WHERE feature_name = $1
+
+            AND enabled = true
+            `,
+            [
+
+                featureName
+            ]
+        );
+
+    return result.rows.map(
+
+        row => row.guild_id
+    );
+}
+
 async function initializeGuildFeatures({
 
     guildId,
@@ -288,6 +317,7 @@ module.exports = {
     featureFlagExists,
     setFeatureFlag,
     getGuildFeatures,
+    getEnabledGuilds,
     initializeGuildFeatures,
     initializeAllGuildFeatures
 };

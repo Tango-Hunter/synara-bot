@@ -41,6 +41,10 @@ const {
 } = require('../../core/config/feature-flags');
 
 const {
+    getEnabledGuilds
+} = require('../../core/database/feature-flags-repository');
+
+const {
     discordLog
 } = require('../../core/logging/discord-logger');
 
@@ -131,19 +135,22 @@ Requirements:
             '1365571082387722380'  //Ghosty's Clubhouse
         ];
 
-        for (const guildId of guildIds) {
+        const guildIds =
+            await getEnabledGuilds(
+                'qotdScheduler'
+            );
+
+        for (
+            const guildId of guildIds
+        ) {
 
             const guildConfig =
-
                 getGuildConfig(
                     guildId
                 );
 
             if (
                 !guildConfig
-                ||
-                !guildConfig.features
-                    ?.qotdScheduler
             ) {
                 continue;
             }
