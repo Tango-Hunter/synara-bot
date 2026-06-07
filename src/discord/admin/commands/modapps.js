@@ -19,6 +19,10 @@ const {
 } = require('../../../core/config/guild-config');
 
 const {
+    getFeatureFlag
+} = require('../../../core/database/feature-flags-repository');
+
+const {
     logFeature
 } = require('../../../core/logging/logger');
 
@@ -116,21 +120,26 @@ async function handleModAppsCommand(
     interaction
 ) {
 
-    const guildConfig =
-
-        getGuildConfig(
-            interaction.guild.id
-        );
-
+    const modApplicationsEnabled =
+        await getFeatureFlag({
+    
+            guildId:
+                interaction.guild.id,
+    
+            featureName:
+                'modApplications'
+        });
+    
     if (
-        !guildConfig?.features?.modApplications
+    
+        !modApplicationsEnabled
     ) {
-
+    
         return await interaction.reply({
-
+    
             content:
                 'Moderator applications are disabled for this server.',
-
+    
             flags:
                 MessageFlags.Ephemeral
         });

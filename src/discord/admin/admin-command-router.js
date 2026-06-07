@@ -21,6 +21,14 @@ const {
 } = require('./commands/commands');
 
 const {
+    handleFeatureCommand
+} = require('./commands/feature');
+
+const {
+    handleFeaturesCommand
+} = require('./commands/features');
+
+const {
     hasAdminPermissions
 } = require('./permission-check');
 
@@ -123,6 +131,38 @@ async function routeAdminCommand(
     ) {
 
         return await handleAdminCommands(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    FEATURE ENABLE/DISABLE
+    ============================
+    */
+
+    if (
+        interaction.commandName ===
+        'feature'
+    ) {
+
+        return await handleFeatureCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    FEATURES LIST
+    ============================
+    */
+
+    if (
+        interaction.commandName ===
+        'features'
+    ) {
+
+        return await handleFeaturesCommand(
             interaction
         );
     }

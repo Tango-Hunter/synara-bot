@@ -55,6 +55,10 @@ const {
     getGuildConfig
 } = require('./core/config/guild-config');
 const {
+    initializeAllGuildFeatures,
+    initializeGuildFeatures
+} = require('./core/database/feature-flags-repository');
+const {
     logFeature,
     logError
 } = require('./core/logging/logger');
@@ -104,6 +108,9 @@ client.once('clientReady', async () => {
     startDailyQuestionScheduler();
     startNightlyMessageScheduler();
     startActivityScheduler();
+
+    // Feature Flags for existing Discord Servers
+    await initializeAllGuildFeatures(client);
 
     client.user.setPresence({
         activities: [
@@ -269,6 +276,25 @@ client.on(
                 }
             });
         }
+    }
+);
+
+// ===============================
+// Initializes feature flags when SYNARA is added to a new server
+// ===============================
+client.on(
+    'guildCreate',
+
+    async guild => {
+
+        await initializeGuildFeatures({
+
+            guildId:
+                guild.id,
+
+            guildName:
+                guild.name
+        });
     }
 );
 

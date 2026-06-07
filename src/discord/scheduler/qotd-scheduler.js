@@ -41,6 +41,10 @@ const {
 } = require('../../core/config/feature-flags');
 
 const {
+    getEnabledGuilds
+} = require('../../core/database/feature-flags-repository');
+
+const {
     discordLog
 } = require('../../core/logging/discord-logger');
 
@@ -124,26 +128,22 @@ Requirements:
                 maxTokens: 120
             });
 
-        const guildIds = [
+        const guildIds =
+            await getEnabledGuilds(
+                'qotdScheduler'
+            );
 
-            '1416462287341883477', // Hunters Lodge
-            '1430018484775030919', // Void Army
-            '1365571082387722380'  //Ghosty's Clubhouse
-        ];
-
-        for (const guildId of guildIds) {
+        for (
+            const guildId of guildIds
+        ) {
 
             const guildConfig =
-
                 getGuildConfig(
                     guildId
                 );
 
             if (
                 !guildConfig
-                ||
-                !guildConfig.features
-                    ?.qotdScheduler
             ) {
                 continue;
             }

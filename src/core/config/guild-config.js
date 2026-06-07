@@ -6,103 +6,6 @@
  * Description: Centralized configuration for server features.
  */
 
-/*
-Discord Server Template. Copy and paste at end of list then input correct ID's
-
-,
-    
-    // ============================
-    // guildName
-    // ============================
-    
-    'guildID': {
-
-        name:
-            'guildName',
-
-        onboarding: {
-
-            verifiedRoleId:
-                'roleID', // verifiedRole
-
-            welcomeChannelId:
-                'channelID', // #general
-            
-            rolesChannelId:
-                'channelID', // #roles
-
-            introChannelId:
-                'channelID'  // #introductions
-        },
-
-        moderation: {
-
-            modappApplyChannelId:
-                'channelID', // #mod-applications
-
-            modappApplyMessageId:
-                'messageID',
-
-            modappSubmissionsChannelId:
-                'channelID', // #mod-submissions
-
-            adminRoleIds: [
-
-                'roleID'  // Admins
-            ],
-
-            moderatorRoleIds: [
-
-                'roleID'  // Mods
-            ]
-        },
-
-        streaming: {
-
-            leadershipLiveChannelId:
-                'channelID',
-
-            selfPromoChannelId:
-                'channelID'
-        },
-
-        schedulers: {
-
-            qotdChannelId:
-                'channelID',  // #general
-
-            nightlyChannelId:
-                'channelID',  // #general
-
-            logsChannelId:
-                'channelID'  // #synara-logs
-        },
-
-        features: {
-
-            onboarding:
-                true,
-
-            modApplications:
-                true,
-
-            observations:
-                true,
-
-            qotdScheduler:
-                true,
-
-            motivationalScheduler:
-                true,
-
-            twitchMonitoring:
-                true
-        }
-    }
-
-*/
-
-
 const guildConfig = {
 
     // ============================
@@ -170,27 +73,6 @@ const guildConfig = {
 
             logsChannelId:
                 '1508895479335878866' // #synara-logs
-        },
-
-        features: {
-
-            onboarding:
-                true,
-
-            modApplications:
-                true,
-
-            observations:
-                true,
-
-            qotdScheduler:
-                true,
-
-            motivationalScheduler:
-                true,
-
-            twitchMonitoring:
-                true
         }
     },
 
@@ -261,27 +143,6 @@ const guildConfig = {
 
             logsChannelId:
                 '1508898030060044471'  // #synara-logs
-        },
-
-        features: {
-
-            onboarding:
-                true,
-
-            modApplications:
-                true,
-
-            observations:
-                true,
-
-            qotdScheduler:
-                true,
-
-            motivationalScheduler:
-                true,
-
-            twitchMonitoring:
-                true
         }
     },
     
@@ -350,27 +211,6 @@ const guildConfig = {
 
             logsChannelId:
                 '1365733928685797568'  // #server-updates
-        },
-
-        features: {
-
-            onboarding:
-                true,
-
-            modApplications:
-                true,
-
-            observations:
-                true,
-
-            qotdScheduler:
-                true,
-
-            motivationalScheduler:
-                true,
-
-            twitchMonitoring:
-                true
         }
     }
 };
@@ -385,6 +225,5 @@ function getGuildConfig(
 }
 
 module.exports = {
-
     getGuildConfig
 };
