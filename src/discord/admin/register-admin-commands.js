@@ -15,6 +15,10 @@ const {
 require('dotenv').config();
 
 const {
+    getFeatureChoices
+} = require('../../core/database/default-feature-flags');
+
+const {
     logFeature
 } = require('../../core/logging/logger');
 
@@ -60,13 +64,117 @@ const commands = [
 
     new SlashCommandBuilder()
 
-      .setName(
-          'commands'
-      )
+        .setName(
+            'commands'
+        )
 
-      .setDescription(
-          'View available admin commands.'
-      )
+        .setDescription(
+            'View available admin commands.'
+        ),
+
+    new SlashCommandBuilder()
+
+        .setName(
+            'features'
+        )
+
+        .setDescription(
+            'View all guild feature flags.'
+        ),
+
+    new SlashCommandBuilder()
+
+        .setName(
+            'feature'
+        )
+
+        .setDescription(
+            'Enable or disable a feature.'
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'enable'
+                    )
+
+                    .setDescription(
+                        'Enable a feature.'
+                    )
+
+                    .addStringOption(
+
+                        option => {
+
+                            option
+
+                                .setName(
+                                    'feature'
+                                )
+
+                                .setDescription(
+                                    'Feature name'
+                                )
+
+                                .setRequired(
+                                    true
+                                );
+
+                            option.addChoices(
+
+                                ...getFeatureChoices()
+                            );
+
+                            return option;
+                        }
+                    )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'disable'
+                    )
+
+                    .setDescription(
+                        'Disable a feature.'
+                    )
+
+                    .addStringOption(
+
+                        option => {
+
+                            option
+
+                                .setName(
+                                    'feature'
+                                )
+
+                                .setDescription(
+                                    'Feature name'
+                                )
+
+                                .setRequired(
+                                    true
+                                );
+
+                            option.addChoices(
+
+                                ...getFeatureChoices()
+                            );
+
+                            return option;
+                        }
+                    )
+        ),
 ];
 
 const rest =

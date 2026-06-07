@@ -196,6 +196,35 @@ async function getGuildFeatures(
     return features;
 }
 
+async function getAllFeatureFlags(
+    guildId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT
+
+                feature_name,
+
+                enabled
+
+            FROM feature_flags
+
+            WHERE guild_id = $1
+
+            ORDER BY feature_name
+            `,
+            [
+                guildId
+            ]
+        );
+
+    return result.rows;
+}
+
 async function getEnabledGuilds(
     featureName
 ) {
@@ -237,16 +266,13 @@ async function initializeGuildFeatures({
     } = require('./default-feature-flags');
 
     for (
-
-        const featureName
-
-        of
-
-        DEFAULT_FEATURE_FLAGS
+        const feature of DEFAULT_FEATURE_FLAGS
     ) {
 
-        const exists =
+        const featureName =
+            feature.name;
 
+        const exists =
             await featureFlagExists({
 
                 guildId,
@@ -255,10 +281,8 @@ async function initializeGuildFeatures({
             });
 
         if (
-
             !exists
         ) {
-
             await setFeatureFlag({
 
                 guildId,
@@ -278,7 +302,6 @@ async function initializeAllGuildFeatures(
 ) {
 
     for (
-
         const guild
 
         of
@@ -317,6 +340,7 @@ module.exports = {
     featureFlagExists,
     setFeatureFlag,
     getGuildFeatures,
+    getAllFeatureFlags,
     getEnabledGuilds,
     initializeGuildFeatures,
     initializeAllGuildFeatures

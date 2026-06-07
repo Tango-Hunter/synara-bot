@@ -7,19 +7,86 @@
 
 const DEFAULT_FEATURE_FLAGS = [
 
-    'onboarding',
+    {
 
-    'modApplications',
+        name:
+            'onboarding',
 
-    'observations',
+        description:
+            'Member onboarding and verification'
+    },
 
-    'qotdScheduler',
+    {
 
-    'motivationalScheduler',
+        name:
+            'modApplications',
 
-    'twitchMonitoring'
+        description:
+            'Moderator applications'
+    },
+
+    {
+
+        name:
+            'observations',
+
+        description:
+            'AI observations'
+    },
+
+    {
+
+        name:
+            'qotdScheduler',
+
+        description:
+            'Question of the Day'
+    },
+
+    {
+
+        name:
+            'motivationalScheduler',
+
+        description:
+            'Nightly motivational messages'
+    },
+
+    {
+
+        name:
+            'twitchMonitoring',
+
+        description:
+            'Twitch live notifications'
+    }
 ];
 
+function getFeatureNames() {
+
+    return DEFAULT_FEATURE_FLAGS.map(
+
+        feature => feature.name
+    );
+}
+
+function getFeatureChoices() {
+
+    return DEFAULT_FEATURE_FLAGS.map(
+
+        feature => ({
+
+            name:
+                feature.name,
+
+            value:
+                feature.name
+        })
+    );
+}
+
 module.exports = {
-    DEFAULT_FEATURE_FLAGS
+    DEFAULT_FEATURE_FLAGS,
+    getFeatureNames,
+    getFeatureChoices
 };
