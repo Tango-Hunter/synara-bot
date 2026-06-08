@@ -13,6 +13,10 @@
  */
 
 const {
+    MessageFlags
+} = require('discord.js');
+
+const {
     handleModAppsCommand
 } = require('./commands/modapps');
 
@@ -31,6 +35,18 @@ const {
 const {
     handleSettingsCommand
 } = require('./commands/settings');
+
+const {
+    handleSetChannelCommand
+} = require('./commands/setchannel');
+
+const {
+    handleSetRoleCommand
+} = require('./commands/setrole');
+
+const {
+    handleRemoveRoleCommand
+} = require('./commands/removerole');
 
 const {
     hasAdminPermissions
@@ -102,8 +118,8 @@ async function routeAdminCommand(
             content:
                 'You do not have permission to use administrative commands.',
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
         });
     }
 
@@ -181,6 +197,51 @@ async function routeAdminCommand(
         'settings'
     ) {
         return await handleSettingsCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    SET CHANNEL
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'setchannel'
+    ) {
+
+        return await handleSetChannelCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    SET ROLE
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'setrole'
+    ) {
+
+        return await handleSetRoleCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    REMOVE ROLE
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'removerole'
+    ) {
+
+        return await handleRemoveRoleCommand(
             interaction
         );
     }

@@ -11,8 +11,11 @@
     "PGPORT",
     "PGUSER",
     "qotd",
+    "removerole",
     "roleplay",
     "selfpromo",
+    "setchannel",
+    "setrole",
     "twitchstats",
     "unlinktwitch"
   ]

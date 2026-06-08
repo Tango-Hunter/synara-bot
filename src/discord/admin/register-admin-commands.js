@@ -25,8 +25,40 @@ const {
 } = require('../../core/database/default-feature-flags');
 
 const {
+    getChannelSettings,
+    getRoleSettings
+} = require('../../core/database/default-guild-settings');
+
+const {
     logFeature
 } = require('../../core/logging/logger');
+
+
+const channelChoices =
+    getChannelSettings()
+        .map(
+            setting => ({
+
+                name:
+                    setting.displayName,
+
+                value:
+                    setting.displayName
+            })
+        );
+
+const roleChoices =
+    getRoleSettings()
+        .map(
+            setting => ({
+
+                name:
+                    setting.displayName,
+
+                value:
+                    setting.displayName
+            })
+        );
 
 
 const commands = [
@@ -215,6 +247,181 @@ const commands = [
 
         .setDescription(
             'View guild settings.'
+        ),
+
+    /*
+    ============================
+    SET CHANNEL
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'setchannel'
+        )
+
+        .setDescription(
+            'Configure a channel setting.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'setting'
+                    )
+
+                    .setDescription(
+                        'Channel setting'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+                        ...channelChoices
+                    )
+        ),
+
+    /*
+    ============================
+    SET ROLE
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'setrole'
+        )
+
+        .setDescription(
+            'Add a role setting.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'setting'
+                    )
+
+                    .setDescription(
+                        'Role type'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+
+                        {
+                            name: 'Admin',
+                            value: 'Admin'
+                        },
+
+                        {
+                            name: 'Moderator',
+                            value: 'Moderator'
+                        },
+
+                        {
+                            name: 'Verified',
+                            value: 'Verified'
+                        }
+                    )
+        )
+
+        .addRoleOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'role'
+                    )
+
+                    .setDescription(
+                        'Role'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+        ),
+
+    /*
+    ============================
+    REMOVE ROLE
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'removerole'
+        )
+
+        .setDescription(
+            'Remove an admin or moderator role.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'setting'
+                    )
+
+                    .setDescription(
+                        'Role type'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+
+                        {
+                            name: 'Admin',
+                            value: 'Admin'
+                        },
+
+                        {
+                            name: 'Moderator',
+                            value: 'Moderator'
+                        }
+                    )
+        )
+
+        .addRoleOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'role'
+                    )
+
+                    .setDescription(
+                        'Role'
+                    )
+
+                    .setRequired(
+                        true
+                    )
         ),
 ];
 
