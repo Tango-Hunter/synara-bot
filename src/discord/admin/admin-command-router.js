@@ -8,7 +8,7 @@
 
 /**
  * IMPORTANT NOTE: 
- * THIS FILE MUST BE LAUNCHED TO NODE EACH TIME COMMANDS ARE CREATED, UPDATED, OR DELETED
+ * THIS TERMINAL COMMAND MUST BE LAUNCHED EACH TIME COMMANDS ARE CREATED, UPDATED, OR DELETED:
  * npm run register-commands
  */
 
@@ -27,6 +27,10 @@ const {
 const {
     handleFeaturesCommand
 } = require('./commands/features');
+
+const {
+    handleSettingsCommand
+} = require('./commands/settings');
 
 const {
     hasAdminPermissions
@@ -163,6 +167,20 @@ async function routeAdminCommand(
     ) {
 
         return await handleFeaturesCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    SETTINGS LIST
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'settings'
+    ) {
+        return await handleSettingsCommand(
             interaction
         );
     }

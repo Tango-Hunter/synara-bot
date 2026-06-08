@@ -80,15 +80,29 @@ async function getGuildSetting({
     const value =
         result.rows[0].setting_value;
 
-    try {
-        return JSON.parse(
-            value
-        );
+    if (
+        typeof value ===
+        'string'
+
+        &&
+
+        value.startsWith(
+            '['
+        )
+    ) {
+
+        try {
+            return JSON.parse(
+                value
+            );
+        }
+
+        catch {
+            return value;
+        }
     }
 
-    catch {
-        return value;
-    }
+    return value;
 }
 
 async function setGuildSetting({
@@ -201,16 +215,29 @@ async function getAllGuildSettings(
 
         row => {
 
-            try {
-                row.setting_value =
-                    JSON.parse(
-                        row.setting_value
-                    );
+            if (
+                typeof row.setting_value ===
+                'string'
+
+                &&
+
+                row.setting_value.startsWith(
+                    '['
+                )
+            ) {
+
+                try {
+                    row.setting_value =
+                        JSON.parse(
+                            row.setting_value
+                        );
+                }
+
+                catch {
+                    // leave as string
+                }
             }
 
-            catch {
-                // leave as string
-            }
             return row;
         }
     );

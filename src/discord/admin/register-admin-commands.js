@@ -6,6 +6,12 @@
  * Description: Registers admin slash commands.
  */
 
+/**
+ * IMPORTANT NOTE: 
+ * THIS TERMINAL COMMAND MUST BE LAUNCHED EACH TIME COMMANDS ARE CREATED, UPDATED, OR DELETED:
+ * npm run register-commands
+ */
+
 const {
     REST,
     Routes,
@@ -25,6 +31,11 @@ const {
 
 const commands = [
 
+    /*
+    ============================
+    MOD APPS
+    ============================
+    */
     new SlashCommandBuilder()
 
         .setName(
@@ -62,6 +73,11 @@ const commands = [
                     )
         ),
 
+    /*
+    ============================
+    COMMAND LIST
+    ============================
+    */
     new SlashCommandBuilder()
 
         .setName(
@@ -72,6 +88,11 @@ const commands = [
             'View available admin commands.'
         ),
 
+    /*
+    ============================
+    FEATURES LIST
+    ============================
+    */
     new SlashCommandBuilder()
 
         .setName(
@@ -82,6 +103,11 @@ const commands = [
             'View all guild feature flags.'
         ),
 
+    /*
+    ============================
+    FEATURE ENABLE/DISABLE
+    ============================
+    */
     new SlashCommandBuilder()
 
         .setName(
@@ -174,6 +200,21 @@ const commands = [
                             return option;
                         }
                     )
+        ),
+    
+    /*
+    ============================
+    SETTINGS LIST
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'settings'
+        )
+
+        .setDescription(
+            'View guild settings.'
         ),
 ];
 
