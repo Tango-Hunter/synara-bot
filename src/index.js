@@ -59,6 +59,9 @@ const {
     initializeGuildFeatures
 } = require('./core/database/feature-flags-repository');
 const {
+    initializeAllGuildSettings
+} = require('./core/database/guild-settings-repository');
+const {
     logFeature,
     logError
 } = require('./core/logging/logger');
@@ -109,8 +112,9 @@ client.once('clientReady', async () => {
     startNightlyMessageScheduler();
     startActivityScheduler();
 
-    // Feature Flags for existing Discord Servers
+    // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);
+    await initializeAllGuildSettings(client);
 
     client.user.setPresence({
         activities: [

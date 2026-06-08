@@ -55,6 +55,30 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS guild_settings (
+
+            guild_id TEXT NOT NULL,
+
+            guild_name TEXT NOT NULL,
+
+            setting_name TEXT NOT NULL,
+
+            setting_value TEXT,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                setting_name
+            )
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -68,7 +92,9 @@ async function initializeDatabase() {
 
                 'trivia_leaderboard',
 
-                'feature_flags'
+                'feature_flags',
+
+                'guild_settings'
             ] 
         }
     });
