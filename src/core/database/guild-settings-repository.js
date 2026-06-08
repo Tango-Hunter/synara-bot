@@ -260,6 +260,25 @@ async function initializeGuildSettings({
                 settingValue:
                     null
             });
+            
+            logFeature({
+
+                category:
+                    'GUILD_SETTINGS',
+
+                message:
+                    'Guild setting initialized',
+
+                details: {
+
+                    guildId,
+
+                    guildName,
+
+                    settingName:
+                        setting.name
+                }
+            });
         }
     }
 }

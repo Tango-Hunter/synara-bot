@@ -43,12 +43,12 @@ const DEFAULT_GUILD_SETTINGS = [
     },
 
     {
-        name: 'role_admin',
+        name: 'roles_admin',
         description: 'Administrative role'
     },
 
     {
-        name: 'role_moderator',
+        name: 'roles_moderator',
         description: 'Moderator role'
     },
 

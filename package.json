@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "register-commands": "node src/discord/admin/register-admin-commands.js",
+    "migrate-guild-configs": "node src/core/database/migrate-guild-configs.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

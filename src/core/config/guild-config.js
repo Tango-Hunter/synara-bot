@@ -225,5 +225,6 @@ function getGuildConfig(
 }
 
 module.exports = {
+    guildConfig,
     getGuildConfig
 };
