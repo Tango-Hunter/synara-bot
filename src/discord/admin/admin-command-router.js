@@ -81,7 +81,7 @@ async function routeAdminCommand(
     */
 
     if (
-        !hasAdminPermissions(
+        !await hasAdminPermissions(
             interaction
         )
     ) {

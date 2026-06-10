@@ -15,8 +15,9 @@ const {
 } = require('discord.js');
 
 const {
-    getGuildConfig
-} = require('../../../core/config/guild-config');
+    getGuildSetting,
+    setGuildSetting
+} = require('../../../core/database/guild-settings-repository');
 
 const {
     getFeatureFlag
@@ -32,44 +33,228 @@ const {
 
 
 async function getApplicationMessage(
-    interaction,
-    guildConfig
+    interaction
 ) {
 
-    const channel =
+    const applyChannelId =
+        await getGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            settingName:
+                'channel_modapps_apply'
+        });
+
+    const submissionsChannelId =
+        await getGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            settingName:
+                'channel_modapps_submissions'
+        });
+
+    if (
+        !applyChannelId
+    ) {
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Missing Mod applications channel configuration',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                guildName:
+                    interaction.guild.name
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                'Moderator applications channel has not been configured. Use `/setchannel Mod Applications` in the channel where applications should be posted.',
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    if (
+        !submissionsChannelId
+    ) {
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Missing Mod applications submissions channel configuration',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                guildName:
+                    interaction.guild.name
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                'Moderator application submissions channel has not been configured. Use `/setchannel Mod App Submissions` in the channel where completed applications should be sent.',
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    const messageId =
+        await getGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            settingName:
+                'message_modapps_apply'
+        });
+
+    let channel;
+
+    try {
+
+        channel =
+
+            await interaction.client.channels.fetch(
+                applyChannelId
+            );
+    }
+
+    catch {
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Deleted Mod applications channel configuration',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                guildName:
+                    interaction.guild.name
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                `The configured moderator applications channel no longer exists.\n\nConfigured Channel ID: ${applyChannelId}\n\nRun \`/setchannel Mod Applications\` in the correct channel to repair this setting.`,
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    try {
 
         await interaction.client.channels.fetch(
-
-            guildConfig
-                .moderation
-                .modappApplyChannelId
+            submissionsChannelId
         );
+    }
+
+    catch {
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'Deleted  Mod applications submissions channel configuration',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                guildName:
+                    interaction.guild.name
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                `The configured moderator application submissions channel no longer exists.\n\nConfigured Channel ID: ${submissionsChannelId}\n\nRun \`/setchannel Mod App Submissions\` in the correct channel to repair this setting.`,
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
 
     /*
     ============================
     EXISTING MESSAGE
     ============================
     */
-
-    const messageId =
-
-        guildConfig
-            .moderation
-            .modappApplyMessageId;
-
     if (
         messageId
     ) {
 
-        const message =
-            await channel.messages.fetch(
-                messageId
-            );
+        try {
 
-        return {
-            channel,
-            message
-        };
+            const message =
+                await channel.messages.fetch(
+                    messageId
+                );
+
+            return {
+
+                channel,
+
+                message
+            };
+        }
+
+        catch {
+
+            logFeature({
+
+                category:
+                    'MOD_APP',
+
+                message:
+                    'Application message missing, creating replacement',
+
+                details: {
+
+                    guildName:
+                        interaction.guild.name,
+
+                    guildId:
+                        interaction.guild.id,
+
+                    missingMessageId:
+                        messageId
+                }
+            });
+        }
     }
 
     /*
@@ -85,6 +270,21 @@ async function getApplicationMessage(
             content:
                 'Initializing moderator applications...'
         });
+
+    await setGuildSetting({
+
+        guildId:
+            interaction.guild.id,
+
+        guildName:
+            interaction.guild.name,
+
+        settingName:
+            'message_modapps_apply',
+
+        settingValue:
+            placeholderMessage.id
+    });
 
     logFeature({
 
@@ -145,20 +345,6 @@ async function handleModAppsCommand(
         });
     }
 
-    if (
-        !guildConfig
-    ) {
-
-        return await interaction.reply({
-
-            content:
-                'Guild configuration not found.',
-
-            flags:
-                MessageFlags.Ephemeral
-        });
-    }
-
     const subcommand =
         interaction.options.getSubcommand();
 
@@ -167,12 +353,11 @@ async function handleModAppsCommand(
         message
     } = await getApplicationMessage(
 
-        interaction,
-        guildConfig
+        interaction
     );
 
     const guildName =
-        guildConfig.name;
+        interaction.guild.name;
 
     /*
     ============================
@@ -254,10 +439,14 @@ Press the button below to begin.
         });
 
         const verifiedRoleId =
+            await getGuildSetting({
 
-            guildConfig
-                .onboarding
-                .verifiedRoleId;
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'role_verified'
+            });
 
         await channel.send({
 

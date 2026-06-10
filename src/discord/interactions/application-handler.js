@@ -18,8 +18,8 @@ const {
 } = require('discord.js');
 
 const {
-    getGuildConfig
-} = require('../../core/config/guild-config');
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     createSession,
@@ -296,18 +296,6 @@ async function handleApplicationInteraction(
     interaction
 ) {
 
-    const guildConfig =
-        getGuildConfig(
-            interaction.guild.id
-        );
-
-    if (
-        !guildConfig
-    ) {
-
-        return;
-    }
-
     if (
 
         interaction.isButton() &&
@@ -582,12 +570,57 @@ async function handleApplicationInteraction(
                 interaction.user.id
             );
 
+        const submissionsChannelId =
+            await getGuildSetting({
+
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'channel_modapps_submissions'
+            });
+
+        if (
+            !submissionsChannelId
+        ) {
+
+            logFeature({
+
+                category:
+                    'MOD_APP',
+
+                message:
+                    'Submission failed - missing configuration',
+
+                details: {
+
+                    guildName:
+                        interaction.guild.name,
+
+                    guildId:
+                        interaction.guild.id,
+
+                    userId:
+                        interaction.user.id,
+
+                    username:
+                        interaction.user.username
+                }
+            });
+
+            return await interaction.reply({
+
+                content:
+                    'Moderator application submissions channel has not been configured.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
         const reviewChannel =
             await interaction.client.channels.fetch(
-
-                guildConfig
-                    .moderation
-                    .modappSubmissionsChannelId
+                submissionsChannelId
             );
 
         const identityEmbed =

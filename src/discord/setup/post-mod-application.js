@@ -42,7 +42,7 @@ Application Sections:
 
 🔹 Identity & Availability
 🔸 Moderation Philosophy
-⚪ Perspective & Judgment
+🔺 Perspective & Judgment
 
 The application consists of 3 short modal forms.
 
