@@ -11,8 +11,8 @@ const {
 } = require('discord.js');
 
 const {
-    getGuildConfig
-} = require('../../core/config/guild-config');
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     buildWelcomeEmbed,
@@ -46,10 +46,15 @@ async function handleNewMember(
     member
 ) {
 
-    const guildConfig =
-        getGuildConfig(
-            member.guild.id
-        );
+    const welcomeChannelId =
+        await getGuildSetting({
+
+            guildId:
+                member.guild.id,
+
+            settingName:
+                'channel_welcome'
+        });
 
     const onboardingEnabled =
         await getFeatureFlag({
@@ -68,17 +73,14 @@ async function handleNewMember(
     }
 
     if (
-        !guildConfig
+        !welcomeChannelId
     ) {
         return;
     }
 
     const channel =
         await member.guild.channels.fetch(
-
-            guildConfig
-                .onboarding
-                .welcomeChannelId
+            welcomeChannelId
         );
 
     const {
@@ -143,11 +145,6 @@ async function handleNewMember(
 async function handleOnboardingInteraction(
     interaction
 ) {
-
-    const guildConfig =
-        getGuildConfig(
-            interaction.guild.id
-        );
     
     const onboardingEnabled =
         await getFeatureFlag({
@@ -164,6 +161,16 @@ async function handleOnboardingInteraction(
     ) {
         return;
     }
+
+    const verifiedRoleId =
+        await getGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            settingName:
+                'role_verified'
+        });
 
     /*
     ============================
@@ -343,10 +350,7 @@ async function handleOnboardingInteraction(
         if (
 
             member.roles.cache.has(
-
-                guildConfig
-                    .onboarding
-                    .verifiedRoleId
+                verifiedRoleId
             )
         ) {
 
@@ -360,10 +364,7 @@ async function handleOnboardingInteraction(
         }
 
         await member.roles.add(
-
-            guildConfig
-                .onboarding
-                .verifiedRoleId
+            verifiedRoleId
         );
 
         logFeature({
@@ -389,7 +390,7 @@ async function handleOnboardingInteraction(
                     interaction.user.username,
 
                 roleId:
-                    guildConfig.onboarding.verifiedRoleId
+                    verifiedRoleId
             }
         });
 
@@ -411,21 +412,47 @@ async function finalizeOnboarding(
     member
 ) {
 
-    const guildConfig =
+    const welcomeChannelId =
+        await getGuildSetting({
 
-        getGuildConfig(
-            member.guild.id
-        );
+            guildId:
+                member.guild.id,
+
+            settingName:
+                'channel_welcome'
+        });
+
+    const rolesChannelId =
+        await getGuildSetting({
+
+            guildId:
+                member.guild.id,
+
+            settingName:
+                'channel_roles'
+        });
+
+    const introChannelId =
+        await getGuildSetting({
+
+            guildId:
+                member.guild.id,
+
+            settingName:
+                'channel_intro'
+        });
 
     if (
-        !guildConfig
+        !welcomeChannelId
+        ||
+        !rolesChannelId
+        ||
+        !introChannelId
     ) {
-
         return;
     }
 
     const messageId =
-
         getOnboardingMessage(
             member.id
         );
@@ -440,10 +467,7 @@ async function finalizeOnboarding(
     const channel =
 
         await member.guild.channels.fetch(
-
-            guildConfig
-                .onboarding
-                .welcomeChannelId
+            welcomeChannelId
         );
 
     const message =
@@ -454,11 +478,11 @@ async function finalizeOnboarding(
 
     const rolesMention =
 
-        `<#${guildConfig.onboarding.rolesChannelId}>`;
+        `<#${rolesChannelId}>`;
 
     const introMention =
 
-        `<#${guildConfig.onboarding.introChannelId}>`;
+        `<#${introChannelId}>`;
 
     const completedEmbed =
 
