@@ -98,12 +98,14 @@ async function runBonkCommand({
 
         &&
 
-        now - lastBonk < 30000
+        now - lastBonk < 10000
     ) {
+        const cooldownTimer = ((now - lastBonk)/1000).toFixed(0);
+        
         return {
 
             message:
-                'Bonk cooldown active. Please wait 30 seconds.'
+                `Bonk cooldown active. Please wait ${cooldownTimer} seconds.`
         };
     }
 
