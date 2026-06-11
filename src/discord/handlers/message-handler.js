@@ -48,7 +48,7 @@ const {
 
 const {
     handleCooldown
-} = require('./cooldowns');
+} = require('../utils/cooldown-manager');
 
 const {
     handleTriviaReply
