@@ -39,10 +39,6 @@ const {
 } = require('../../core/database/guild-settings-repository');
 
 const {
-    featureFlags
-} = require('../../core/config/feature-flags');
-
-const {
     getEnabledGuilds
 } = require('../../core/database/feature-flags-repository');
 
@@ -258,13 +254,6 @@ ${finalResponse}
 }
 
 function startNightlyMessageScheduler() {
-
-    if (
-        !featureFlags.nightlyScheduler
-    ) {
-
-        return;
-    }
 
     const schedulerRegistered =
         registerScheduler(

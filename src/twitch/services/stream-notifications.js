@@ -7,8 +7,8 @@
  */
 
 const {
-    getGuildConfig
-} = require('../../core/config/guild-config');
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     buildLiveEmbed
@@ -73,11 +73,6 @@ async function postLiveNotifications({
             continue;
         }
 
-        const guildConfig =
-            getGuildConfig(
-                guildId
-            );
-
         const twitchEnabled =
             await getFeatureFlag({
 
@@ -93,30 +88,60 @@ async function postLiveNotifications({
             continue;
         }
 
+        const adminRoles =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'roles_admin'
+            })
+
+            || [];
+
+        const leadershipChannelId =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'channel_stream_leadership'
+            });
+
+        const selfPromoChannelId =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'channel_stream_selfpromo'
+            });
+
+        const verifiedRoleId =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'role_verified'
+            });
+
         let channelId =
-            guildConfig
-                .streaming
-                .selfPromoChannelId;
+            selfPromoChannelId;
 
         const isLeadership =
-            guildConfig
-                .moderation
-                .adminRoleIds
-                .some(
-                    roleId =>
-                        member.roles.cache.has(
-                            roleId
-                        )
+            adminRoles.some(
+                roleId =>
+                    member.roles.cache.has(
+                        roleId
+                    )
                 );
 
         if (
             isLeadership
         ) {
-
             channelId =
-                guildConfig
-                    .streaming
-                    .leadershipLiveChannelId;
+                leadershipChannelId;
         }
 
         const channel =
@@ -153,7 +178,7 @@ async function postLiveNotifications({
                 content:
 
                     isLeadership
-                        ? `<@&${guildConfig.onboarding.verifiedRoleId}>`
+                        ? `<@&${verifiedRoleId}>`
                         : null,
 
                 embeds: [
@@ -220,11 +245,6 @@ async function deleteLiveNotifications({
             continue;
         }
 
-        const guildConfig =
-            getGuildConfig(
-                guildId
-            );
-
         const twitchEnabled =
             await getFeatureFlag({
 
@@ -240,16 +260,29 @@ async function deleteLiveNotifications({
             continue;
         }
 
+        const selfPromoChannelId =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'channel_stream_selfpromo'
+            });
+
+        const leadershipChannelId =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'channel_stream_leadership'
+            });
+
         const channels = [
+            selfPromoChannelId,
 
-            guildConfig
-                .streaming
-                .selfPromoChannelId,
-
-            guildConfig
-                .streaming
-                .leadershipLiveChannelId
-        ];
+            leadershipChannelId
+        ].filter(Boolean);
 
         for (
             const channelId of channels

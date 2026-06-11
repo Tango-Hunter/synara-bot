@@ -52,14 +52,15 @@ const {
     finalizeOnboarding
 } = require('./discord/onboarding/onboarding-handler');
 const {
-    getGuildConfig
-} = require('./core/config/guild-config');
+    getGuildSetting
+} = require('./core/database/guild-settings-repository');
 const {
     initializeAllGuildFeatures,
     initializeGuildFeatures
 } = require('./core/database/feature-flags-repository');
 const {
-    initializeAllGuildSettings
+    initializeAllGuildSettings,
+    initializeGuildSettings
 } = require('./core/database/guild-settings-repository');
 const {
     logFeature,
@@ -154,9 +155,18 @@ client.on(
 
         try {
 
+            // Ignore bots
+            if (
+                member.user.bot
+            ) {
+
+                return;
+            }
+
             await handleNewMember(
                 member
             );
+
             logFeature({
 
                 category:
@@ -177,6 +187,95 @@ client.on(
                         member.user.username
                 }
             });
+
+            // Fallback check for servers that automatically assign the verified role
+            setTimeout(
+
+                async () => {
+
+                    try {
+
+                        const refreshedMember =
+                            await member.guild.members.fetch(
+                                member.id
+                            );
+
+                        const verifiedRoleId =
+                            await getGuildSetting({
+
+                                guildId:
+                                    member.guild.id,
+
+                                settingName:
+                                    'role_verified'
+                            });
+
+                        if (
+                            !verifiedRoleId
+                        ) {
+                            return;
+                        }
+
+                        if (
+                            refreshedMember.roles.cache.has(
+                                verifiedRoleId
+                            )
+                        ) {
+
+                            logFeature({
+
+                                category:
+                                    'ONBOARDING',
+
+                                message:
+                                    'Verified role detected during fallback check',
+
+                                details: {
+
+                                    guildId:
+                                        member.guild.id,
+
+                                    userId:
+                                        member.id,
+
+                                    username:
+                                        member.user.username
+                                }
+                            });
+
+                            await finalizeOnboarding(
+                                refreshedMember
+                            );
+                        }
+
+                    } catch (error) {
+
+                        logError({
+
+                            type:
+                                ERROR_TYPES.ONBOARDING_ERROR,
+
+                            source:
+                                'onboarding-fallback-check',
+
+                            message:
+                                error.message,
+
+                            details: {
+
+                                guildId:
+                                    member.guild.id,
+
+                                userId:
+                                    member.id
+                            }
+                        });
+                    }
+
+                },
+
+                5000
+            );
 
         } catch (error) {
 
@@ -217,36 +316,30 @@ client.on(
 
         try {
 
-            const guildConfig =
+            const verifiedRoleId =
+                await getGuildSetting({
 
-                getGuildConfig(
+                    guildId:
+                        newMember.guild.id,
 
-                    newMember.guild.id
-                );
+                    settingName:
+                        'role_verified'
+                });
 
             if (
-                !guildConfig
+                !verifiedRoleId
             ) {
-
                 return;
             }
 
             const hadRole =
-
                 oldMember.roles.cache.has(
-
-                    guildConfig
-                        .onboarding
-                        .verifiedRoleId
+                    verifiedRoleId
                 );
 
             const hasRole =
-
                 newMember.roles.cache.has(
-
-                    guildConfig
-                        .onboarding
-                        .verifiedRoleId
+                    verifiedRoleId
                 );
 
             if (
@@ -292,6 +385,15 @@ client.on(
     async guild => {
 
         await initializeGuildFeatures({
+
+            guildId:
+                guild.id,
+
+            guildName:
+                guild.name
+        });
+
+        await initializeGuildSettings({
 
             guildId:
                 guild.id,

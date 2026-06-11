@@ -37,10 +37,6 @@ const {
 } = require('../../core/database/guild-settings-repository');
 
 const {
-    featureFlags
-} = require('../../core/config/feature-flags');
-
-const {
     getEnabledGuilds
 } = require('../../core/database/feature-flags-repository');
 
@@ -260,12 +256,6 @@ ${response}
 }
 
 function startDailyQuestionScheduler() {
-
-    if (
-        !featureFlags.qotdScheduler
-    ) {
-        return;
-    }
 
     const schedulerRegistered =
         registerScheduler(
