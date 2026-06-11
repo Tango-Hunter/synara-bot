@@ -76,6 +76,31 @@ async function initializeDatabase() {
                 setting_name
             )
         );
+    `);
+
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS bonk_counts (
+
+            guild_id TEXT NOT NULL,
+
+            user_id TEXT NOT NULL,
+
+            username TEXT NOT NULL,
+
+            received_count INTEGER NOT NULL DEFAULT 0,
+
+            given_count INTEGER NOT NULL DEFAULT 0,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                user_id
+            )
+        );
 
     `);
 
@@ -94,7 +119,9 @@ async function initializeDatabase() {
 
                 'feature_flags',
 
-                'guild_settings'
+                'guild_settings',
+
+                'bonk_counts'
             ] 
         }
     });

@@ -5,6 +5,11 @@
  * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
+
+const {
+    runBonkCommand
+} = require('../commands/bonk');
+
 const {
     runCommandsCommand
 } = require('../commands/commands');
@@ -75,6 +80,11 @@ const {
 } = require('../../core/logging/error-types');
 
 const commandRegistry = {
+
+    '!bonk': {
+        title: 'BONK',
+        execute: runBonkCommand
+    },
 
     '!commands': {
         title: 'COMMANDS',

@@ -35,6 +35,14 @@ const DEFAULT_FEATURE_FLAGS = [
     },
 
     {
+        name:
+            'bonks',
+
+        description:
+            'Community bonk system'
+    },
+
+    {
 
         name:
             'qotdScheduler',
