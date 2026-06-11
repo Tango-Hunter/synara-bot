@@ -2,17 +2,12 @@
  * Title: mentions.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/19/26
  * Description: Only sends message if SYNARA was correctly mentioned.
  */
 
 const {
-    sanitizeMessage
-} = require('../../shared/utils/sanitize-message');
-
-const {
     splitIntoChunks
-} = require('../../shared/utils/response-manager');
+} = require('../utils/response-manager');
 
 const {
     generateResponse
@@ -32,12 +27,15 @@ const {
 } = require('../../core/memory/memory-manager');
 
 const {
-    buildChannelContext
-} = require('../services/channel-awareness');
-
-const {
     logFeature
 } = require('../../core/logging/logger');
+
+
+function sanitizeMessage(message, client) {
+    return message
+        .replace(`<@${client.user.id}>`, '')
+        .trim();
+}
 
 async function handleMention(
     message,
@@ -72,14 +70,6 @@ async function handleMention(
                 message.author.id
         });
 
-    const channelContext =
-        buildChannelContext({
-            guildId:
-                message.guild.id,
-            channelId:
-                message.channel.id
-        });
-
     const userPrompt = `
 
 The following message was directed toward SYNARA inside Discord.
@@ -106,8 +96,6 @@ Discord
 
 Previous Conversation Context:
 ${memoryContext || 'No prior conversation context.'}
-
-${channelContext}
 
 Current User Message:
 ${cleanedMessage}

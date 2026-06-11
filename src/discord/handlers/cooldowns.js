@@ -22,7 +22,6 @@ async function handleCooldown(message) {
     if (
         cooldownSeconds === 0
     ) {
-
         return false;
     }
 
@@ -31,7 +30,6 @@ async function handleCooldown(message) {
             message.author.id
         )
     ) {
-
         return true;
     }
 

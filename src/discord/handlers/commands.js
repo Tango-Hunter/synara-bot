@@ -63,10 +63,6 @@ const {
 } = require('../commands/twitchstats');
 
 const {
-    formatCommandResponse
-} = require('../../shared/utils/command-formatter');
-
-const {
     createTriviaSession
 } = require('../trivia/trivia-session-manager');
 
@@ -174,6 +170,16 @@ const commandRegistry = {
         execute: handleTwitchStatsCommand
     },
 };
+
+function formatCommandResponse(
+    title,
+    response
+) {
+    return (
+        `## ${title}\n\n` +
+        `${response}`
+    );
+}
 
 async function executeCommand(
     message,

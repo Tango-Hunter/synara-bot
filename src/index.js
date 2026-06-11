@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 const client = 
     require('./core/config/discord-client');
 const createMessageRoutes =
-    require('./discord/routes/messages');
+    require('./routes/messages');
 const createTwitchRoutes =
     require('./routes/twitch');
 

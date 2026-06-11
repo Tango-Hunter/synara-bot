@@ -13,15 +13,15 @@ const router = express.Router();
 const {
     logError,
     logFeature
-} = require('../../core/logging/logger');
+} = require('../core/logging/logger');
 
 const {
     ERROR_TYPES
-} = require('../../core/logging/error-types');
+} = require('../core/logging/error-types');
 
 const {
     apiAuth
-} = require('../../core/security/api-auth');
+} = require('../core/security/api-auth');
 
 module.exports = (client) => {
 
