@@ -214,8 +214,8 @@ Requirements:
 
 - Mention that ${message.author.username} bonked ${victim.username}
 - Mention that ${victim.username} has now been bonked ${bonkCount} times
-- Keep under 100 words
-- 1 to 4 short sentences
+- Keep under 150 words
+- 3 to 5 short sentences
 - Dry humor, observational humor, or light sarcasm
 - Do not insult users
 - Do not use emojis
@@ -237,7 +237,7 @@ Discord
 
                     userPrompt,
 
-                    maxTokens: 180
+                    maxTokens: 220
                 });
 
             return {
