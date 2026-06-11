@@ -14,8 +14,9 @@ const client =
     require('../config/discord-client');
 
 const {
-    getGuildConfig
-} = require('../config/guild-config');
+    getGuildSetting
+} = require('../database/guild-settings-repository');
+
 
 // ===============================
 // Status settings
@@ -66,39 +67,29 @@ async function discordLog({
 
     try {
 
-        const guildConfig =
+        const logsChannelId =
+            await getGuildSetting({
 
-            getGuildConfig(
-                guildId
-            );
+                guildId,
+
+                settingName:
+                    'channel_logs'
+            });
 
         if (
-
-            !guildConfig
-
-            ||
-
-            !guildConfig.schedulers
-                ?.logsChannelId
-
+            !logsChannelId
         ) {
-
             return;
         }
 
         const channel =
-
             await client.channels.fetch(
-
-                guildConfig
-                    .schedulers
-                    .logsChannelId
+                logsChannelId
             );
 
         if (
             !channel
         ) {
-
             return;
         }
 

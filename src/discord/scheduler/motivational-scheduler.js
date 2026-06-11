@@ -35,8 +35,8 @@ const {
 } = require('../../core/config/scheduler-config');
 
 const {
-    getGuildConfig
-} = require('../../core/config/guild-config');
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     featureFlags
@@ -132,21 +132,34 @@ Requirements:
             const guildId of guildIds
         ) {
 
-            const guildConfig =
-                getGuildConfig(
-                    guildId
-                );
+            const channelId =
+                await getGuildSetting({
+
+                    guildId,
+
+                    settingName:
+                        'channel_motivational'
+                });
+
             if (
-                !guildConfig
+                !channelId
             ) {
+                await discordLog({
+
+                    guildId,
+
+                    category:
+                        'NIGHTLY',
+
+                    details:
+                        'Motivational channel not configured',
+
+                    status:
+                        'WARNING'
+                });
+
                 continue;
             }
-
-            const channelId =
-
-                guildConfig
-                    .schedulers
-                    .nightlyChannelId;
 
             const embed =
                 buildEmbed({
@@ -165,11 +178,31 @@ ${finalResponse}
 `
                 });
 
-            await sendDiscordMessage({
+            try {
+                await sendDiscordMessage({
 
-                channelId,
-                embed
-            });
+                    channelId,
+                    embed
+                });
+            }
+
+            catch (error) {
+                await discordLog({
+
+                    guildId,
+
+                    category:
+                        'NIGHTLY',
+
+                    details:
+                        `Failed to post message: ${error.message}`,
+
+                    status:
+                        'ERROR'
+                });
+
+                continue;
+            }
 
             await discordLog({
 

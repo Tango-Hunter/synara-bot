@@ -33,8 +33,8 @@ const {
 } = require('../../core/config/scheduler-config');
 
 const {
-    getGuildConfig
-} = require('../../core/config/guild-config');
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     featureFlags
@@ -137,22 +137,34 @@ Requirements:
             const guildId of guildIds
         ) {
 
-            const guildConfig =
-                getGuildConfig(
-                    guildId
-                );
+            const channelId =
+                await getGuildSetting({
+
+                    guildId,
+
+                    settingName:
+                        'channel_qotd'
+                });
 
             if (
-                !guildConfig
+                !channelId
             ) {
+                await discordLog({
+
+                    guildId,
+
+                    category:
+                        'QOTD',
+
+                    details:
+                        'QOTD channel not configured',
+
+                    status:
+                        'WARNING'
+                });
+
                 continue;
             }
-
-            const channelId =
-
-                guildConfig
-                    .schedulers
-                    .qotdChannelId;
 
             const embed =
                 buildEmbed({
@@ -173,12 +185,32 @@ ${response}
 `
                     });
 
-                await sendDiscordMessage({
+                try {
+                    await sendDiscordMessage({
 
-                    channelId,
+                        channelId,
 
-                    embed
-                });
+                        embed
+                    });
+                }
+
+                catch (error) {
+                    await discordLog({
+
+                        guildId,
+
+                        category:
+                            'QOTD',
+
+                        details:
+                            `Failed to post question: ${error.message}`,
+
+                        status:
+                            'ERROR'
+                    });
+
+                    continue;
+                }
 
                 await discordLog({
 
