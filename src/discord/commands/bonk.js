@@ -100,8 +100,8 @@ async function runBonkCommand({
 
         now - lastBonk < 10000
     ) {
-        const cooldownTimer = ((now - lastBonk)/1000).toFixed(0);
-        
+        const cooldownTimer = (10 - ((now - lastBonk)/1000)).toFixed(0);
+
         return {
 
             message:
