@@ -20,7 +20,7 @@ const openaiConfig = {
 
         commands: 200,
 
-        mentions: 500,
+        mentions: 1000,
 
         scheduler: 350
     }

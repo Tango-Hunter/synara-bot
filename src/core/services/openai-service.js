@@ -40,6 +40,8 @@ const REQUEST_TIMEOUT_MS =
     openaiConfig.timeoutMs;
 const BASE_RETRY_DELAY_MS =
     openaiConfig.baseRetryDelayMs;
+const MAX_TOKENS =
+    openaiConfig.maxTokens.mentions;
 
 function delay(ms) {
 
@@ -56,7 +58,7 @@ async function generateResponse({
 
     systemPrompt,
     userPrompt,
-    maxTokens = 500
+    MAX_TOKENS
 
 }) {
 
@@ -97,7 +99,7 @@ async function generateResponse({
                         ],
 
                         max_completion_tokens:
-                            maxTokens
+                            MAX_TOKENS
                     }),
 
                     new Promise((_, reject) =>
@@ -119,6 +121,27 @@ async function generateResponse({
                 completion?.choices?.[0]?.message?.content
                 ||
                 '';
+
+            logFeature({
+
+                category:
+                    'OPENAI',
+
+                message:
+                    'Raw completion metadata',
+
+                details: {
+
+                    finishReason:
+                        completion?.choices?.[0]?.finish_reason,
+
+                    contentLength:
+                        completion?.choices?.[0]?.message?.content?.length,
+
+                    usage:
+                        completion?.usage
+                }
+            });
 
             const validatedResponse =
                 validateResponse(
