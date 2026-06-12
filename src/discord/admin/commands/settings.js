@@ -14,8 +14,13 @@ const {
 } = require('../../../core/database/guild-settings-repository');
 
 const {
+    getIgnoredChannels
+} = require('../../../core/database/ignored-channels-repository');
+
+const {
     logFeature
 } = require('../../../core/logging/logger');
+
 
 function formatSettingLabel(
     settingName
@@ -66,9 +71,13 @@ async function handleSettingsCommand(
             interaction.guild.id
         );
 
+    const ignoredChannels =
+        await getIgnoredChannels(
+            interaction.guild.id
+        );
+
     const channels = [];
     const roles = [];
-    const messages = [];
 
     for (
         const setting
@@ -198,21 +207,23 @@ async function handleSettingsCommand(
 
             continue;
         }
-
-        // ============================
-        // Messages
-        // ============================
-
-        if (
-            setting_name.startsWith(
-                'message_'
-            )
-        ) {
-            messages.push(
-                `**${label}**\n${setting_value}`
-            );
-        }
     }
+
+    const ignoredChannelList =
+        ignoredChannels.length
+
+            ? ignoredChannels
+
+                .map(
+
+                    channel =>
+
+                        `#${channel.channel_name}`
+                )
+
+                .join('\n')
+
+            : 'No ignored channels configured.';
 
     const embed =
 
@@ -258,23 +269,31 @@ async function handleSettingsCommand(
                             )
 
                             : 'None Configured'
-                },
-
-                {
-
-                    name:
-                        'Messages',
-
-                    value:
-
-                        messages.length
-
-                            ? messages.join(
-                                '\n\n'
-                            )
-
-                            : 'None Configured'
                 }
+            )
+
+            .setFooter({
+
+                text:
+                    interaction.guild.name
+            })
+
+            .setTimestamp();
+
+    const ignoredEmbed =
+
+        new EmbedBuilder()
+
+            .setColor(
+                0x5865F2
+            )
+
+            .setTitle(
+                'Ignored Channels'
+            )
+
+            .setDescription(
+                ignoredChannelList
             )
 
             .setFooter({
@@ -312,7 +331,10 @@ async function handleSettingsCommand(
     await interaction.reply({
 
         embeds: [
-            embed
+
+            embed,
+
+            ignoredEmbed
         ]
     });
 }

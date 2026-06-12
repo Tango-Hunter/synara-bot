@@ -49,6 +49,10 @@ const {
 } = require('./commands/removerole');
 
 const {
+    handleIgnoreChannelCommand
+} = require('./commands/ignorechannel');
+
+const {
     hasAdminPermissions
 } = require('./permission-check');
 
@@ -212,6 +216,21 @@ async function routeAdminCommand(
     ) {
 
         return await handleSetChannelCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    IGNORE CHANNEL
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'ignorechannel'
+    ) {
+
+        return await handleIgnoreChannelCommand(
             interaction
         );
     }

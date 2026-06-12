@@ -289,6 +289,51 @@ const commands = [
 
     /*
     ============================
+    IGNORE CHANNEL
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'ignorechannel'
+        )
+
+        .setDescription(
+            'Manage ignored channels.'
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'add'
+                    )
+
+                    .setDescription(
+                        'Ignore the current channel.'
+                    )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'remove'
+                    )
+
+                    .setDescription(
+                        'Remove the current channel from ignored channels.'
+                    )
+        ),
+
+    /*
+    ============================
     SET ROLE
     ============================
     */
