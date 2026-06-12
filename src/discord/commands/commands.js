@@ -30,6 +30,14 @@ async function runCommandsCommand() {
     embed.addFields(
 
         {
+            name:
+                '\u200B',
+
+            value:
+                '\u200B'
+        },
+
+        {
 
             name:
                 '🎲 Fun Commands',
@@ -57,6 +65,14 @@ View trivia rankings and statistics.
         },
 
         {
+            name:
+                '\u200B',
+
+            value:
+                '\u200B'
+        },
+
+        {
 
             name:
                 '🔗 Twitch Integration',
@@ -75,6 +91,14 @@ Remove your Twitch account link.
 !twitchstats
 View Twitch statistics.
 `
+        },
+
+        {
+            name:
+                '\u200B',
+
+            value:
+                '\u200B'
         },
 
         {

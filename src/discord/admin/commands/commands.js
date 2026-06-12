@@ -34,6 +34,14 @@ async function handleAdminCommands(
             .addFields(
 
                 {
+                    name:
+                        '\u200B',
+
+                    value:
+                        '\u200B'
+                },
+
+                {
 
                     name:
                         '⚙️ Feature Management',
@@ -49,6 +57,14 @@ Enable a feature.
 /feature disable
 Disable a feature.
 `
+                },
+
+                {
+                    name:
+                        '\u200B',
+
+                    value:
+                        '\u200B'
                 },
 
                 {
@@ -76,6 +92,14 @@ Ignore the current channel for observations and activity tracking.
 /ignorechannel remove
 Remove the current channel from ignored channels for observations and activity tracking.
 `
+                },
+
+                {
+                    name:
+                        '\u200B',
+
+                    value:
+                        '\u200B'
                 },
 
                 {
