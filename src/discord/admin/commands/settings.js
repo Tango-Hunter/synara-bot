@@ -216,9 +216,19 @@ async function handleSettingsCommand(
 
                 .map(
 
-                    channel =>
+                    channel => {
 
-                        `<#${channel.channel_name}>`
+                        const guildChannel =
+                            interaction.guild.channels.cache.get(
+                                channel.channel_id
+                            );
+
+                        return guildChannel
+
+                            ? guildChannel.toString()
+
+                            : `⚠ Missing Channel (${channel.channel_id})`;
+                    }
                 )
 
                 .join('\n')
