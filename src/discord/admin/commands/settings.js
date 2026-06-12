@@ -218,7 +218,7 @@ async function handleSettingsCommand(
 
                     channel =>
 
-                        `#${channel.channel_name}`
+                        `<#${channel.channel_name}>`
                 )
 
                 .join('\n')
