@@ -14,9 +14,12 @@ const {
 } = require('../services/openai-service');
 
 const {
-    observationConfig,
-    isObservationChannel
+    observationConfig
 } = require('../config/observational-config');
+
+const {
+    isIgnoredChannel
+} = require('../database/ignored-channels-repository');
 
 const {
     getFeatureFlag
@@ -67,9 +70,14 @@ async function tryObservation(
     }
 
     if (
-        !isObservationChannel(
-            message.channel
-        )
+        await isIgnoredChannel({
+
+            guildId:
+                message.guild.id,
+
+            channelId:
+                message.channel.id
+        })
     ) {
         return;
     }

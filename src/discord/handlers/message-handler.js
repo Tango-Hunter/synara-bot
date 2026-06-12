@@ -14,6 +14,10 @@ const {
 } = require('../../core/config/discord-config');
 
 const {
+    isIgnoredChannel
+} = require('../../core/database/ignored-channels-repository');
+
+const {
     trackMessage
 } = require('../../core/observation/observation-manager');
 
@@ -24,10 +28,6 @@ const {
 const {
     recordActivity
 } = require('../../core/database/activity-repository');
-
-const {
-    observationConfig
-} = require('../../core/config/observational-config');
 
 const {
     logError,
@@ -54,6 +54,7 @@ const {
     handleTriviaReply
 } = require('../trivia/trivia-reply-handler');
 
+
 function discordMessageHandler(client) {
 
     client.on('messageCreate', async (message) => {
@@ -67,17 +68,22 @@ function discordMessageHandler(client) {
                     client
                 )
             ) {
-
                 return;
             }
 
             // Activity Check
-            if (
-                !observationConfig
-                    .ignoredChannels
-                    .includes(
+            const ignored =
+                await isIgnoredChannel({
+
+                    guildId:
+                        message.guild.id,
+
+                    channelId:
                         message.channel.id
-                    )
+                });
+
+            if (
+                !ignored
             ) {
                 await recordActivity(
                     message.author.id
@@ -88,7 +94,6 @@ function discordMessageHandler(client) {
 
             // Trivia
             const handledTrivia =
-
                 await handleTriviaReply(
                     message
                 );

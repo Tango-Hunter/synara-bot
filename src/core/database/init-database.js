@@ -80,6 +80,30 @@ async function initializeDatabase() {
 
     await pool.query(`
 
+        CREATE TABLE IF NOT EXISTS ignored_channels (
+
+            guild_id TEXT NOT NULL,
+
+            guild_name TEXT NOT NULL,
+
+            channel_id TEXT NOT NULL,
+
+            channel_name TEXT NOT NULL,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                channel_id
+            )
+        );
+
+    `);
+
+    await pool.query(`
+
         CREATE TABLE IF NOT EXISTS bonk_counts (
 
             guild_id TEXT NOT NULL,
@@ -120,6 +144,8 @@ async function initializeDatabase() {
                 'feature_flags',
 
                 'guild_settings',
+
+                'ignored_channels',
 
                 'bonk_counts'
             ] 

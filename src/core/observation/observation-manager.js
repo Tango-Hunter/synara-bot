@@ -6,13 +6,17 @@
  */
 
 const {
-    observationConfig,
-    isObservationChannel
+    observationConfig
 } = require('../config/observational-config');
+
+const {
+    isIgnoredChannel
+} = require('../database/ignored-channels-repository');
 
 const {
     getFeatureFlag
 } = require('../database/feature-flags-repository');
+
 
 const activityMap = new Map();
 
@@ -40,9 +44,14 @@ async function trackMessage(
     }
 
     if (
-        !isObservationChannel(
-            message.channel
-        )
+        await isIgnoredChannel({
+
+            guildId:
+                message.guild.id,
+
+            channelId:
+                message.channel.id
+        })
     ) {
         return;
     }
@@ -55,7 +64,6 @@ async function trackMessage(
             channelId
         )
     ) {
-
         activityMap.set(
             channelId,
             []
