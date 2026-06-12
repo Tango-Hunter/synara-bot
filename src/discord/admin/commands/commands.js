@@ -2,35 +2,112 @@
  * Title: commands.js
  * Author: Tango Hunter
  * Date Created: 5/24/26
- * Date Modified: 5/24/26
+ * Date Modified: 6/11/26
  * Description: Displays available admin slash commands.
  */
 
+
 const {
-    MessageFlags
+    EmbedBuilder
 } = require('discord.js');
+
 
 async function handleAdminCommands(
     interaction
 ) {
 
-    return await interaction.reply({
+    const embed =
+        new EmbedBuilder()
 
-        content:
+            .setColor(
+                0x5865F2
+            )
+
+            .setTitle(
+                'SYNARA Administration Guide'
+            )
+
+            .setDescription(
+                'Administrative commands used to configure and manage SYNARA.'
+            )
+
+            .addFields(
+
+                {
+
+                    name:
+                        '⚙️ Feature Management',
+
+                    value:
 `
-Available Administrative Commands:
+/features
+View all feature flags and their status.
 
+/feature enable
+Enable a feature.
+
+/feature disable
+Disable a feature.
+`
+                },
+
+                {
+
+                    name:
+                        '🏗 Server Configuration',
+
+                    value:
+`
+/settings
+View current server configuration.
+
+/setchannel
+Assign the current channel to a SYNARA feature.
+
+/setrole
+Add an Admin, Moderator, or Verified role to SYNARA settings.
+
+/removerole
+Remove an Admin or Moderator role from SYNARA settings.
+
+/ignorechannel add
+Ignore the current channel for observations and activity tracking.
+
+/ignorechannel remove
+Remove the current channel from ignored channels for observations and activity tracking.
+`
+                },
+
+                {
+
+                    name:
+                        '🛡 Moderator Applications',
+
+                    value:
+`
 /modapps open
 Open moderator applications.
 
 /modapps close
 Close moderator applications.
+`
+                }
 
-/commands
-Display available administrative commands.
-`,
+            )
 
-        flags: MessageFlags.Ephemeral
+            .setFooter({
+
+                text:
+                    'Run commands in the channel you wish to configure whenever applicable.'
+            })
+
+            .setTimestamp();
+
+    return await interaction.reply({
+
+        embeds: [
+            embed
+        ]
     });
 }
 
