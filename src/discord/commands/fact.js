@@ -2,7 +2,6 @@
  * Title: fact.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/19/26
  * Description: Prompt for the !fact command.
  */
 
@@ -14,6 +13,20 @@ const {
     buildSystemPrompt
 } = require('../../synara/cognition/prompt-builder');
 
+const {
+    categories
+} = require('../databases/category-samples.json');
+
+
+function getRandomCategory() {
+    return categories[
+        Math.floor(
+            Math.random() *
+            categories.length
+        )
+    ];
+}
+
 async function runFactCommand({
 
     username,
@@ -23,43 +36,71 @@ async function runFactCommand({
 
     const systemPrompt =
         buildSystemPrompt();
+    
+    const category =
+        getRandomCategory();
 
-    const userPrompt = `
+    let userPrompt = `
 
-Generate a fascinating short fact as SYNARA.
+Generate ONE fascinating and accurate fact.
+
+Category:
+${category}
 
 Requirements:
 
-- Must be true and accurate
-- Topics can include:
-  science,
-  history,
-  psychology,
-  space,
-  technology,
-  biology,
-  or strange human behavior
-- Keep under 120 words
-- Make it feel intelligent and conversational
-- Avoid sounding like trivia website copy
-- Occasionally include subtle observational commentary
-- Avoid repetitive openings
-- Do not use emojis or hashtags
-
-Current User:
-${username}
-
-Current Platform:
-${platform}
+- Must be true
+- Must be interesting
+- Focus on the selected category
+- Avoid common overused facts
+- Return ONLY the fact
+- Maximum 75 words
 `;
 
-    const response =
+    const fact =
         await generateResponse({
 
             systemPrompt,
             userPrompt,
-            maxTokens: 150
+            maxTokens: 100
         });
+
+    userPrompt = `
+
+You are SYNARA.
+
+Analyze the following fact.
+
+Fact:
+
+${fact}
+
+Requirements:
+
+- Remain in character
+- Intelligent
+- Analytical
+- Slightly witty
+- Do not repeat the fact
+- 1-3 sentences maximum
+`;
+
+    const factResponse =
+        await generateResponse({
+
+            systemPrompt,
+            userPrompt,
+            maxTokens: 120
+        });
+
+    const response =`
+
+${fact}
+
+**SYNARA ANALYSIS**
+
+${factResponse}
+`;
 
     return {
         message: response

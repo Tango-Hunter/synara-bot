@@ -2,7 +2,6 @@
  * Title: joke.js
  * Author: Tango Hunter
  * Date Created: 5/16/26
- * Date Modified: 5/19/26
  * Description: Prompt for the !joke command.
  */
 
@@ -14,6 +13,20 @@ const {
     buildSystemPrompt
 } = require('../../synara/cognition/prompt-builder');
 
+const {
+    categories
+} = require('../databases/category-samples.json');
+
+
+function getRandomCategory() {
+    return categories[
+        Math.floor(
+            Math.random() *
+            categories.length
+        )
+    ];
+}
+
 async function runJokeCommand({
 
     username,
@@ -24,35 +37,71 @@ async function runJokeCommand({
     const systemPrompt =
         buildSystemPrompt();
 
-    const userPrompt = `
+    const category =
+        getRandomCategory();
 
-Generate a short joke or humorous observation as SYNARA.
+    let userPrompt = `
+
+Generate ONE short joke.
+
+Category:
+${category}
 
 Requirements:
 
-- Humor should be intelligent, dry, observational, or lightly sarcastic
-- Avoid meme humor
-- Avoid cringe internet slang
-- Avoid offensive jokes
-- Humor should feel subtly AI flavored
-- Keep under 100 words
-- Occasionally reference humans, systems, patterns, technology, or behavior
-- Make responses varied and natural
-
-Current User:
-${username}
-
-Current Platform:
-${platform}
+- Intelligent humor
+- Focus on the selected category
+- Dry humor preferred
+- Light sarcasm allowed
+- No offensive content
+- No internet slang
+- Return ONLY the joke
+- Maximum 60 words
 `;
 
-    const response =
+    const joke =
+        await generateResponse({
+
+            systemPrompt,
+            userPrompt,
+            maxTokens: 100
+        });
+
+    userPrompt = `
+
+You are SYNARA.
+
+React to the following joke.
+
+Joke:
+
+${joke}
+
+Requirements:
+
+- Stay in character
+- Intelligent observation
+- Slight sarcasm allowed
+- 1-3 sentences maximum
+- React to the joke rather than explaining it
+`;
+
+    const jokeResponse =
         await generateResponse({
 
             systemPrompt,
             userPrompt,
             maxTokens: 120
         });
+
+    const response = `
+    
+${joke}
+
+**SYNARA COMMENTARY**
+
+${jokeResponse}
+`;
 
     return {
         message: response

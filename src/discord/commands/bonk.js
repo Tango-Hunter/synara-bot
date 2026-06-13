@@ -23,6 +23,10 @@ const {
 } = require('../../core/database/bonk-repository');
 
 const {
+    styles
+} = require('../databases/commentary-styles.json');
+
+const {
     logCommand,
     logError
 } = require('../../core/logging/logger');
@@ -34,6 +38,15 @@ const {
 
 const bonkCooldowns = new Map();
 
+
+function getRandomStyle() {
+    return styles[
+        Math.floor(
+            Math.random() *
+            styles.length
+        )
+    ];
+}
 
 async function runBonkCommand({
     message
@@ -52,8 +65,8 @@ async function runBonkCommand({
     if (
         !enabled
     ) {
-        return {
 
+        return {
             message:
                 'Bonk functionality is disabled.'
         };
@@ -65,8 +78,8 @@ async function runBonkCommand({
     if (
         !target
     ) {
-        return {
 
+        return {
             message:
                 'Specify a user to bonk.'
         };
@@ -76,7 +89,6 @@ async function runBonkCommand({
         target.bot
     ) {
         return {
-
             message:
                 'SYNARA refuses to participate in inter-bot violence.'
         };
@@ -99,11 +111,13 @@ async function runBonkCommand({
         &&
 
         now - lastBonk < 10000
+
     ) {
-        const cooldownTimer = (10 - ((now - lastBonk)/1000)).toFixed(0);
+
+        const cooldownTimer =
+            (10 - ((now - lastBonk) / 1000)).toFixed(0);
 
         return {
-
             message:
                 `Bonk cooldown active. Please wait ${cooldownTimer} seconds.`
         };
@@ -121,6 +135,13 @@ async function runBonkCommand({
 
     const selfBonk =
         roll < 0.01;
+
+    const aiCommentary =
+        !selfBonk
+
+        &&
+
+        roll < 0.99;
 
     const victim =
         selfBonk
@@ -181,24 +202,33 @@ async function runBonkCommand({
             message.channel.id
     });
 
-    // ===============================
-    // Self Bonk (1%)
-    // ===============================
+    /*
+    ===============================
+    Self Bonk (1%)
+    ===============================
+    */
     if (
         selfBonk
     ) {
+
         return {
             message:
 
-                `⚠ BONK ERROR\n\nThe bonk packet looped back to sender.\n\n<@${victim.id}> has now been bonked ${bonkCount} times.`
+`⚠ **BONK ERROR**
+
+The bonk missed and instead bonked the sender.
+
+<@${victim.id}> has now been bonked ${bonkCount} times.`
         };
     }
 
-    // ===============================
-    // AI Commentary (10%)
-    // ===============================
+    /*
+    ===============================
+    AI Commentary (10%)
+    ===============================
+    */
     if (
-        roll < 0.11
+        aiCommentary
     ) {
 
         try {
@@ -206,43 +236,58 @@ async function runBonkCommand({
             const systemPrompt =
                 buildSystemPrompt();
 
+            const style =
+                getRandomStyle();
+
             const userPrompt = `
 
-Generate a short bonk commentary as SYNARA.
+You are SYNARA.
+
+A bonk event has occurred.
+
+Bonker:
+${message.author.username}
+
+Victim:
+${victim.username}
+
+Bonk Count:
+${bonkCount}
+
+Commentary Style:
+${style}
 
 Requirements:
 
-- Mention that ${message.author.username} bonked ${victim.username}
-- Mention that ${victim.username} has now been bonked ${bonkCount} times
-- Keep under 150 words
-- 3 to 5 short sentences
-- Dry humor, observational humor, or light sarcasm
-- Do not insult users
-- Do not use emojis
-- Do not use hashtags
-- Treat the bonk as a real recorded event
-- Vary the response naturally
-
-Current User:
-${message.author.username}
-
-Current Platform:
-Discord
+- Stay in character
+- Brief commentary
+- 1 to 3 sentences
+- Dry humor, analysis, or light sarcasm
+- Do not repeat the event details
+- Do not restate the bonk count
+- Treat the bonk as a recorded event
+- Response should have the inflection the commentary style
 `;
 
-            const response =
+            const commentary =
                 await generateResponse({
-
                     systemPrompt,
-
                     userPrompt,
-
-                    maxTokens: 220
+                    maxTokens: 120
                 });
 
             return {
                 message:
-                    response
+
+`
+
+<@${message.author.id}> just bonked <@${victim.id}>.
+
+They have been bonked ${bonkCount} times.
+
+**SYNARA COMMENTARY**
+
+${commentary}`
             };
 
         } catch (error) {
@@ -271,18 +316,32 @@ Discord
             return {
                 message:
 
-                    `Bonk recorded.\n\nThis interaction has been archived for future embarrassment.\n\n<@${victim.id}> has now been bonked ${bonkCount} times.`
+`**BONK**
+
+<@${message.author.id}> just bonked <@${victim.id}>.
+
+They have been bonked ${bonkCount} times.
+
+**SYNARA COMMENTARY**
+
+This interaction has been archived for future analysis.`
             };
         }
     }
 
-    // ===============================
-    // Normal Bonk (89%)
-    // ===============================
+    /*
+    ===============================
+    Normal Bonk (89%)
+    ===============================
+    */
     return {
         message:
 
-            `<@${message.author.id}> just bonked <@${victim.id}>.\n\nThey have been bonked ${bonkCount} times.`
+`**BONK**
+
+<@${message.author.id}> just bonked <@${victim.id}>.
+
+They have been bonked ${bonkCount} times.`
     };
 }
 
