@@ -22,6 +22,10 @@ const {
 } = require('../../core/observation/observation-manager');
 
 const {
+    handleCountingGame
+} = require('../interactions/counting-game');
+
+const {
     tryObservation
 } = require('../../core/observation/observation-generator');
 
@@ -90,7 +94,11 @@ function discordMessageHandler(client) {
                 );
             }
 
+            // Track Messages
             await trackMessage(message);
+
+            // Track Counting Game
+            await handleCountingGame(message);
 
             // Trivia
             const handledTrivia =

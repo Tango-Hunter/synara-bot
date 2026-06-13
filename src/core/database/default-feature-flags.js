@@ -43,6 +43,14 @@ const DEFAULT_FEATURE_FLAGS = [
     },
 
     {
+        name:
+            'countingPenalties',
+
+        description:
+            'Counting game failure tracking'
+    },
+
+    {
 
         name:
             'qotdScheduler',
