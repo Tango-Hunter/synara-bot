@@ -316,8 +316,7 @@ ${commentary}`
             return {
                 message:
 
-`**BONK**
-
+`
 <@${message.author.id}> just bonked <@${victim.id}>.
 
 They have been bonked ${bonkCount} times.
@@ -337,8 +336,7 @@ This interaction has been archived for future analysis.`
     return {
         message:
 
-`**BONK**
-
+`
 <@${message.author.id}> just bonked <@${victim.id}>.
 
 They have been bonked ${bonkCount} times.`
