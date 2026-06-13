@@ -141,7 +141,7 @@ async function runBonkCommand({
 
         &&
 
-        roll < 0.99;
+        roll < 0.11;
 
     const victim =
         selfBonk
