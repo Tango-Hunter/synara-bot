@@ -65,6 +65,9 @@ function discordMessageHandler(client) {
 
         try {
 
+            // Track Counting Game
+            await handleCountingGame(message);
+
             // Protection filters
             if (
                 shouldIgnoreMessage(
@@ -96,9 +99,6 @@ function discordMessageHandler(client) {
 
             // Track Messages
             await trackMessage(message);
-
-            // Track Counting Game
-            await handleCountingGame(message);
 
             // Trivia
             const handledTrivia =
