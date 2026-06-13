@@ -17,6 +17,14 @@ const {
     categories
 } = require('../databases/category-samples.json');
 
+const {
+    logError
+} = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
 
 function getRandomCategory() {
     return categories[
@@ -27,20 +35,82 @@ function getRandomCategory() {
     ];
 }
 
-async function runJokeCommand({
+/*
+====================================
+Primary Source
+JokeAPI
+====================================
+*/
+async function getJokeApiJoke() {
 
-    username,
-    platform
+    const response = await fetch(
+        'https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit'
+    );
 
-}) {
+    if (
+        !response.ok
+    ) {
+        throw new Error(
+            `JokeAPI returned ${response.status}`
+        );
+    }
 
-    const systemPrompt =
-        buildSystemPrompt();
+    const joke =
+        await response.json();
+
+    if (
+        joke.type === 'single'
+    ) {
+        return joke.joke;
+    }
+
+    return `${joke.setup}
+
+${joke.delivery}`;
+}
+
+/*
+====================================
+Fallback #1
+Official Joke API
+====================================
+*/
+async function getOfficialJoke() {
+
+    const response = await fetch(
+        'https://official-joke-api.appspot.com/random_joke'
+    );
+
+    if (
+        !response.ok
+    ) {
+        throw new Error(
+            `Official Joke API returned ${response.status}`
+        );
+    }
+
+    const joke =
+        await response.json();
+
+    return `${joke.setup}
+
+${joke.punchline}`;
+}
+
+/*
+====================================
+Fallback #2
+OpenAI Joke Generation
+====================================
+*/
+async function getAiGeneratedJoke(
+    systemPrompt
+) {
 
     const category =
         getRandomCategory();
 
-    let userPrompt = `
+    const userPrompt = `
 
 Generate ONE short joke.
 
@@ -59,15 +129,91 @@ Requirements:
 - Maximum 60 words
 `;
 
-    const joke =
-        await generateResponse({
+    return await generateResponse({
+        systemPrompt,
+        userPrompt,
+        maxTokens: 100
+    });
+}
 
-            systemPrompt,
-            userPrompt,
-            maxTokens: 100
+/*
+====================================
+Main Command
+====================================
+*/
+async function runJokeCommand({
+
+    username,
+    platform
+
+}) {
+
+    const systemPrompt =
+        buildSystemPrompt();
+
+    let joke;
+
+    /*
+    ====================================
+    Primary Source
+    ====================================
+    */
+    try {
+
+        joke =
+            await getJokeApiJoke();
+
+    } catch (error) {
+
+        logError({
+
+            type:
+                ERROR_TYPES.API_ERROR,
+
+            source:
+                'joke-api',
+
+            message:
+                error.message
         });
 
-    userPrompt = `
+        /*
+        ====================================
+        Fallback #1
+        ====================================
+        */
+        try {
+
+            joke =
+                await getOfficialJoke();
+
+        } catch (fallbackError) {
+
+            logError({
+
+                type:
+                    ERROR_TYPES.API_ERROR,
+
+                source:
+                    'official-joke-api',
+
+                message:
+                    fallbackError.message
+            });
+
+            /*
+            ====================================
+            Fallback #2
+            ====================================
+            */
+            joke =
+                await getAiGeneratedJoke(
+                    systemPrompt
+                );
+        }
+    }
+
+    const userPrompt = `
 
 You are SYNARA.
 
@@ -86,27 +232,28 @@ Requirements:
 - React to the joke rather than explaining it
 `;
 
-    const jokeResponse =
+    const commentary =
         await generateResponse({
-
             systemPrompt,
             userPrompt,
             maxTokens: 120
         });
 
-    const response = `
-    
+    const response = 
+`
 ${joke}
 
 **SYNARA COMMENTARY**
 
-${jokeResponse}
+${commentary}
 `;
 
     return {
         message: response
     };
 }
+
+
 
 module.exports = {
     runJokeCommand
