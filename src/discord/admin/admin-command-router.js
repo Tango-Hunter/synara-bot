@@ -49,6 +49,10 @@ const {
 } = require('./commands/removerole');
 
 const {
+    handleSetUserCommand
+} = require('./commands/setuser');
+
+const {
     handleIgnoreChannelCommand
 } = require('./commands/ignorechannel');
 
@@ -261,6 +265,21 @@ async function routeAdminCommand(
     ) {
 
         return await handleRemoveRoleCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    SET USER
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'setuser'
+    ) {
+
+        return await handleSetUserCommand(
             interaction
         );
     }

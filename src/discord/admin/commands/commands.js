@@ -86,6 +86,9 @@ Add an Admin, Moderator, or Verified role to SYNARA settings.
 /removerole
 Remove an Admin or Moderator role from SYNARA settings.
 
+/setuser
+Set a user/bot account for SYNARA to track.
+
 /ignorechannel add
 Ignore the current channel for observations and activity tracking.
 

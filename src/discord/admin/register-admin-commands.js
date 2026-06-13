@@ -60,6 +60,13 @@ const roleChoices =
             })
         );
 
+const userChoices = [
+    {
+        name: 'Counting Bot',
+        value: 'Counting Bot'
+    }
+];
+
 
 const commands = [
 
@@ -366,21 +373,7 @@ const commands = [
                     )
 
                     .addChoices(
-
-                        {
-                            name: 'Admin',
-                            value: 'Admin'
-                        },
-
-                        {
-                            name: 'Moderator',
-                            value: 'Moderator'
-                        },
-
-                        {
-                            name: 'Verified',
-                            value: 'Verified'
-                        }
+                        ...roleChoices
                     )
         )
 
@@ -438,15 +431,16 @@ const commands = [
 
                     .addChoices(
 
-                        {
-                            name: 'Admin',
-                            value: 'Admin'
-                        },
+                        ...roleChoices.filter(
 
-                        {
-                            name: 'Moderator',
-                            value: 'Moderator'
-                        }
+                            choice =>
+
+                                choice.value === 'Admin'
+
+                                ||
+
+                                choice.value === 'Moderator'
+                        )
                     )
         )
 
@@ -462,6 +456,63 @@ const commands = [
 
                     .setDescription(
                         'Role'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+        ),
+
+    /*
+    ============================
+    SET USER
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'setuser'
+        )
+
+        .setDescription(
+            'Configure a user setting.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'setting'
+                    )
+
+                    .setDescription(
+                        'User setting'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+                        ...userChoices
+                    )
+        )
+
+        .addUserOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'user'
+                    )
+
+                    .setDescription(
+                        'User'
                     )
 
                     .setRequired(

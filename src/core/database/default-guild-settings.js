@@ -100,12 +100,12 @@ const DEFAULT_GUILD_SETTINGS = [
     {
         name: 'counting_bot',
         displayName: 'Counting Bot',
-        description: 'Counting game bot user ID'
+        description: 'Counting game bot user'
     },
 
     {
         name: 'role_counting_failure',
-        displayName: 'Counting Failure',
+        displayName: 'Counting Failure Role',
         description: 'Role assigned to the latest counting failure'
     }
 ];
