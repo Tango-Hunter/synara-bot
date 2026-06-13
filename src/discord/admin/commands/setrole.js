@@ -11,6 +11,10 @@ const {
 } = require('../../../core/database/guild-settings-repository');
 
 const {
+    getRoleSettings
+} = require('../../../core/database/default-guild-settings');
+
+const {
     logFeature
 } = require('../../../core/logging/logger');
 
@@ -19,7 +23,7 @@ async function handleSetRoleCommand(
     interaction
 ) {
 
-    const setting =
+    const selectedSetting =
         interaction.options.getString(
             'setting'
         );
@@ -29,36 +33,42 @@ async function handleSetRoleCommand(
             'role'
         );
 
-    let settingName;
+    const roleSetting =
+        getRoleSettings().find(
 
-    switch (
-        setting
-    ) {
+            setting =>
 
-        case 'Admin':
-
-            settingName =
-                'roles_admin';
-
-            break;
-
-        case 'Moderator':
-
-            settingName =
-                'roles_moderator';
-
-            break;
-
-        case 'Verified':
-
-            settingName =
-                'role_verified';
-
-            break;
-    }
+                setting.displayName ===
+                selectedSetting
+        );
 
     if (
-        setting === 'Verified'
+        !roleSetting
+    ) {
+        return await interaction.reply({
+
+            content:
+                'Invalid role setting.'
+        });
+    }
+
+    /*
+    ===============================
+    Single Role Settings
+    ===============================
+    */
+    if (
+
+        roleSetting.name.startsWith(
+            'role_'
+        )
+
+        &&
+
+        !roleSetting.name.startsWith(
+            'roles_'
+        )
+
     ) {
 
         await setGuildSetting({
@@ -69,20 +79,29 @@ async function handleSetRoleCommand(
             guildName:
                 interaction.guild.name,
 
-            settingName,
+            settingName:
+                roleSetting.name,
 
             settingValue:
                 role.id
         });
     }
 
+    /*
+    ===============================
+    Multi Role Settings
+    ===============================
+    */
     else {
 
         const currentRoles =
             await getGuildSetting({
+
                 guildId:
                     interaction.guild.id,
-                settingName
+
+                settingName:
+                    roleSetting.name
             })
 
             || [];
@@ -105,7 +124,8 @@ async function handleSetRoleCommand(
             guildName:
                 interaction.guild.name,
 
-            settingName,
+            settingName:
+                roleSetting.name,
 
             settingValue:
                 currentRoles
@@ -128,7 +148,8 @@ async function handleSetRoleCommand(
             guildName:
                 interaction.guild.name,
 
-            setting,
+            setting:
+                roleSetting.name,
 
             roleId:
                 role.id,
@@ -142,9 +163,9 @@ async function handleSetRoleCommand(
     });
 
     await interaction.reply({
-        content:
 
-            `✅ ${role} added to ${setting}`
+        content:
+            `✅ ${role} added to ${selectedSetting}`
     });
 }
 

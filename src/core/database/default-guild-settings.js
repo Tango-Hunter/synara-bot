@@ -89,6 +89,24 @@ const DEFAULT_GUILD_SETTINGS = [
         name: 'channel_logs',
         displayName: 'Logs',
         description: 'Discord logging channel'
+    },
+
+    {
+        name: 'channel_counting',
+        displayName: 'Counting',
+        description: 'Counting game channel'
+    },
+
+    {
+        name: 'counting_bot',
+        displayName: 'Counting Bot',
+        description: 'Counting game bot user ID'
+    },
+
+    {
+        name: 'role_counting_failure',
+        displayName: 'Counting Failure',
+        description: 'Role assigned to the latest counting failure'
     }
 ];
 
