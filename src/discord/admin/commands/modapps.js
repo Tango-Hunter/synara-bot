@@ -386,6 +386,7 @@ Moderator applications are currently OPEN.
 
 Please answer carefully and thoughtfully.
 
+⚠ Prior Moderators are not permitted to re-apply.
 ⚠ Once submitted, responses cannot be edited.
 
 Application Sections:
