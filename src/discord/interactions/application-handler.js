@@ -18,7 +18,8 @@ const {
 } = require('discord.js');
 
 const {
-    getGuildSetting
+    getGuildSetting,
+    getGuildArraySetting
 } = require('../../core/database/guild-settings-repository');
 
 const {
@@ -305,16 +306,14 @@ async function handleApplicationInteraction(
     ) {
 
         const blacklist =
-            await getGuildSetting({
+            await getGuildArraySetting({
 
                 guildId:
                     interaction.guild.id,
 
                 settingName:
                     'modapps_blacklist'
-            })
-
-            || [];
+            });
 
         // Blacklist Check
         if (

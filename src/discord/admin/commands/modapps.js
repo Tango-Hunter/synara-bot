@@ -16,6 +16,9 @@ const {
 
 const {
     getGuildSetting,
+    getGuildArraySetting,
+    addGuildArrayValue,
+    removeGuildArrayValue,
     setGuildSetting
 } = require('../../../core/database/guild-settings-repository');
 
@@ -374,29 +377,7 @@ async function handleModAppsCommand(
                 'user'
             );
 
-        const blacklist =
-            await getGuildSetting({
-
-                guildId:
-                    interaction.guild.id,
-
-                settingName:
-                    'modapps_blacklist'
-            })
-
-            || [];
-
-        if (
-            !blacklist.includes(
-                user.id
-            )
-        ) {
-            blacklist.push(
-                user.id
-            );
-        }
-
-        await setGuildSetting({
+        await addGuildArrayValue({
 
             guildId:
                 interaction.guild.id,
@@ -407,8 +388,8 @@ async function handleModAppsCommand(
             settingName:
                 'modapps_blacklist',
 
-            settingValue:
-                blacklist
+            value:
+                user.id
         });
 
         logFeature({
@@ -459,28 +440,7 @@ async function handleModAppsCommand(
                 'user'
             );
 
-        const blacklist =
-            await getGuildSetting({
-
-                guildId:
-                    interaction.guild.id,
-
-                settingName:
-                    'modapps_blacklist'
-            })
-
-            || [];
-
-        const updatedBlacklist =
-            blacklist.filter(
-
-                userId =>
-
-                    userId !==
-                    user.id
-            );
-
-        await setGuildSetting({
+        await removeGuildArrayValue({
 
             guildId:
                 interaction.guild.id,
@@ -491,8 +451,8 @@ async function handleModAppsCommand(
             settingName:
                 'modapps_blacklist',
 
-            settingValue:
-                updatedBlacklist
+            value:
+                user.id
         });
 
         logFeature({
@@ -540,16 +500,14 @@ async function handleModAppsCommand(
     ) {
 
         const blacklist =
-            await getGuildSetting({
+            await getGuildArraySetting({
 
                 guildId:
                     interaction.guild.id,
 
                 settingName:
                     'modapps_blacklist'
-            })
-
-            || [];
+            });
 
         const description =
             blacklist.length

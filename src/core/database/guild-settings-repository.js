@@ -13,6 +13,11 @@ const {
 } = require('../logging/logger');
 
 
+/*
+====================================
+HELPER FUNCTION
+====================================
+*/
 async function settingExists({
 
     guildId,
@@ -44,6 +49,11 @@ async function settingExists({
     return result.rows.length > 0;
 }
 
+/*
+====================================
+GET GUILD SETTINGS
+====================================
+*/
 async function getGuildSetting({
 
     guildId,
@@ -105,6 +115,11 @@ async function getGuildSetting({
     return value;
 }
 
+/*
+====================================
+SET GUILD SETTING
+====================================
+*/
 async function setGuildSetting({
 
     guildId,
@@ -184,6 +199,143 @@ async function setGuildSetting({
     );
 }
 
+/*
+====================================
+GET ARRAY SETTING
+====================================
+*/
+async function getGuildArraySetting({
+
+    guildId,
+
+    settingName
+}) {
+
+    const value =
+
+        await getGuildSetting({
+
+            guildId,
+
+            settingName
+        });
+
+    return Array.isArray(
+        value
+    )
+
+        ? value
+
+        : [];
+}
+
+/*
+====================================
+ADD ARRAY VALUE
+====================================
+*/
+async function addGuildArrayValue({
+
+    guildId,
+
+    guildName,
+
+    settingName,
+
+    value
+}) {
+
+    const currentValues =
+
+        await getGuildArraySetting({
+
+            guildId,
+
+            settingName
+        });
+
+    if (
+
+        !currentValues.includes(
+            value
+        )
+
+    ) {
+
+        currentValues.push(
+            value
+        );
+    }
+
+    await setGuildSetting({
+
+        guildId,
+
+        guildName,
+
+        settingName,
+
+        settingValue:
+            currentValues
+    });
+
+    return currentValues;
+}
+
+/*
+====================================
+REMOVE ARRAY VALUE
+====================================
+*/
+async function removeGuildArrayValue({
+
+    guildId,
+
+    guildName,
+
+    settingName,
+
+    value
+}) {
+
+    const currentValues =
+
+        await getGuildArraySetting({
+
+            guildId,
+
+            settingName
+        });
+
+    const updatedValues =
+
+        currentValues.filter(
+
+            currentValue =>
+
+                currentValue !== value
+        );
+
+    await setGuildSetting({
+
+        guildId,
+
+        guildName,
+
+        settingName,
+
+        settingValue:
+            updatedValues
+    });
+
+    return updatedValues;
+}
+
+/*
+====================================
+GET ALL SETTINGS
+====================================
+*/
 async function getAllGuildSettings(
     guildId
 ) {
@@ -243,6 +395,11 @@ async function getAllGuildSettings(
     );
 }
 
+/*
+====================================
+NEW GUILD INIT
+====================================
+*/
 async function initializeGuildSettings({
 
     guildId,
@@ -310,6 +467,11 @@ async function initializeGuildSettings({
     }
 }
 
+/*
+====================================
+EXISTING GUILD UPDATE
+====================================
+*/
 async function initializeAllGuildSettings(
     client
 ) {
@@ -353,6 +515,9 @@ module.exports = {
     settingExists,
     getGuildSetting,
     setGuildSetting,
+    getGuildArraySetting,
+    addGuildArrayValue,
+    removeGuildArrayValue,
     getAllGuildSettings,
     initializeGuildSettings,
     initializeAllGuildSettings
