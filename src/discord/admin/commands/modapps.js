@@ -384,10 +384,11 @@ async function handleModAppsCommand(
 
 Moderator applications are currently OPEN.
 
-Please answer carefully and thoughtfully.
-
 ⚠ Prior Moderators are not permitted to re-apply.
 ⚠ Once submitted, responses cannot be edited.
+⚠ Submitting an application does not guarantee a moderator position.
+
+Please answer carefully and thoughtfully.
 
 Application Sections:
 
