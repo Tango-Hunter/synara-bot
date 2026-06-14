@@ -361,6 +361,242 @@ async function handleModAppsCommand(
 
     /*
     ============================
+    BLACKLIST ADD
+    ============================
+    */
+    if (
+        subcommand ===
+        'blacklist-add'
+    ) {
+
+        const user =
+            interaction.options.getUser(
+                'user'
+            );
+
+        const blacklist =
+            await getGuildSetting({
+
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'modapps_blacklist'
+            })
+
+            || [];
+
+        if (
+            !blacklist.includes(
+                user.id
+            )
+        ) {
+            blacklist.push(
+                user.id
+            );
+        }
+
+        await setGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            guildName:
+                interaction.guild.name,
+
+            settingName:
+                'modapps_blacklist',
+
+            settingValue:
+                blacklist
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'User added to blacklist',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    user.id,
+
+                username:
+                    user.username,
+
+                addedBy:
+                    interaction.user.username
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                `✅ ${user} added to the moderator application blacklist.`,
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    /*
+    ============================
+    BLACKLIST REMOVE
+    ============================
+    */
+    if (
+        subcommand ===
+        'blacklist-remove'
+    ) {
+        const user =
+            interaction.options.getUser(
+                'user'
+            );
+
+        const blacklist =
+            await getGuildSetting({
+
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'modapps_blacklist'
+            })
+
+            || [];
+
+        const updatedBlacklist =
+            blacklist.filter(
+
+                userId =>
+
+                    userId !==
+                    user.id
+            );
+
+        await setGuildSetting({
+
+            guildId:
+                interaction.guild.id,
+
+            guildName:
+                interaction.guild.name,
+
+            settingName:
+                'modapps_blacklist',
+
+            settingValue:
+                updatedBlacklist
+        });
+
+        logFeature({
+
+            category:
+                'MOD_APP',
+
+            message:
+                'User removed from blacklist',
+
+            details: {
+
+                guildId:
+                    interaction.guild.id,
+
+                userId:
+                    user.id,
+
+                username:
+                    user.username,
+
+                addedBy:
+                    interaction.user.username
+            }
+        });
+
+        return await interaction.reply({
+
+            content:
+                `✅ ${user} removed from the moderator application blacklist.`,
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    /*
+    ============================
+    BLACKLIST LIST
+    ============================
+    */
+    if (
+        subcommand ===
+        'blacklist-list'
+    ) {
+
+        const blacklist =
+            await getGuildSetting({
+
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'modapps_blacklist'
+            })
+
+            || [];
+
+        const description =
+            blacklist.length
+
+                ? blacklist
+
+                    .map(
+
+                        userId =>
+
+                            `<@${userId}>`
+                    )
+
+                    .join('\n')
+
+                : 'No users are currently blacklisted.';
+
+        const embed =
+            new EmbedBuilder()
+
+                .setTitle(
+                    'Moderator Application Blacklist'
+                )
+
+                .setColor(
+                    0xED4245
+                )
+
+                .setDescription(
+                    description
+                )
+
+                .setTimestamp();
+
+        return await interaction.reply({
+
+            embeds: [
+                embed
+            ],
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    /*
+    ============================
     OPEN APPLICATIONS
     ============================
     */

@@ -110,6 +110,89 @@ const commands = [
                     .setDescription(
                         'Close moderator applications.'
                     )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'blacklist-add'
+                    )
+
+                    .setDescription(
+                        'Add a user to the moderator application blacklist.'
+                    )
+
+                    .addUserOption(
+
+                        option =>
+
+                            option
+
+                                .setName(
+                                    'user'
+                                )
+
+                                .setDescription(
+                                    'User to blacklist'
+                                )
+
+                                .setRequired(
+                                    true
+                                )
+                    )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'blacklist-remove'
+                    )
+
+                    .setDescription(
+                        'Remove a user from the moderator application blacklist.'
+                    )
+
+                    .addUserOption(
+
+                        option =>
+
+                            option
+
+                                .setName(
+                                    'user'
+                                )
+
+                                .setDescription(
+                                    'User to remove'
+                                )
+
+                                .setRequired(
+                                    true
+                                )
+                    )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'blacklist-list'
+                    )
+
+                    .setDescription(
+                        'View blacklisted moderator applicants.'
+                    )
         ),
 
     /*

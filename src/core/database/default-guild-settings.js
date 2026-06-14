@@ -44,6 +44,12 @@ const DEFAULT_GUILD_SETTINGS = [
     },
 
     {
+        name: 'modapps_blacklist',
+        displayName: 'ModApps Blacklist',
+        description: 'Users prohibited from applying for moderator positions'
+    },
+
+    {
         name: 'channel_modapps_submissions',
         displayName: 'Mod App Submissions',
         description: 'Moderator application submissions channel'

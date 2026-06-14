@@ -304,6 +304,36 @@ async function handleApplicationInteraction(
         'start_mod_application'
     ) {
 
+        const blacklist =
+            await getGuildSetting({
+
+                guildId:
+                    interaction.guild.id,
+
+                settingName:
+                    'modapps_blacklist'
+            })
+
+            || [];
+
+        // Blacklist Check
+        if (
+            blacklist.includes(
+                interaction.user.id
+            )
+
+        ) {
+            return await interaction.reply({
+
+                content:
+                    'Unfortunately, you are unable to apply for a moderator position at this time.\n\nIf you have questions or concerns, please open a support ticket and a staff member will be happy to assist you.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        // Create Application Session
         createSession(
             interaction.user.id
         );
