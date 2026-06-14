@@ -117,6 +117,15 @@ Open moderator applications.
 
 /modapps close
 Close moderator applications.
+
+/modapps blacklist-add
+Add a user to be blacklisted from moderator applications.
+
+/modapps blacklist-remove
+Remove a user from the blacklist for moderator applications.
+
+/modapps blacklist-list
+List current users that are blacklisted from moderator applications.
 `
                 }
 
