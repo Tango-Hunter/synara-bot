@@ -18,7 +18,11 @@ const discordConfig = {
 
         moderatorResponse: 5,
 
-        adminResponse: 0
+        adminResponse: 0,
+
+        drawUser: 300,
+
+        drawServer: 120
     },
 
     embeds: {

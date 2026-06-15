@@ -34,6 +34,7 @@ const {
     ERROR_TYPES
 } = require('../logging/error-types');
 
+
 const MAX_RETRIES =
     openaiConfig.maxRetries;
 const REQUEST_TIMEOUT_MS =
@@ -42,6 +43,7 @@ const BASE_RETRY_DELAY_MS =
     openaiConfig.baseRetryDelayMs;
 const MAX_TOKENS =
     openaiConfig.maxTokens.mentions;
+
 
 function delay(ms) {
 
@@ -54,6 +56,12 @@ function delay(ms) {
     );
 }
 
+
+/*
+====================================
+RESPONSE GENERATION
+====================================
+*/
 async function generateResponse({
 
     systemPrompt,
@@ -224,6 +232,70 @@ async function generateResponse({
     }
 }
 
+/*
+====================================
+IMAGE GENERATION
+====================================
+*/
+async function generateImage({
+
+    prompt
+}) {
+
+    try {
+
+        const result =
+
+            await openai.images.generate({
+
+                model:
+                    openaiConfig.imageModel,
+
+                prompt,
+
+                size:
+                    '1024x1024'
+            });
+
+        const imageBase64 =
+
+            result.data?.[0]?.b64_json;
+
+        if (
+            !imageBase64
+        ) {
+
+            throw new Error(
+                'Image generation failed.'
+            );
+        }
+
+        return Buffer.from(
+
+            imageBase64,
+
+            'base64'
+        );
+
+    } catch (error) {
+
+        logError({
+
+            type:
+                ERROR_TYPES.OPENAI_ERROR,
+
+            source:
+                'openai-service',
+
+            message:
+                error.message
+        });
+
+        throw error;
+    }
+}
+
 module.exports = {
-    generateResponse
+    generateResponse,
+    generateImage
 };

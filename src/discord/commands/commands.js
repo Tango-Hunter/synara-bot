@@ -47,6 +47,9 @@ async function runCommandsCommand() {
 !bonk @user
 Bonk another user.
 
+!draw <Description>
+Generate artwork interpreted by SYNARA.
+
 !fact
 Receive an interesting fact.
 
@@ -79,7 +82,7 @@ View trivia rankings and statistics.
 
             value:
 `
-!linktwitch
+!linktwitch <Twitch Username>
 Link your Twitch account.
 
 !mytwitch

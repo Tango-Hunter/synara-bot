@@ -10,6 +10,8 @@ const openaiConfig = {
 
     model: 'gpt-5.5',
 
+    imageModel: 'gpt-image-1',
+
     timeoutMs: 15000,
 
     maxRetries: 3,

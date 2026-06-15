@@ -15,6 +15,10 @@ const {
 } = require('../commands/commands');
 
 const {
+    runDrawCommand
+} = require('../commands/draw');
+
+const {
     runFactCommand
 } = require('../commands/fact');
 
@@ -85,6 +89,11 @@ const commandRegistry = {
     '!commands': {
         title: 'COMMANDS',
         execute: runCommandsCommand
+    },
+
+    '!draw': {
+        title: 'DRAWING',
+        execute: runDrawCommand
     },
 
     '!fact': {
@@ -218,6 +227,38 @@ async function executeCommand(
                 args
             });
 
+        /*
+        ====================================
+        ATTACHMENT
+        ====================================
+        */
+        if (
+            response.attachment
+        ) {
+
+            await message.reply({
+
+                content:
+                    formatCommandResponse(
+
+                        commandConfig.title,
+
+                        response.message
+                    ),
+
+                files: [
+                    response.attachment
+                ]
+            });
+
+            return true;
+        }
+
+        /*
+        ====================================
+        EMBED
+        ====================================
+        */
         if (
             response.embed
         ) {
@@ -267,6 +308,11 @@ async function executeCommand(
 
         } else {
 
+            /*
+            ====================================
+            NORMAL RESPONSE
+            ====================================
+            */
             await message.reply(
 
                 formatCommandResponse(
