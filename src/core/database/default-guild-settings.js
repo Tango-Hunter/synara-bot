@@ -92,6 +92,18 @@ const DEFAULT_GUILD_SETTINGS = [
     },
 
     {
+        name: 'channel_birthdays',
+        displayName: 'Birthdays',
+        description: 'Birthday announcement channel'
+    },
+
+    {
+        name: 'role_birthday',
+        displayName: 'Birthday',
+        description: 'Birthday celebration role'
+    },
+
+    {
         name: 'channel_logs',
         displayName: 'Logs',
         description: 'Discord logging channel'

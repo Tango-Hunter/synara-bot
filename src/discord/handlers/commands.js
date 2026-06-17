@@ -5,7 +5,15 @@
  * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
+/**
+const {
+    runBirthdayCommand
+} = require('../commands/birthday');
 
+const {
+    runNextBirthdaysCommand
+} = require('../commands/nextbirthdays');
+*/
 const {
     runBonkCommand
 } = require('../commands/bonk');
@@ -80,7 +88,17 @@ const {
 } = require('../../core/logging/error-types');
 
 const commandRegistry = {
+/**
+    '!birthday': {
+        title: 'BIRTHDAY',
+        execute: runBirthdayCommand
+    },
 
+    '!nextbirthdays': {
+        title: 'UPCOMING BIRTHDAYS',
+        execute: runNextBirthdaysCommand
+    },
+*/
     '!bonk': {
         title: 'BONK',
         execute: runBonkCommand

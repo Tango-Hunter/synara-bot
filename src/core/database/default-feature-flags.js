@@ -51,6 +51,14 @@ const DEFAULT_FEATURE_FLAGS = [
     },
 
     {
+        name:
+            'birthdays',
+
+        description:
+            'Birthday tracking and announcements'
+    },
+
+    {
 
         name:
             'qotdScheduler',

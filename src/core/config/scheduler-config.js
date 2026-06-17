@@ -20,7 +20,10 @@ const schedulerConfig = {
             '0 20 * * *',
 
         activityAudit:
-            '5 0 * * *'
+            '5 0 * * *',
+
+        birthdays:
+            '5 0 * * *',
     }
 };
 

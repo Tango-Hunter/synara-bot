@@ -128,6 +128,32 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS birthdays (
+
+            guild_id TEXT NOT NULL,
+
+            user_id TEXT NOT NULL,
+
+            month INTEGER NOT NULL,
+
+            day INTEGER NOT NULL,
+
+            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                user_id
+            )
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -147,7 +173,9 @@ async function initializeDatabase() {
 
                 'ignored_channels',
 
-                'bonk_counts'
+                'bonk_counts',
+
+                'birthdays'
             ] 
         }
     });
