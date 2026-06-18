@@ -35,6 +35,9 @@ const {
     startActivityScheduler
 } = require('./discord/scheduler/activity-scheduler');
 const {
+    startBirthdayScheduler
+} = require('./discord/scheduler/birthday-scheduler');
+const {
     initializeDatabase
 } = require('./core/database/init-database');
 const {
@@ -112,6 +115,7 @@ client.once('clientReady', async () => {
     startDailyQuestionScheduler();
     startNightlyMessageScheduler();
     startActivityScheduler();
+    startBirthdayScheduler();
 
     // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);

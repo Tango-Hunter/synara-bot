@@ -2,9 +2,7 @@
  * Title: interaction-router.js
  * Author: Tango Hunter
  * Date Created: 5/23/26
- * Date Modified: 5/23/26
- * Description:
- * Centralized Discord interaction router.
+ * Description: Centralized Discord interaction router.
  */
 
 const {
@@ -16,6 +14,10 @@ const {
 } = require('../admin/admin-command-router');
 
 const {
+    handleBirthdayInteraction
+} = require('./birthday-handler');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -24,11 +26,28 @@ const {
     ERROR_TYPES
 } = require('../../core/logging/error-types');
 
+
 async function routeInteraction(
     interaction
 ) {
 
     try {
+
+        /*
+        ============================
+        BIRTHDAY INTERACTIONS
+        ============================
+        */
+        const handledBirthday =
+            await handleBirthdayInteraction(
+                interaction
+            );
+
+        if (
+            handledBirthday !== false
+        ) {
+            return;
+        }
 
         /*
         ============================

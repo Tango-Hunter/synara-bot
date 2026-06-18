@@ -5,7 +5,7 @@
  * Date Modified: 5/18/26
  * Description: Runs the correct prompt per command sent.
  */
-/**
+
 const {
     runBirthdayCommand
 } = require('../commands/birthday');
@@ -13,7 +13,7 @@ const {
 const {
     runNextBirthdaysCommand
 } = require('../commands/nextbirthdays');
-*/
+
 const {
     runBonkCommand
 } = require('../commands/bonk');
@@ -88,7 +88,7 @@ const {
 } = require('../../core/logging/error-types');
 
 const commandRegistry = {
-/**
+
     '!birthday': {
         title: 'BIRTHDAY',
         execute: runBirthdayCommand
@@ -98,7 +98,7 @@ const commandRegistry = {
         title: 'UPCOMING BIRTHDAYS',
         execute: runNextBirthdaysCommand
     },
-*/
+
     '!bonk': {
         title: 'BONK',
         execute: runBonkCommand
@@ -282,12 +282,19 @@ async function executeCommand(
         ) {
 
             const sentMessage =
-
                 await message.reply({
 
                     embeds: [
                         response.embed
-                    ]
+                    ],
+
+                    components:
+
+                        response.components
+
+                        ||
+
+                        []
                 });
 
             /*

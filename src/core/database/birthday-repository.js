@@ -122,8 +122,41 @@ async function getUpcomingBirthdays({
     return result.rows;
 }
 
+async function getBirthdaysForDate({
+
+    guildId,
+
+    month,
+
+    day
+}) {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT
+                user_id
+            FROM birthdays
+            WHERE guild_id = $1
+            AND month = $2
+            AND day = $3
+            `,
+
+            [
+                guildId,
+                month,
+                day
+            ]
+        );
+
+    return result.rows;
+}
+
 module.exports = {
     getBirthday,
     updateBirthday,
-    getUpcomingBirthdays
+    getUpcomingBirthdays,
+    getBirthdaysForDate
 };
