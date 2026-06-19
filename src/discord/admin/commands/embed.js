@@ -19,7 +19,6 @@ async function handleEmbedCommand(
 ) {
 
     const embed =
-
         new EmbedBuilder()
 
             .setColor(
@@ -48,7 +47,6 @@ Press **Create Embed** to continue.`
             );
 
     const row =
-
         new ActionRowBuilder()
 
             .addComponents(
