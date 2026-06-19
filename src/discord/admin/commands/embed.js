@@ -38,11 +38,11 @@ The finished embed will be posted in this channel.
 
 Fields:
 
-• Title
-• Body
-• Footer
-• Thumbnail URL (optional)
-• Image URL (optional)
+• Title (Required)
+• Body (Required)
+• Footer (Optional)
+• Thumbnail URL (Optional)
+• Image URL (Optional)
 
 Press **Create Embed** to continue.`
             );

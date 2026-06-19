@@ -23,6 +23,7 @@ const {
 
 const embedDrafts = new Map();
 
+
 /*
 ============================
 URL VALIDATION
@@ -34,11 +35,20 @@ function isValidUrl(
 
     try {
 
-        new URL(
-            value
-        );
+        const url =
 
-        return true;
+            new URL(
+                value
+            );
+
+        return (
+
+            url.protocol === 'https:'
+
+            ||
+
+            url.protocol === 'http:'
+        );
 
     } catch {
 
@@ -55,7 +65,6 @@ async function handleCustomEmbedInteraction(
     CREATE BUTTON
     ============================
     */
-
     if (
 
         interaction.isButton()
@@ -206,9 +215,7 @@ async function handleCustomEmbedInteraction(
                                 .setStyle(
                                     TextInputStyle.Short
                                 )
-                        ),
-
-                    
+                        )
                 );
 
         await interaction.showModal(
@@ -223,7 +230,6 @@ async function handleCustomEmbedInteraction(
     MODAL SUBMIT
     ============================
     */
-
     if (
 
         interaction.isModalSubmit()
@@ -271,6 +277,55 @@ async function handleCustomEmbedInteraction(
                 interaction.channel.id
         };
 
+        /*
+        ============================
+        URL VALIDATION
+        ============================
+        */
+        if (
+
+            draft.thumbnail
+
+            &&
+
+            !isValidUrl(
+                draft.thumbnail
+            )
+
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Thumbnail URL is invalid.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        if (
+
+            draft.image
+
+            &&
+
+            !isValidUrl(
+                draft.image
+            )
+
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Image URL is invalid.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
         embedDrafts.set(
 
             interaction.user.id,
@@ -301,25 +356,25 @@ async function handleCustomEmbedInteraction(
 `${draft.footer || ''}
 
 SYNARA Announcement on behalf of ${interaction.user.username}`
-                })
-                
-                if (
-                    draft.thumbnail
-                ) {
+                });
 
-                    preview.setThumbnail(
-                        draft.thumbnail
-                    );
-                }
+        if (
+            draft.thumbnail
+        ) {
 
-                if (
-                    draft.image
-                ) {
+            preview.setThumbnail(
+                draft.thumbnail
+            );
+        }
 
-                    preview.setImage(
-                        draft.image
-                    );
-                };
+        if (
+            draft.image
+        ) {
+
+            preview.setImage(
+                draft.image
+            );
+        }
 
         const row =
 
@@ -387,27 +442,6 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
                 MessageFlags.Ephemeral
         });
 
-        if (
-
-            draft.thumbnail
-
-            &&
-
-            !isValidUrl(
-                draft.thumbnail
-            )
-
-        ) {
-            return await interaction.reply({
-
-                content:
-                    'Thumbnail URL is invalid.',
-
-                flags:
-                    MessageFlags.Ephemeral
-            });
-        }
-
         return;
     }
 
@@ -416,7 +450,6 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
     PUBLISH
     ============================
     */
-
     if (
 
         interaction.isButton()
@@ -471,45 +504,24 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
 `${draft.footer || ''}
 
 SYNARA Announcement on behalf of ${interaction.user.username}`
-                })
-                
-                if (
-                    draft.thumbnail
-                ) {
+                });
 
-                    embed.setThumbnail(
-                        draft.thumbnail
-                    );
-                }
-
-                if (
-                    draft.image
-                ) {
-
-                    embed.setImage(
-                        draft.image
-                    );
-                };
         if (
-
             draft.thumbnail
-
-            &&
-
-            !isValidUrl(
-                draft.thumbnail
-            )
-
         ) {
 
-            return await interaction.reply({
+            embed.setThumbnail(
+                draft.thumbnail
+            );
+        }
 
-                content:
-                    'Thumbnail URL is invalid.',
+        if (
+            draft.image
+        ) {
 
-                flags:
-                    MessageFlags.Ephemeral
-            });
+            embed.setImage(
+                draft.image
+            );
         }
 
         await interaction.channel.send({
@@ -564,8 +576,8 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
     CANCEL
     ============================
     */
-
     if (
+
         interaction.isButton()
 
         &&
