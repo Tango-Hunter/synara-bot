@@ -23,6 +23,28 @@ const {
 
 const embedDrafts = new Map();
 
+/*
+============================
+URL VALIDATION
+============================
+*/
+function isValidUrl(
+    value
+) {
+
+    try {
+
+        new URL(
+            value
+        );
+
+        return true;
+
+    } catch {
+
+        return false;
+    }
+}
 
 async function handleCustomEmbedInteraction(
     interaction
@@ -138,7 +160,55 @@ async function handleCustomEmbedInteraction(
                                 .setStyle(
                                     TextInputStyle.Short
                                 )
-                        )
+                        ),
+
+                    new ActionRowBuilder()
+
+                        .addComponents(
+
+                            new TextInputBuilder()
+
+                                .setCustomId(
+                                    'thumbnail'
+                                )
+
+                                .setLabel(
+                                    'Thumbnail URL'
+                                )
+
+                                .setRequired(
+                                    false
+                                )
+
+                                .setStyle(
+                                    TextInputStyle.Short
+                                )
+                        ),
+
+                    new ActionRowBuilder()
+
+                        .addComponents(
+
+                            new TextInputBuilder()
+
+                                .setCustomId(
+                                    'image'
+                                )
+
+                                .setLabel(
+                                    'Image URL'
+                                )
+
+                                .setRequired(
+                                    false
+                                )
+
+                                .setStyle(
+                                    TextInputStyle.Short
+                                )
+                        ),
+
+                    
                 );
 
         await interaction.showModal(
@@ -185,6 +255,18 @@ async function handleCustomEmbedInteraction(
                     'footer'
                 ),
 
+            thumbnail:
+
+                interaction.fields.getTextInputValue(
+                    'thumbnail'
+                ),
+
+            image:
+
+                interaction.fields.getTextInputValue(
+                    'image'
+                ),
+
             channelId:
                 interaction.channel.id
         };
@@ -219,7 +301,25 @@ async function handleCustomEmbedInteraction(
 `${draft.footer || ''}
 
 SYNARA Announcement on behalf of ${interaction.user.username}`
-                });
+                })
+                
+                if (
+                    draft.thumbnail
+                ) {
+
+                    preview.setThumbnail(
+                        draft.thumbnail
+                    );
+                }
+
+                if (
+                    draft.image
+                ) {
+
+                    preview.setImage(
+                        draft.image
+                    );
+                };
 
         const row =
 
@@ -287,6 +387,27 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
                 MessageFlags.Ephemeral
         });
 
+        if (
+
+            draft.thumbnail
+
+            &&
+
+            !isValidUrl(
+                draft.thumbnail
+            )
+
+        ) {
+            return await interaction.reply({
+
+                content:
+                    'Thumbnail URL is invalid.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
         return;
     }
 
@@ -350,7 +471,46 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
 `${draft.footer || ''}
 
 SYNARA Announcement on behalf of ${interaction.user.username}`
-                });
+                })
+                
+                if (
+                    draft.thumbnail
+                ) {
+
+                    embed.setThumbnail(
+                        draft.thumbnail
+                    );
+                }
+
+                if (
+                    draft.image
+                ) {
+
+                    embed.setImage(
+                        draft.image
+                    );
+                };
+        if (
+
+            draft.thumbnail
+
+            &&
+
+            !isValidUrl(
+                draft.thumbnail
+            )
+
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Thumbnail URL is invalid.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
 
         await interaction.channel.send({
 
