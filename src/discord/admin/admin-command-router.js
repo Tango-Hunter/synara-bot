@@ -37,6 +37,10 @@ const {
 } = require('./commands/settings');
 
 const {
+    handleEmbedCommand
+} = require('./commands/embed');
+
+const {
     handleSetChannelCommand
 } = require('./commands/setchannel');
 
@@ -205,6 +209,23 @@ async function routeAdminCommand(
         'settings'
     ) {
         return await handleSettingsCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    CUSTOM EMBED
+    ============================
+    */
+    if (
+
+        interaction.commandName ===
+        'embed'
+
+    ) {
+
+        return await handleEmbedCommand(
             interaction
         );
     }

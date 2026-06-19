@@ -18,6 +18,10 @@ const {
 } = require('./birthday-handler');
 
 const {
+    handleCustomEmbedInteraction
+} = require('./custom-embed-handler');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -46,6 +50,23 @@ async function routeInteraction(
         if (
             handledBirthday !== false
         ) {
+            return;
+        }
+
+        /*
+        ============================
+        CUSTOM EMBED INTERACTIONS
+        ============================
+        */
+        const handledCustomEmbed =
+            await handleCustomEmbedInteraction(
+                interaction
+            );
+
+        if (
+            handledCustomEmbed !== false
+        ) {
+
             return;
         }
 

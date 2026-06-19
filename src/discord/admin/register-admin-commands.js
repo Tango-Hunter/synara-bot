@@ -197,6 +197,21 @@ const commands = [
 
     /*
     ============================
+    CUSTOM EMBED
+    ============================
+    */
+    new SlashCommandBuilder()
+
+    .setName(
+        'embed'
+    )
+
+    .setDescription(
+        'Create a custom SYNARA embed.'
+    ),
+
+    /*
+    ============================
     COMMAND LIST
     ============================
     */
