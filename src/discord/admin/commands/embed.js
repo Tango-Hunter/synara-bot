@@ -41,6 +41,8 @@ Fields:
 • Title
 • Body
 • Footer
+• Thumbnail URL (optional)
+• Image URL (optional)
 
 Press **Create Embed** to continue.`
             );
