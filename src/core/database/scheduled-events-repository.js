@@ -321,6 +321,120 @@ async function getDueEvents() {
     return result.rows;
 }
 
+/*
+====================================
+MARK 24H REMINDER SENT
+====================================
+*/
+async function mark24HourReminderSent(
+    eventId
+) {
+
+    await pool.query(
+
+        `
+        UPDATE scheduled_events
+
+        SET reminder_24h_sent = true
+
+        WHERE event_id = $1
+        `,
+        [
+            eventId
+        ]
+    );
+}
+
+/*
+====================================
+MARK 1H REMINDER SENT
+====================================
+*/
+async function mark1HourReminderSent(
+    eventId
+) {
+
+    await pool.query(
+
+        `
+        UPDATE scheduled_events
+
+        SET reminder_1h_sent = true
+
+        WHERE event_id = $1
+        `,
+        [
+            eventId
+        ]
+    );
+}
+
+/*
+====================================
+24 HOUR REMINDERS
+====================================
+*/
+async function getEventsNeeding24HourReminder() {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT *
+
+            FROM scheduled_events
+
+            WHERE
+
+                approved = true
+
+                AND active = true
+
+                AND reminder_24h_sent = false
+
+                AND next_run <= NOW() + INTERVAL '24 hours'
+
+                AND next_run > NOW()
+            `
+        );
+
+    return result.rows;
+}
+
+/*
+====================================
+1 HOUR REMINDERS
+====================================
+*/
+async function getEventsNeeding1HourReminder() {
+
+    const result =
+
+        await pool.query(
+
+            `
+            SELECT *
+
+            FROM scheduled_events
+
+            WHERE
+
+                approved = true
+
+                AND active = true
+
+                AND reminder_1h_sent = false
+
+                AND next_run <= NOW() + INTERVAL '1 hour'
+
+                AND next_run > NOW()
+            `
+        );
+
+    return result.rows;
+}
+
 module.exports = {
     createScheduledEvent,
     getScheduledEvent,
@@ -330,5 +444,9 @@ module.exports = {
     resumeScheduledEvent,
     deleteScheduledEvent,
     updateNextRun,
-    getDueEvents
+    getDueEvents,
+    mark24HourReminderSent,
+    mark1HourReminderSent,
+    getEventsNeeding24HourReminder,
+    getEventsNeeding1HourReminder
 };

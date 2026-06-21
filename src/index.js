@@ -25,6 +25,7 @@ const createTwitchRoutes =
 const {
     discordMessageHandler
 } = require('./discord/handlers/message-handler');
+
 const {
     startDailyQuestionScheduler
 } = require('./discord/scheduler/qotd-scheduler');
@@ -38,6 +39,12 @@ const {
     startBirthdayScheduler
 } = require('./discord/scheduler/birthday-scheduler');
 const {
+    startAutomationScheduler
+} = require(
+    './discord/scheduler/automation-scheduler'
+);
+
+const {
     initializeDatabase
 } = require('./core/database/init-database');
 const {
@@ -46,14 +53,17 @@ const {
 const {
     initializeActivityTable
 } = require('./core/database/init-activity-table');
+
 const {
     routeInteraction
 } = require('./discord/interactions/interaction-router');
+
 const {
     handleNewMember,
     handleOnboardingInteraction,
     finalizeOnboarding
 } = require('./discord/onboarding/onboarding-handler');
+
 const {
     getGuildSetting
 } = require('./core/database/guild-settings-repository');
@@ -65,6 +75,7 @@ const {
     initializeAllGuildSettings,
     initializeGuildSettings
 } = require('./core/database/guild-settings-repository');
+
 const {
     logFeature,
     logError
@@ -116,6 +127,7 @@ client.once('clientReady', async () => {
     startNightlyMessageScheduler();
     startActivityScheduler();
     startBirthdayScheduler();
+    startAutomationScheduler(client);
 
     // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);
