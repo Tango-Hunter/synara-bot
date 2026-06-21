@@ -22,6 +22,19 @@ const {
 } = require('../utils/event-id');
 
 const {
+    getScheduledEvent,
+    setScheduledEventActive,
+    deleteScheduledEvent,
+    skipScheduledEvent
+} = require(
+    '../../core/database/scheduled-events-repository'
+);
+
+const {
+    calculateNextRun
+} = require('../utils/event-recurrence');
+
+const {
     getGuildSetting
 } = require('../../core/database/guild-settings-repository');
 
@@ -842,6 +855,242 @@ async function handleEventInteraction(
         );
 
         return;
+    }
+
+    /*
+    ============================
+    MANAGE EVENT SELECT
+    ============================
+    */
+    if (
+
+        interaction.isStringSelectMenu()
+
+        &&
+
+        interaction.customId ===
+        'event_manage_select'
+
+    ) {
+
+        const eventId =
+            interaction.values[0];
+
+        const menu =
+            new StringSelectMenuBuilder()
+
+                .setCustomId(
+                    `event_action_${eventId}`
+                )
+
+                .setPlaceholder(
+                    'Select Action'
+                )
+
+                .addOptions(
+
+                    {
+
+                        label:
+                            'Pause',
+
+                        value:
+                            'pause'
+                    },
+
+                    {
+
+                        label:
+                            'Resume',
+
+                        value:
+                            'resume'
+                    },
+
+                    {
+
+                        label:
+                            'Skip',
+
+                        value:
+                            'skip'
+                    },
+
+                    {
+
+                        label:
+                            'Delete',
+
+                        value:
+                            'delete'
+                    },
+
+                    {
+
+                        label:
+                            'Edit',
+
+                        value:
+                            'edit'
+                    }
+                );
+
+        return await interaction.update({
+
+            content:
+                'Select an action.',
+
+            components: [
+
+                new ActionRowBuilder()
+
+                    .addComponents(
+                        menu
+                    )
+            ]
+        });
+    }
+
+    /*
+    ============================
+    EVENT ACTION
+    ============================
+    */
+    if (
+
+        interaction.isStringSelectMenu()
+
+        &&
+
+        interaction.customId.startsWith(
+            'event_action_'
+        )
+
+    ) {
+
+        const eventId =
+
+            interaction.customId.replace(
+                'event_action_',
+                ''
+            );
+
+        const action =
+            interaction.values[0];
+
+        const event =
+
+            await getScheduledEvent(
+                eventId
+            );
+
+        if (
+            !event
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Event not found.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        switch (
+            action
+        ) {
+
+            case 'pause':
+
+                await setScheduledEventActive({
+
+                    eventId,
+
+                    active:
+                        false
+                });
+
+                return await interaction.update({
+
+                    content:
+                        'Event paused.',
+
+                    components: []
+                });
+
+            case 'resume':
+
+                await setScheduledEventActive({
+
+                    eventId,
+
+                    active:
+                        true
+                });
+
+                return await interaction.update({
+
+                    content:
+                        'Event resumed.',
+
+                    components: []
+                });
+
+            case 'skip':
+
+                const nextRun =
+                    calculateNextRun({
+
+                        currentDate:
+                            event.next_run,
+
+                        recurrence:
+                            event.recurrence
+                    });
+
+                await skipScheduledEvent({
+
+                    eventId,
+
+                    nextRun
+                });
+
+                return await interaction.update({
+
+                    content:
+                        'Event skipped.',
+
+                    components: []
+                });
+
+            case 'delete':
+
+                await deleteScheduledEvent(
+                    eventId
+                );
+
+                return await interaction.update({
+
+                    content:
+                        'Event deleted.',
+
+                    components: []
+                });
+
+            case 'edit':
+
+                return await interaction.reply({
+
+                    content:
+
+                        'Edit workflow will be added next.',
+
+                    flags:
+                        MessageFlags.Ephemeral
+                });
+        }
     }
 
     return false;

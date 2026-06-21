@@ -260,7 +260,11 @@ Begins in approximately 1 hour.`
             'AUTOMATION',
 
         message:
-            'Automation scheduler started'
+            'Automation scheduler started',
+
+        details: 
+            'Details'
+        
     });
 }
 

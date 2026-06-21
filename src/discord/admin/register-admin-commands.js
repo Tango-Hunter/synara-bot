@@ -212,7 +212,7 @@ const commands = [
 
     /*
     ============================
-    CUSTOM EMBED
+    CUSTOM EVENT
     ============================
     */
     new SlashCommandBuilder()
@@ -261,6 +261,15 @@ const commands = [
 
                             value:
                                 'scheduled'
+                        },
+
+                        {
+
+                            name:
+                                'Manage Scheduled Event',
+
+                            value:
+                                'manage'
                         }
                     )
         ),

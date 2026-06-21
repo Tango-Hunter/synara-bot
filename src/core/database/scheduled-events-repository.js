@@ -435,6 +435,128 @@ async function getEventsNeeding1HourReminder() {
     return result.rows;
 }
 
+/*
+====================================
+SET ACTIVE STATUS
+====================================
+*/
+async function setScheduledEventActive({
+
+    eventId,
+
+    active
+}) {
+
+    await pool.query(
+
+        `
+        UPDATE scheduled_events
+
+        SET active = $2
+
+        WHERE event_id = $1
+        `,
+        [
+
+            eventId,
+
+            active
+        ]
+    );
+}
+
+/*
+====================================
+SKIP EVENT
+====================================
+*/
+async function skipScheduledEvent({
+
+    eventId,
+
+    nextRun
+}) {
+
+    await pool.query(
+
+        `
+        UPDATE scheduled_events
+
+        SET
+
+            next_run = $2,
+
+            reminder_24h_sent = false,
+
+            reminder_1h_sent = false
+
+        WHERE event_id = $1
+        `,
+        [
+
+            eventId,
+
+            nextRun
+        ]
+    );
+}
+
+/*
+====================================
+UPDATE EVENT
+====================================
+*/
+async function updateScheduledEvent({
+
+    eventId,
+
+    title,
+
+    description,
+
+    channelId,
+
+    nextRun,
+
+    recurrence
+}) {
+
+    await pool.query(
+
+        `
+        UPDATE scheduled_events
+
+        SET
+
+            title = $2,
+
+            description = $3,
+
+            channel_id = $4,
+
+            next_run = $5,
+
+            recurrence = $6
+
+        WHERE event_id = $1
+        `,
+        [
+
+            eventId,
+
+            title,
+
+            description,
+
+            channelId,
+
+            nextRun,
+
+            recurrence
+        ]
+    );
+}
+
 module.exports = {
     createScheduledEvent,
     getScheduledEvent,
@@ -448,5 +570,8 @@ module.exports = {
     mark24HourReminderSent,
     mark1HourReminderSent,
     getEventsNeeding24HourReminder,
-    getEventsNeeding1HourReminder
+    getEventsNeeding1HourReminder,
+    setScheduledEventActive,
+    skipScheduledEvent,
+    updateScheduledEvent
 };
