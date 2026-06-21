@@ -104,6 +104,18 @@ const DEFAULT_GUILD_SETTINGS = [
     },
 
     {
+        name: 'channel_announcements',
+        displayName: 'Announcements',
+        description: 'Server announcement channel'
+    },
+
+    {
+        name: 'channel_automation',
+        displayName: 'Automation',
+        description: 'Automation approval and scheduler channel'
+    },
+
+    {
         name: 'channel_logs',
         displayName: 'Logs',
         description: 'Discord logging channel'

@@ -154,6 +154,39 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS scheduled_events (
+
+            event_id TEXT PRIMARY KEY,
+
+            guild_id TEXT NOT NULL,
+
+            title TEXT NOT NULL,
+
+            description TEXT,
+
+            channel_id TEXT NOT NULL,
+
+            next_run TIMESTAMP NOT NULL,
+
+            recurrence TEXT NOT NULL,
+
+            author_id TEXT NOT NULL,
+
+            approved BOOLEAN DEFAULT FALSE,
+
+            active BOOLEAN DEFAULT TRUE,
+
+            reminder_24h_sent BOOLEAN DEFAULT FALSE,
+
+            reminder_1h_sent BOOLEAN DEFAULT FALSE,
+
+            created_at TIMESTAMP NOT NULL
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -175,7 +208,9 @@ async function initializeDatabase() {
 
                 'bonk_counts',
 
-                'birthdays'
+                'birthdays',
+
+                'scheduled_events'
             ] 
         }
     });
