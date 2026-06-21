@@ -22,6 +22,10 @@ const {
 } = require('./custom-embed-handler');
 
 const {
+    handleEventInteraction
+} = require('./event-handler');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -65,6 +69,23 @@ async function routeInteraction(
 
         if (
             handledCustomEmbed !== false
+        ) {
+
+            return;
+        }
+
+        /*
+        ============================
+        EVENT INTERACTIONS
+        ============================
+        */
+        const handledEvent =
+            await handleEventInteraction(
+                interaction
+            );
+
+        if (
+            handledEvent !== false
         ) {
 
             return;
