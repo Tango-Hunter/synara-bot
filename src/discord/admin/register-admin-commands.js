@@ -202,13 +202,68 @@ const commands = [
     */
     new SlashCommandBuilder()
 
-    .setName(
-        'embed'
-    )
+        .setName(
+            'embed'
+        )
 
-    .setDescription(
-        'Create a custom SYNARA embed.'
-    ),
+        .setDescription(
+            'Create a custom SYNARA embed.'
+        ),
+
+    /*
+    ============================
+    CUSTOM EMBED
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'event'
+        )
+
+        .setDescription(
+            'Create and manage events.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'type'
+                    )
+
+                    .setDescription(
+                        'Event type'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+
+                        {
+
+                            name:
+                                'Discord Event',
+
+                            value:
+                                'discord'
+                        },
+
+                        {
+
+                            name:
+                                'Scheduled Event',
+
+                            value:
+                                'scheduled'
+                        }
+                    )
+        ),
 
     /*
     ============================
