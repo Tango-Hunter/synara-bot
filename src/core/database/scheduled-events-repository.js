@@ -66,7 +66,7 @@ async function createScheduledEvent(
 
             $8,
 
-            false,
+            true,
 
             true,
 

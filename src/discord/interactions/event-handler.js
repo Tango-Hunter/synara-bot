@@ -50,19 +50,31 @@ const eventDrafts = new Map();
 OPEN MODAL
 ====================================
 */
-async function showScheduledEventModal(
-    interaction
-) {
+async function showScheduledEventModal({
+
+    interaction,
+
+    customId =
+        'scheduled_event_modal',
+
+    titleValue = '',
+
+    descriptionValue = '',
+
+    dateValue = '',
+
+    timeValue = ''
+}) {
 
     const modal =
         new ModalBuilder()
 
             .setCustomId(
-                'scheduled_event_modal'
+                customId
             )
 
             .setTitle(
-                'Create Scheduled Event'
+                'Scheduled Event'
             )
 
             .addComponents(
@@ -83,6 +95,10 @@ async function showScheduledEventModal(
 
                             .setRequired(
                                 true
+                            )
+
+                            .setValue(
+                                titleValue
                             )
 
                             .setStyle(
@@ -108,6 +124,10 @@ async function showScheduledEventModal(
                                 true
                             )
 
+                            .setValue(
+                                descriptionValue
+                            )
+
                             .setStyle(
                                 TextInputStyle.Paragraph
                             )
@@ -131,6 +151,10 @@ async function showScheduledEventModal(
                                 true
                             )
 
+                            .setValue(
+                                dateValue
+                            )
+
                             .setStyle(
                                 TextInputStyle.Short
                             )
@@ -152,6 +176,10 @@ async function showScheduledEventModal(
 
                             .setRequired(
                                 true
+                            )
+
+                            .setValue(
+                                timeValue
                             )
 
                             .setStyle(
@@ -186,9 +214,9 @@ async function handleEventInteraction(
 
     ) {
 
-        await showScheduledEventModal(
+        await showScheduledEventModal({
             interaction
-        );
+        });
 
         return;
     }
@@ -850,9 +878,9 @@ async function handleEventInteraction(
             draft.authorId
         );
 
-        await showScheduledEventModal(
+        await showScheduledEventModal({
             interaction
-        );
+        });
 
         return;
     }
@@ -1002,6 +1030,7 @@ async function handleEventInteraction(
             action
         ) {
 
+            // PAUSE
             case 'pause':
 
                 await setScheduledEventActive({
@@ -1020,6 +1049,7 @@ async function handleEventInteraction(
                     components: []
                 });
 
+            // RESUME
             case 'resume':
 
                 await setScheduledEventActive({
@@ -1038,7 +1068,60 @@ async function handleEventInteraction(
                     components: []
                 });
 
+            // SKIP
             case 'skip':
+
+                if (
+                    event.recurrence === 'NONE'
+                ) {
+
+                    const row =
+                        new ActionRowBuilder()
+
+                            .addComponents(
+
+                                new ButtonBuilder()
+
+                                    .setCustomId(
+                                        `event_delete_confirm_${eventId}`
+                                    )
+
+                                    .setLabel(
+                                        'Delete Event'
+                                    )
+
+                                    .setStyle(
+                                        ButtonStyle.Danger
+                                    ),
+
+                                new ButtonBuilder()
+
+                                    .setCustomId(
+                                        `event_delete_cancel_${eventId}`
+                                    )
+
+                                    .setLabel(
+                                        'Cancel'
+                                    )
+
+                                    .setStyle(
+                                        ButtonStyle.Secondary
+                                    )
+                            );
+
+                    return await interaction.update({
+
+                        content:
+
+            `This is a one-time event and cannot be skipped.
+
+            Would you like to delete it instead?`,
+
+                        components: [
+                            row
+                        ]
+                    });
+                }
 
                 const nextRun =
                     calculateNextRun({
@@ -1065,6 +1148,7 @@ async function handleEventInteraction(
                     components: []
                 });
 
+            // DELETE
             case 'delete':
 
                 await deleteScheduledEvent(
@@ -1079,18 +1163,115 @@ async function handleEventInteraction(
                     components: []
                 });
 
+            // EDIT
             case 'edit':
 
-                return await interaction.reply({
+                const date =
+                    new Date(
+                        event.next_run
+                    );
 
-                    content:
+                const dateValue =
+                    `${String(
+                        date.getMonth() + 1
+                    ).padStart(2, '0')}/${
+                        String(
+                            date.getDate()
+                        ).padStart(2, '0')
+                    }/${
+                        date.getFullYear()
+                    }`;
 
-                        'Edit workflow will be added next.',
+                const timeValue =
+                    `${String(
+                        date.getHours()
+                    ).padStart(2, '0')}:${
+                        String(
+                            date.getMinutes()
+                        ).padStart(2, '0')
+                    }`;
 
-                    flags:
-                        MessageFlags.Ephemeral
+                return await showScheduledEventModal({
+
+                    interaction,
+
+                    customId:
+                        `scheduled_event_edit_${eventId}`,
+
+                    titleValue:
+                        event.title,
+
+                    descriptionValue:
+                        event.description,
+
+                    dateValue,
+
+                    timeValue
                 });
         }
+    }
+
+    /*
+    ============================
+    DELETE CONFIRM
+    ============================
+    */
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId.startsWith(
+            'event_delete_confirm_'
+        )
+
+    ) {
+
+        const eventId =
+
+            interaction.customId.replace(
+                'event_delete_confirm_',
+                ''
+            );
+
+        await deleteScheduledEvent(
+            eventId
+        );
+
+        return await interaction.update({
+
+            content:
+                'Event deleted.',
+
+            components: []
+        });
+    }
+
+    /*
+    ============================
+    DELETE CANCEL
+    ============================
+    */
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId.startsWith(
+            'event_delete_cancel_'
+        )
+
+    ) {
+
+        return await interaction.update({
+
+            content:
+                'Deletion cancelled.',
+
+            components: []
+        });
     }
 
     return false;
