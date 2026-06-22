@@ -166,78 +166,6 @@ async function getUserScheduledEvents({
 
 /*
 ====================================
-APPROVE EVENT
-====================================
-*/
-async function approveScheduledEvent(
-    eventId
-) {
-
-    await pool.query(
-
-        `
-        UPDATE scheduled_events
-
-        SET approved = true
-
-        WHERE event_id = $1
-        `,
-        [
-            eventId
-        ]
-    );
-}
-
-/*
-====================================
-PAUSE EVENT
-====================================
-*/
-async function pauseScheduledEvent(
-    eventId
-) {
-
-    await pool.query(
-
-        `
-        UPDATE scheduled_events
-
-        SET active = false
-
-        WHERE event_id = $1
-        `,
-        [
-            eventId
-        ]
-    );
-}
-
-/*
-====================================
-RESUME EVENT
-====================================
-*/
-async function resumeScheduledEvent(
-    eventId
-) {
-
-    await pool.query(
-
-        `
-        UPDATE scheduled_events
-
-        SET active = true
-
-        WHERE event_id = $1
-        `,
-        [
-            eventId
-        ]
-    );
-}
-
-/*
-====================================
 DELETE EVENT
 ====================================
 */
@@ -561,9 +489,6 @@ module.exports = {
     createScheduledEvent,
     getScheduledEvent,
     getUserScheduledEvents,
-    approveScheduledEvent,
-    pauseScheduledEvent,
-    resumeScheduledEvent,
     deleteScheduledEvent,
     updateNextRun,
     getDueEvents,

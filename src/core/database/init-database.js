@@ -187,6 +187,27 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS discord_event_announcements (
+
+            event_id TEXT PRIMARY KEY,
+
+            guild_id TEXT NOT NULL,
+
+            title TEXT NOT NULL,
+
+            description TEXT,
+
+            location TEXT,
+
+            start_time TIMESTAMP NOT NULL,
+
+            created_at TIMESTAMP NOT NULL DEFAULT NOW()
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -210,7 +231,9 @@ async function initializeDatabase() {
 
                 'birthdays',
 
-                'scheduled_events'
+                'scheduled_events',
+
+                'discord_event_announcements'
             ] 
         }
     });
