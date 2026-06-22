@@ -25,7 +25,8 @@ const {
     getScheduledEvent,
     setScheduledEventActive,
     deleteScheduledEvent,
-    skipScheduledEvent
+    skipScheduledEvent,
+    updateScheduledEvent
 } = require(
     '../../core/database/scheduled-events-repository'
 );
@@ -361,6 +362,158 @@ async function handleEventInteraction(
 
     /*
     ============================
+    EDIT MODAL SUBMIT
+    ============================
+    */
+    if (
+
+        interaction.isModalSubmit()
+
+        &&
+
+        interaction.customId.startsWith(
+            'scheduled_event_edit_'
+        )
+
+    ) {
+
+        const eventId =
+
+            interaction.customId.replace(
+                'scheduled_event_edit_',
+                ''
+            );
+
+        const existingEvent =
+
+            await getScheduledEvent(
+                eventId
+            );
+
+        if (
+            !existingEvent
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Event not found.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        eventDrafts.set(
+
+            interaction.user.id,
+
+            {
+
+                editing: true,
+
+                eventId,
+
+                title:
+
+                    interaction.fields.getTextInputValue(
+                        'title'
+                    ),
+
+                description:
+
+                    interaction.fields.getTextInputValue(
+                        'description'
+                    ),
+
+                date:
+
+                    interaction.fields.getTextInputValue(
+                        'date'
+                    ),
+
+                time:
+
+                    interaction.fields.getTextInputValue(
+                        'time'
+                    ),
+
+                recurrence:
+                    existingEvent.recurrence,
+
+                channelId:
+                    existingEvent.channel_id
+            }
+        );
+
+        const recurrenceMenu =
+            new StringSelectMenuBuilder()
+
+                .setCustomId(
+                    'scheduled_event_edit_recurrence'
+                )
+
+                .setPlaceholder(
+                    'Select Recurrence'
+                )
+
+                .addOptions(
+
+                    {
+                        label: 'One Time',
+                        value: 'NONE'
+                    },
+
+                    {
+                        label: 'Daily',
+                        value: 'DAILY'
+                    },
+
+                    {
+                        label: 'Weekly',
+                        value: 'WEEKLY'
+                    },
+
+                    {
+                        label: 'Biweekly',
+                        value: 'BIWEEKLY'
+                    },
+
+                    {
+                        label: 'Monthly',
+                        value: 'MONTHLY'
+                    },
+
+                    {
+                        label: 'Yearly',
+                        value: 'YEARLY'
+                    }
+                );
+
+        return await interaction.reply({
+
+            content:
+
+`Current Recurrence: ${existingEvent.recurrence}
+
+Select the new recurrence.`,
+
+            components: [
+
+                new ActionRowBuilder()
+
+                    .addComponents(
+                        recurrenceMenu
+                    )
+            ],
+
+            flags:
+                MessageFlags.Ephemeral
+        });
+    }
+
+    /*
+    ============================
     RECURRENCE SELECT
     ============================
     */
@@ -447,6 +600,107 @@ async function handleEventInteraction(
 
             content:
                 'Select a channel.',
+
+            components: [
+
+                new ActionRowBuilder()
+
+                    .addComponents(
+                        channelMenu
+                    )
+            ]
+        });
+    }
+
+    /*
+    ============================
+    EDIT RECURRENCE
+    ============================
+    */
+    if (
+
+        interaction.isStringSelectMenu()
+
+        &&
+
+        interaction.customId ===
+        'scheduled_event_edit_recurrence'
+
+    ) {
+
+        const draft =
+
+            eventDrafts.get(
+                interaction.user.id
+            );
+
+        if (
+            !draft
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Edit draft not found.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        draft.recurrence =
+            interaction.values[0];
+
+        const channels =
+
+            interaction.guild.channels.cache
+
+                .filter(
+
+                    channel =>
+
+                        channel.isTextBased()
+
+                        &&
+
+                        !channel.isThread()
+                )
+
+                .first(25);
+
+        const channelMenu =
+            new StringSelectMenuBuilder()
+
+                .setCustomId(
+                    'scheduled_event_edit_channel'
+                )
+
+                .setPlaceholder(
+                    'Select Channel'
+                )
+
+                .addOptions(
+
+                    channels.map(
+
+                        channel => ({
+
+                            label:
+                                channel.name,
+
+                            value:
+                                channel.id
+                        })
+                    )
+                );
+
+        return await interaction.update({
+
+            content:
+
+`Current Channel: <#${draft.channelId}>
+
+Select the new channel.`,
 
             components: [
 
@@ -662,6 +916,82 @@ async function handleEventInteraction(
 
             content:
                 'Scheduled event submitted for approval.',
+
+            components: []
+        });
+    }
+
+    /*
+    ============================
+    EDIT CHANNEL
+    ============================
+    */
+    if (
+
+        interaction.isStringSelectMenu()
+
+        &&
+
+        interaction.customId ===
+        'scheduled_event_edit_channel'
+
+    ) {
+
+        const draft =
+
+            eventDrafts.get(
+                interaction.user.id
+            );
+
+        if (
+            !draft
+        ) {
+
+            return await interaction.reply({
+
+                content:
+                    'Edit draft not found.',
+
+                flags:
+                    MessageFlags.Ephemeral
+            });
+        }
+
+        draft.channelId =
+            interaction.values[0];
+
+        await updateScheduledEvent({
+
+            eventId:
+                draft.eventId,
+
+            title:
+                draft.title,
+
+            description:
+                draft.description,
+
+            channelId:
+                draft.channelId,
+
+            nextRun:
+
+                new Date(
+                    `${draft.date} ${draft.time}`
+                ),
+
+            recurrence:
+                draft.recurrence
+        });
+
+        eventDrafts.delete(
+            interaction.user.id
+        );
+
+        return await interaction.update({
+
+            content:
+                'Scheduled event updated.',
 
             components: []
         });

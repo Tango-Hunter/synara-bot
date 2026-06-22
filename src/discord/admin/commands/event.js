@@ -29,27 +29,6 @@ async function handleEventCommand(
 
     /*
     ============================
-    DISCORD EVENT
-    ============================
-    */
-
-    if (
-        type ===
-        'discord'
-    ) {
-        return await interaction.reply({
-
-            content:
-
-                'Discord Event creation is not implemented yet.',
-
-            flags:
-                MessageFlags.Ephemeral
-        });
-    }
-
-    /*
-    ============================
     MANAGE EVENT
     ============================
     */

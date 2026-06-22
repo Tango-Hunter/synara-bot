@@ -248,15 +248,6 @@ const commands = [
                         {
 
                             name:
-                                'Discord Event',
-
-                            value:
-                                'discord'
-                        },
-
-                        {
-
-                            name:
                                 'Scheduled Event',
 
                             value:
