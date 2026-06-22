@@ -25,6 +25,9 @@ const createTwitchRoutes =
 const {
     discordMessageHandler
 } = require('./discord/handlers/message-handler');
+const {
+    registerDiscordEventListeners
+} = require('./discord/interactions/discord-event-listener');
 
 const {
     startDailyQuestionScheduler
@@ -128,6 +131,7 @@ client.once('clientReady', async () => {
     startActivityScheduler();
     startBirthdayScheduler();
     startAutomationScheduler(client);
+    registerDiscordEventListeners(client);
 
     // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);

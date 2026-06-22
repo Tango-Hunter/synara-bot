@@ -13,6 +13,10 @@ const {
 } = require('discord.js');
 
 const {
+    embedThemes
+} = require('../../core/config/embed-themes');
+
+const {
     getDueEvents,
     updateNextRun,
     deleteScheduledEvent,
@@ -20,9 +24,16 @@ const {
     mark1HourReminderSent,
     getEventsNeeding24HourReminder,
     getEventsNeeding1HourReminder
-} = require(
-    '../../core/database/scheduled-events-repository'
-);
+} = require('../../core/database/scheduled-events-repository');
+
+const {
+    getDueDiscordEvents,
+    deleteDiscordEventAnnouncement
+} = require('../../core/database/discord-event-announcements-repository');
+
+const {
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
 
 const {
     calculateNextRun
@@ -78,12 +89,17 @@ function startAutomationScheduler(
                                 new EmbedBuilder()
 
                                     .setColor(
-                                        0x8B5CF6
+                                        embedThemes.eventStartingSoon.color
                                     )
 
-                                    .setTitle(
-                                        'Upcoming Event'
+                                    .setTitle(`${embedThemes.eventStartingSoon.icon} Upcoming Event`
                                     )
+
+                                    .setFooter({
+
+                                        text:
+                                            embedThemes.eventStartingSoon.footer
+                                    })
 
                                     .setDescription(
 
@@ -133,12 +149,17 @@ Begins in approximately 24 hours.`
                                 new EmbedBuilder()
 
                                     .setColor(
-                                        0x8B5CF6
+                                        embedThemes.eventStartingSoon.color
                                     )
 
-                                    .setTitle(
-                                        'Event Starting Soon'
+                                    .setTitle(`${embedThemes.eventStartingSoon.icon} Event Starting Soon`
                                     )
+
+                                    .setFooter({
+
+                                        text:
+                                            embedThemes.eventStartingSoon.footer
+                                    })
 
                                     .setDescription(
 
@@ -188,12 +209,17 @@ Begins in approximately 1 hour.`
                                 new EmbedBuilder()
 
                                     .setColor(
-                                        0x8B5CF6
+                                        embedThemes.scheduledEvent.color
                                     )
 
-                                    .setTitle(
-                                        event.title
+                                    .setTitle(`${embedThemes.scheduledEvent.icon} ${event.title}`
                                     )
+
+                                    .setFooter({
+
+                                        text:
+                                            embedThemes.scheduledEvent.footer
+                                    })
 
                                     .setDescription(
                                         event.description
@@ -230,6 +256,109 @@ Begins in approximately 1 hour.`
                         );
                     }
                 }
+
+                /*
+                ============================
+                DISCORD EVENTS
+                ============================
+                */
+
+                const discordEvents =
+
+                    await getDueDiscordEvents();
+
+                for (
+
+                    const event
+
+                    of
+
+                    discordEvents
+                ) {
+
+                    const announcementChannelId =
+
+                        await getGuildSetting({
+
+                            guildId:
+                                event.guild_id,
+
+                            settingName:
+                                'channel_announcements'
+                        });
+
+                    const verifiedRoleId =
+
+                        await getGuildSetting({
+
+                            guildId:
+                                event.guild_id,
+
+                            settingName:
+                                'role_verified'
+                        });
+
+                    const channel =
+
+                        await client.channels.fetch(
+                            announcementChannelId
+                        );
+
+                    if (
+                        channel
+                    ) {
+
+                        await channel.send({
+
+                            content:
+                                `<@&${verifiedRoleId}>`,
+
+                            embeds: [
+
+                                new EmbedBuilder()
+
+                                    .setColor(
+                                        embedThemes.eventStartingNow.color
+                                    )
+
+                                    .setTitle(`${embedThemes.eventStartingNow.icon} ${event.title} Starting Now`
+                                    )
+
+                                    .setFooter({
+
+                                        text:
+                                            embedThemes.eventStartingNow.footer
+                                    })
+
+                                    .setDescription(
+
+                                        event.description ||
+
+                                        'Event is beginning.'
+                                    )
+
+                                    .addFields(
+
+                                        {
+
+                                            name:
+                                                'Location',
+
+                                            value:
+
+                                                event.location ||
+
+                                                'Discord'
+                                        }
+                                    )
+                            ]
+                        });
+                    }
+
+                    await deleteDiscordEventAnnouncement(
+                        event.event_id
+                    );
+                }
             }
 
             catch (
@@ -262,8 +391,18 @@ Begins in approximately 1 hour.`
         message:
             'Automation scheduler started',
 
-        details: 
-            'Details'
+        details: {
+
+            cron:
+                '* * * * *',
+
+            services: [
+
+                'scheduled_events',
+
+                'discord_events'
+            ]
+        }
         
     });
 }

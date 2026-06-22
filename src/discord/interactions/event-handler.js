@@ -18,6 +18,10 @@ const {
 } = require('discord.js');
 
 const {
+    embedThemes
+} = require('../../core/config/embed-themes');
+
+const {
     generateEventId
 } = require('../utils/event-id');
 
@@ -795,12 +799,17 @@ Select the new channel.`,
             new EmbedBuilder()
 
                 .setColor(
-                    0x8B5CF6
+                    embedThemes.scheduledEvent.color
                 )
 
-                .setTitle(
-                    'Pending Scheduled Event'
+                .setTitle(`${embedThemes.scheduledEvent.icon} Pending Scheduled Event`
                 )
+
+                .setFooter({
+
+                    text:
+                        embedThemes.scheduledEvent.footer
+                })
 
                 .addFields(
 
