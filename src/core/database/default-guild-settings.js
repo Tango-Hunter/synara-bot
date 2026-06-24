@@ -128,6 +128,12 @@ const DEFAULT_GUILD_SETTINGS = [
     },
 
     {
+        name: 'server_leader',
+        displayName: 'Server Leader',
+        description: 'Primary streamer or community leader'
+    },
+
+    {
         name: 'counting_bot',
         displayName: 'Counting Bot',
         description: 'Counting game bot user'

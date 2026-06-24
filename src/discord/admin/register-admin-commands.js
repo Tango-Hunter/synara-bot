@@ -61,9 +61,15 @@ const roleChoices =
         );
 
 const userChoices = [
+
     {
         name: 'Counting Bot',
         value: 'Counting Bot'
+    },
+
+    {
+        name: 'Server Leader',
+        value: 'Server Leader'
     }
 ];
 

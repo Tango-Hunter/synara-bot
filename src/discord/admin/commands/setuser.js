@@ -34,6 +34,13 @@ async function handleSetUserCommand(
         setting
     ) {
 
+        case 'Server Leader':
+
+            settingName =
+                'server_leader';
+
+            break;
+
         case 'Counting Bot':
 
             settingName =
