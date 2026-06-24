@@ -2,13 +2,26 @@
  * Title: eventsub-handler.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Date Modified: 5/30/26
  * Description: handles eventsub data being sent to Discord.
  */
 
 const {
+    createLiveStreamEvent,
+    startOfflineCooldown,
+    cancelOfflineCooldown
+} = require('../../discord/utils/live-stream-event');
+
+const {
     getEnabledUsersByTwitchUserId
 } = require('../../core/database/twitch-repository');
+
+const {
+    getGuildSetting
+} = require('../../core/database/guild-settings-repository');
+
+const {
+    getFeatureFlag
+} = require('../../core/database/feature-flags-repository');
 
 const {
     postLiveNotifications,
@@ -34,15 +47,18 @@ const {
 } = require('../../core/logging/logger');
 
 
+/*
+====================================
+STREAM ONLINE
+====================================
+*/
 async function handleStreamOnline(
     payload,
     client
 ) {
 
     const twitchUserId =
-
-        payload.event
-            .broadcaster_user_id;
+        payload.event.broadcaster_user_id;
 
     const users =
         await getEnabledUsersByTwitchUserId(
@@ -60,6 +76,94 @@ async function handleStreamOnline(
 
         return;
     }
+
+    for (
+        const user
+        of users
+    ) {
+
+        for (
+            const guildId
+            of user.guild_ids
+        ) {
+
+            const twitchMonitoringEnabled =
+
+                await getFeatureFlag({
+
+                    guildId,
+
+                    featureName:
+                        'twitchMonitoring'
+                });
+
+            if (
+                !twitchMonitoringEnabled
+            ) {
+
+                continue;
+            }
+
+            const guild =
+
+                client.guilds.cache.get(
+                    guildId
+                );
+
+            if (
+                !guild
+            ) {
+
+                continue;
+            }
+
+            const serverLeaderId =
+
+                await getGuildSetting({
+
+                    guildId,
+
+                    settingName:
+                        'server_leader'
+                });
+
+            if (
+
+                serverLeaderId !==
+
+                user.discord_user_id
+
+            ) {
+
+                continue;
+            }
+
+            cancelOfflineCooldown(
+                guild.id
+            );
+
+            // SERVER LEADER EVENT NOTIFICATION
+            await createLiveStreamEvent({
+
+                guild,
+
+                twitchLogin:
+                    user.twitch_login,
+
+                streamTitle:
+                    streamData.title,
+
+                streamCategory:
+                    streamData.category
+            });
+        }
+    }
+
+    /*
+    ====================================
+    LIVE NOTIFICATION LOGIC
+    ====================================
+    */
 
     logFeature({
 
@@ -116,7 +220,7 @@ async function handleStreamOnline(
 
                 streamCategory:
                     streamData.category,
-                    
+
                 thumbnailUrl:
                     streamData.thumbnailUrl
             });
@@ -161,40 +265,18 @@ async function handleStreamOnline(
     }
 }
 
-async function handleEventSub(
-    payload,
-    client
-) {
-
-    switch (
-        payload.subscription.type
-    ) {
-
-        case 'stream.offline':
-            await handleStreamOffline(
-                payload,
-                client
-            );
-            break;
-
-        case 'stream.online':
-            await handleStreamOnline(
-                payload,
-                client
-            );
-            break;
-    }
-}
-
+/*
+====================================
+STREAM OFFLINE
+====================================
+*/
 async function handleStreamOffline(
     payload,
     client
 ) {
 
     const twitchUserId =
-
-        payload.event
-            .broadcaster_user_id;
+        payload.event.broadcaster_user_id;
 
     const users =
 
@@ -208,6 +290,80 @@ async function handleStreamOffline(
 
         return;
     }
+
+    for (
+        const user
+        of users
+    ) {
+
+        for (
+            const guildId
+            of user.guild_ids
+        ) {
+
+            const twitchMonitoringEnabled =
+
+                await getFeatureFlag({
+
+                    guildId,
+
+                    featureName:
+                        'twitchMonitoring'
+                });
+
+            if (
+                !twitchMonitoringEnabled
+            ) {
+
+                continue;
+            }
+
+            const guild =
+
+                client.guilds.cache.get(
+                    guildId
+                );
+
+            if (
+                !guild
+            ) {
+
+                continue;
+            }
+
+            const serverLeaderId =
+
+                await getGuildSetting({
+
+                    guildId,
+
+                    settingName:
+                        'server_leader'
+                });
+
+            if (
+
+                serverLeaderId !==
+
+                user.discord_user_id
+
+            ) {
+
+                continue;
+            }
+
+            startOfflineCooldown({
+
+                guild
+            });
+        }
+    }
+
+    /*
+    ====================================
+    OFFLINE EMBED REMOVAL
+    ====================================
+    */
 
     logFeature({
 
@@ -278,23 +434,6 @@ async function handleStreamOffline(
                 durationSeconds
         });
 
-        logFeature({
-
-            category:
-                'TWITCH',
-
-            message:
-                'Stream statistics updated',
-
-            details: {
-
-                discordUserId:
-                    user.discord_user_id,
-
-                durationSeconds
-            }
-        });
-
         await markOffline({
 
             discordUserId:
@@ -303,6 +442,40 @@ async function handleStreamOffline(
             endedAt:
                 new Date()
         });
+    }
+}
+
+/*
+====================================
+EVENT SUB
+====================================
+*/
+async function handleEventSub(
+    payload,
+    client
+) {
+
+    switch (
+        payload.subscription.type
+    ) {
+
+        case 'stream.offline':
+
+            await handleStreamOffline(
+                payload,
+                client
+            );
+
+            break;
+
+        case 'stream.online':
+
+            await handleStreamOnline(
+                payload,
+                client
+            );
+
+            break;
     }
 }
 
