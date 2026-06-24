@@ -77,6 +77,14 @@ const DEFAULT_FEATURE_FLAGS = [
     },
 
     {
+        name:
+            'scheduledEvents',
+
+        description:
+            'Recurring events and automation framework'
+    },
+
+    {
 
         name:
             'twitchMonitoring',

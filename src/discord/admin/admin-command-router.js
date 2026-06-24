@@ -41,6 +41,10 @@ const {
 } = require('./commands/embed');
 
 const {
+    handleEventCommand
+} = require('./commands/event');
+
+const {
     handleSetChannelCommand
 } = require('./commands/setchannel');
 
@@ -226,6 +230,21 @@ async function routeAdminCommand(
     ) {
 
         return await handleEmbedCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    EVENT
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'event'
+    ) {
+
+        return await handleEventCommand(
             interaction
         );
     }

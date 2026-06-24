@@ -92,13 +92,51 @@ const embedThemes = {
 
         color:
             0x9146FF,
-
         icon:
             '📊',
-
         footer:
             'SYNARA • Twitch Statistics'
     },
+
+    eventCreated: {
+
+        color:
+            0x8B5CF6,
+        icon:
+            '📅',
+        footer:
+            'SYNARA • Event Created'
+    },
+
+    eventStartingSoon: {
+
+        color:
+            0x8B5CF6,
+        icon:
+            '⏳',
+        footer:
+            'SYNARA • Event Reminder'
+    },
+
+    eventStartingNow: {
+
+        color:
+            0x8B5CF6,
+        icon:
+            '🚀',
+        footer:
+            'SYNARA • Event Starting'
+    },
+
+    scheduledEvent: {
+
+        color:
+            0x8B5CF6,
+        icon:
+            '🗓',
+        footer:
+            'SYNARA • Scheduled Event'
+    }
 };
 
 module.exports = {

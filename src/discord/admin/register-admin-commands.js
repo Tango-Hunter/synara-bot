@@ -61,9 +61,15 @@ const roleChoices =
         );
 
 const userChoices = [
+
     {
         name: 'Counting Bot',
         value: 'Counting Bot'
+    },
+
+    {
+        name: 'Server Leader',
+        value: 'Server Leader'
     }
 ];
 
@@ -202,13 +208,68 @@ const commands = [
     */
     new SlashCommandBuilder()
 
-    .setName(
-        'embed'
-    )
+        .setName(
+            'embed'
+        )
 
-    .setDescription(
-        'Create a custom SYNARA embed.'
-    ),
+        .setDescription(
+            'Create a custom SYNARA embed.'
+        ),
+
+    /*
+    ============================
+    CUSTOM EVENT
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'event'
+        )
+
+        .setDescription(
+            'Create and manage events.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'type'
+                    )
+
+                    .setDescription(
+                        'Event type'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+
+                        {
+
+                            name:
+                                'Scheduled Event',
+
+                            value:
+                                'scheduled'
+                        },
+
+                        {
+
+                            name:
+                                'Manage Scheduled Event',
+
+                            value:
+                                'manage'
+                        }
+                    )
+        ),
 
     /*
     ============================
