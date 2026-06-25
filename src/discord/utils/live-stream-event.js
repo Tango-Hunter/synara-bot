@@ -113,17 +113,18 @@ async function createLiveStreamEvent({
     const leaderName =
         member.displayName;
 
-    const startTime = new Date();
+    const startTime =
+        new Date(
+            Date.now()
+            + 60 * 1000
+        );
 
     const endTime =
         new Date(
-
-            Date.now()
-
+            startTime.getTime()
             +
-
             12 * 60 * 60 * 1000
-        );
+    );
 
     const event =
 
