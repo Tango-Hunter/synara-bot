@@ -208,6 +208,19 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS nicknames (
+
+            user_id TEXT PRIMARY KEY,
+
+            nickname TEXT NOT NULL,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -233,7 +246,9 @@ async function initializeDatabase() {
 
                 'scheduled_events',
 
-                'discord_event_announcements'
+                'discord_event_announcements',
+
+                'nicknames'
             ] 
         }
     });

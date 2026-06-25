@@ -64,6 +64,12 @@ Play a round of trivia.
 
 !leaderboard
 View trivia rankings and statistics.
+
+!birthday
+Set your birthday.
+
+!nextBirthdays
+View the next 3 months worth of birthdays.
 `
         },
 
@@ -111,6 +117,10 @@ View Twitch statistics.
 
             value:
 `
+!nickname <name>
+Set the preferred name SYNARA will use when speaking to you.
+Run !nickname with no name to remove it.
+
 @SYNARA <message>
 --- OR ---
 Direct Reply to SYNARA

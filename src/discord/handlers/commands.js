@@ -43,6 +43,10 @@ const {
 } = require('../commands/motivate');
 
 const {
+    runNicknameCommand
+} = require('../commands/nickname');
+
+const {
     runObserveCommand
 } = require('../commands/observe');
 
@@ -127,6 +131,11 @@ const commandRegistry = {
     '!motivate': {
         title: 'MOTIVATION',
         execute: runMotivateCommand
+    },
+
+    '!nickname': {
+        title: 'NICKNAME',
+        execute: runNicknameCommand
     },
 
     '!observe': {
