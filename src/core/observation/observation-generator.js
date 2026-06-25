@@ -2,7 +2,7 @@
  * Title: observation-generator.js
  * Author: Tango Hunter
  * Date Created: 5/22/26
- * Description: Generates restrained autonomous observations.
+ * Description: Generates meaningful conversational observations.
  */
 
 const {
@@ -43,6 +43,125 @@ const {
     ERROR_TYPES
 } = require('../logging/error-types');
 
+/*
+====================================
+FILTER MEANINGFUL MESSAGES
+====================================
+*/
+
+function filterMeaningfulMessages(
+    activity
+) {
+
+    return activity.filter(entry => {
+
+        const content =
+
+            (
+                entry.content ??
+                ''
+            )
+
+                .trim();
+
+        if (
+
+            content.length < 4
+
+        ) {
+
+            return false;
+        }
+
+        /*
+        Ignore bot commands.
+        */
+
+        if (
+
+            /^!/.test(
+                content
+            )
+
+        ) {
+
+            return false;
+        }
+
+        /*
+        Ignore links.
+        */
+
+        if (
+
+            /^https?:\/\//i.test(
+                content
+            )
+
+        ) {
+
+            return false;
+        }
+
+        /*
+        Ignore Discord custom emoji.
+        */
+
+        if (
+
+            /^<a?:.+:\d+>$/.test(
+                content
+            )
+
+        ) {
+
+            return false;
+        }
+
+        /*
+        Ignore common acknowledgements.
+        */
+
+        if (
+
+            /^(lol|lmao|rofl|ok|okay|thanks|thank you|ty|yw|you're welcome|same|nice|cool|yes|no|yep|nah|good|sounds good|got it)$/i
+
+                .test(
+                    content
+                )
+
+        ) {
+
+            return false;
+        }
+
+        /*
+        Ignore GIF-only messages.
+        */
+
+        if (
+
+            /\.(gif|gifv)$/i.test(
+                content
+            )
+
+        ) {
+
+            return false;
+        }
+
+        return true;
+
+    });
+
+}
+
+/*
+====================================
+TRY OBSERVATION
+====================================
+*/
+
 async function tryObservation(
     message
 ) {
@@ -50,10 +169,12 @@ async function tryObservation(
     if (
         !observationConfig.enabled
     ) {
+
         return;
     }
 
     const observationsEnabled =
+
         await getFeatureFlag({
 
             guildId:
@@ -66,10 +187,12 @@ async function tryObservation(
     if (
         !observationsEnabled
     ) {
+
         return;
     }
 
     if (
+
         await isIgnoredChannel({
 
             guildId:
@@ -78,38 +201,63 @@ async function tryObservation(
             channelId:
                 message.channel.id
         })
+
     ) {
+
         return;
     }
 
     if (
         !canObserve()
     ) {
+
         return;
     }
 
-    const randomChance =
-        Math.random();
-
     if (
 
-        randomChance >
+        Math.random()
+
+        >
 
         observationConfig.observationChance
+
     ) {
 
         return;
     }
 
     const activity =
+
         getChannelActivity(
             message.channel.id
         );
 
+    const meaningfulMessages =
+
+        filterMeaningfulMessages(
+            activity
+        );
+
+    /*
+    Don't even ask GPT unless
+    there is an actual conversation.
+    */
+
     if (
 
-        activity.length <
-        observationConfig.minimumMessages
+        meaningfulMessages.length
+
+        <
+
+        Math.max(
+
+            3,
+
+            observationConfig.minimumMessages
+
+        )
+
     ) {
 
         return;
@@ -117,123 +265,297 @@ async function tryObservation(
 
     const recentConversation =
 
-        activity
-            .map(entry =>
-                `${entry.author}: ${entry.content}`
+        meaningfulMessages
+
+            .map(
+
+                entry =>
+
+                    `${entry.author}: ${entry.content}`
+
             )
 
-            .join('\n');
+            .join(
+                '\n'
+            );
 
     const basePrompt =
+
         buildSystemPrompt();
 
     const systemPrompt = `
 
-        ${basePrompt}
+${basePrompt}
 
-        Additional Behavioral Context:
+You are SYNARA.
 
-        You are currently passively observing a Discord conversation.
+You are participating naturally in an ongoing Discord conversation.
 
-        You were NOT directly addressed.
+You were NOT directly addressed.
 
-        Do NOT suddenly become overly conversational.
+Your goal is NOT to summarize the conversation.
 
-        Your observation should:
+Your goal is to determine whether you genuinely have something worthwhile to contribute.
 
-        - feel restrained
-        - feel subtle
-        - feel observational
-        - avoid excessive length
-        - avoid dominating conversation
-        - avoid sounding like an assistant
-        - avoid unnecessary helpfulness
-        - occasionally analytical
-        - occasionally curious
-        - occasionally dry
+Silence is preferred over unnecessary conversation.
 
-        Formatting Requirements:
+Only respond if AT LEAST ONE of the following is true:
 
-        - Return plain text only
-        - Do not use markdown
-        - Do not use bullet points
-        - Do not use quotation marks
-        - Avoid roleplay formatting
-        - Keep observations under 2 sentences
-        - Avoid dramatic monologues
-        - Avoid theatrical language
-        - Avoid assistant-like helpfulness
+• Someone asked a question you can naturally answer.
 
-        If no meaningful observation exists:
-        Respond ONLY with:
-        NO_OBSERVATION
-        `;
+• Someone shared an interesting opinion that you can expand upon.
+
+• Someone made a joke you can build on.
+
+• Someone shared a story worth reacting to.
+
+• Someone expressed frustration and you can contribute something useful or amusing.
+
+DO NOT respond to:
+
+• greetings
+
+• acknowledgements
+
+• emoji
+
+• GIFs
+
+• stickers
+
+• people simply agreeing
+
+• users thanking each other
+
+• very short exchanges
+
+Never explain that you are observing.
+
+Never summarize what everyone has been talking about.
+
+Instead, contribute like another member of the conversation.
+
+Your responses should usually be one sentence.
+
+Two or three sentences are acceptable only when they make the response feel more natural.
+
+Never dominate the conversation.
+
+Avoid assistant-like wording.
+
+Avoid excessive enthusiasm.
+
+Avoid unnecessary helpfulness.
+
+If you choose to respond, return ONLY valid JSON in this exact format:
+
+{
+
+    "shouldRespond": true,
+
+    "targetUser": "<display name if appropriate>",
+
+    "response": "<1-3 sentence conversational response>"
+
+}
+
+Otherwise return ONLY:
+
+{
+
+    "shouldRespond": false,
+
+    "reason": "<brief explanation>"
+
+}
+
+If you are unsure whether your response improves the conversation,
+
+choose:
+
+shouldRespond = false.
+
+`;
 
     const userPrompt = `
 
-        Recent Conversation Activity:
+Recent Conversation:
 
-        ${recentConversation}
+${recentConversation}
 
-        Generate ONE subtle observation if appropriate.
-        `;
+`;
+    
+    /*
+    ====================================
+    GENERATE RESPONSE
+    ====================================
+    */
 
-    let response =
+    const rawResponse =
+
         await generateResponse({
 
             systemPrompt,
+
             userPrompt,
-            maxTokens: 140
+
+            maxTokens: 220
         });
 
-    if (!response) {
-
-        return;
-    }
-
     if (
-        response.includes(
-            'NO_OBSERVATION'
-        )
+        !rawResponse
     ) {
 
         return;
     }
 
+    let parsedResponse;
+
+    try {
+
+        parsedResponse =
+
+            JSON.parse(
+                rawResponse
+            );
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+        logFeature({
+
+            category:
+                'OBSERVATION',
+
+            message:
+                'Observation JSON parse failed',
+
+            details: {
+
+                error:
+                    error.message,
+
+                response:
+                    rawResponse
+            }
+        });
+
+        return;
+    }
+
+    /*
+    ====================================
+    DECISION
+    ====================================
+    */
+
     if (
-        response.trim().length < 8
+
+        !parsedResponse.shouldRespond
+
+    ) {
+
+        logFeature({
+
+            category:
+                'OBSERVATION',
+
+            message:
+                'Observation skipped',
+
+            details: {
+
+                reason:
+
+                    parsedResponse.reason ??
+
+                    'No reason provided.'
+            }
+        });
+
+        return;
+    }
+
+    if (
+
+        !parsedResponse.response ||
+
+        parsedResponse.response.trim().length < 8
+
     ) {
 
         return;
     }
+
+    /*
+    ====================================
+    UPDATE COOLDOWN
+    ====================================
+    */
 
     updateObservationTime();
+
+    /*
+    ====================================
+    EFFICIENCY
+    ====================================
+    */
 
     const efficiencyShift =
 
         Math.floor(
+
             Math.random() * 7
+
         ) - 3;
 
     const updatedScore =
+
         adjustEfficiency({
 
             userId:
                 message.author.id,
+
             amount:
                 efficiencyShift
         });
 
-        if (
-            Math.random() < 0.25
-        ) {
+    let finalResponse =
 
-            response += `\n\nEfficiency reassessment: ${updatedScore}%`;
-        }
+        parsedResponse.response.trim();
+
+    if (
+
+        Math.random() < 0.25
+
+    ) {
+
+        finalResponse +=
+
+            `\n\nEfficiency reassessment: ${updatedScore}%`;
+    }
+
+    /*
+    ====================================
+    SEND MESSAGE
+    ====================================
+    */
 
     await message.channel.send(
-        response
+
+        finalResponse
     );
+
+    /*
+    ====================================
+    LOGGING
+    ====================================
+    */
 
     logFeature({
 
@@ -260,10 +582,17 @@ async function tryObservation(
             userId:
                 message.author.id,
 
+            targetUser:
+
+                parsedResponse.targetUser ??
+
+                null,
+
             efficiencyScore:
                 updatedScore
         }
     });
+
 }
 
 module.exports = {

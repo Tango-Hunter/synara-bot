@@ -10,6 +10,10 @@ const {
 } = require('../config/observational-config');
 
 const {
+    getUserDisplayName
+} = require('../../discord/utils/user-display-name');
+
+const {
     isIgnoredChannel
 } = require('../database/ignored-channels-repository');
 
@@ -75,10 +79,15 @@ async function trackMessage(
             channelId
         );
 
+    const displayName =
+        await getUserDisplayName(
+            message.member
+        );
+
     messages.push({
 
         author:
-            message.author.username,
+            displayName,
         content:
             message.content,
         timestamp:

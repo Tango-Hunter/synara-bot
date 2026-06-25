@@ -18,6 +18,10 @@ const {
 } = require('../../synara/cognition/prompt-builder');
 
 const {
+    getUserDisplayName
+} = require('../utils/user-display-name');
+
+const {
     adjustEfficiency
 } = require('../../core/efficiency/efficiency-manager');
 
@@ -59,6 +63,11 @@ async function handleMention(
             client
         );
 
+    const displayName =
+        await getUserDisplayName(
+            message.member
+        );
+
     const systemPrompt =
         buildSystemPrompt();
 
@@ -89,7 +98,7 @@ Requirements:
 - Avoid roleplay formatting
 
 Current User:
-${message.author.username}
+${displayName}
 
 Platform:
 Discord
@@ -116,7 +125,7 @@ ${cleanedMessage}
         userId:
             message.author.id,
         username:
-            message.author.username,
+            displayName,
         messageContent:
             cleanedMessage
     });
