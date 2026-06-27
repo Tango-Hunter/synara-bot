@@ -26,6 +26,10 @@ const {
 } = require('./event-handler');
 
 const {
+    handleStickyInteraction
+} = require('./sticky-handler');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -86,6 +90,27 @@ async function routeInteraction(
 
         if (
             handledEvent !== false
+        ) {
+
+            return;
+        }
+
+        /*
+        ============================
+        STICKY INTERACTIONS
+        ============================
+        */
+
+        const handledSticky =
+
+            await handleStickyInteraction(
+                interaction
+            );
+
+        if (
+
+            handledSticky !== false
+
         ) {
 
             return;

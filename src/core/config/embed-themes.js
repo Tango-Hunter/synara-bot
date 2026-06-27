@@ -98,6 +98,18 @@ const embedThemes = {
             'SYNARA • Twitch Statistics'
     },
 
+    sticky: {
+
+        color:
+            0x8B5CF6,
+
+        icon:
+            '📌',
+
+        footer:
+            'SYNARA • Sticky Message'
+    },
+
     eventCreated: {
 
         color:

@@ -221,6 +221,58 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TYPE channel_message_type AS ENUM (
+
+            'STICKY',
+
+            'FAQ',
+
+            'STATUS'
+
+        );
+
+    `).catch(() => {
+
+        /*
+        Enum already exists.
+        */
+
+    });
+
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS channel_messages (
+
+            guild_id TEXT NOT NULL,
+
+            channel_id TEXT NOT NULL,
+
+            type channel_message_type NOT NULL,
+
+            content TEXT NOT NULL,
+
+            discord_message_id TEXT,
+
+            created_by TEXT NOT NULL,
+
+            updated_by TEXT NOT NULL,
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            PRIMARY KEY (
+
+                guild_id,
+
+                channel_id,
+
+                type
+            )
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -248,7 +300,9 @@ async function initializeDatabase() {
 
                 'discord_event_announcements',
 
-                'nicknames'
+                'nicknames',
+
+                'channel_messages'
             ] 
         }
     });

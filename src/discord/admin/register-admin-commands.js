@@ -218,6 +218,61 @@ const commands = [
 
     /*
     ============================
+    STICKY MESSAGE
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'sticky'
+        )
+
+        .setDescription(
+            'Create or remove a sticky channel message.'
+        )
+
+        .addStringOption(
+
+            option =>
+
+                option
+
+                    .setName(
+                        'action'
+                    )
+
+                    .setDescription(
+                        'Sticky action'
+                    )
+
+                    .setRequired(
+                        true
+                    )
+
+                    .addChoices(
+
+                        {
+
+                            name:
+                                'Create',
+
+                            value:
+                                'create'
+                        },
+
+                        {
+
+                            name:
+                                'Delete',
+
+                            value:
+                                'delete'
+                        }
+                    )
+        ),
+
+    /*
+    ============================
     CUSTOM EVENT
     ============================
     */

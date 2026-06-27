@@ -55,6 +55,10 @@ const {
 } = require('../utils/cooldown-manager');
 
 const {
+    handleStickyMessage
+} = require('../utils/sticky-manager');
+
+const {
     handleTriviaReply
 } = require('../trivia/trivia-reply-handler');
 
@@ -179,6 +183,11 @@ function discordMessageHandler(client) {
 
                 return;
             }
+
+            // Sticky Messages
+            await handleStickyMessage(
+                message
+            );
 
             // AI Mentions
             await handleMention(

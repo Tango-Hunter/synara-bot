@@ -41,6 +41,10 @@ const {
 } = require('./commands/embed');
 
 const {
+    handleStickyCommand
+} = require('./commands/sticky');
+
+const {
     handleEventCommand
 } = require('./commands/event');
 
@@ -230,6 +234,23 @@ async function routeAdminCommand(
     ) {
 
         return await handleEmbedCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    STICKY
+    ============================
+    */
+    if (
+
+        interaction.commandName ===
+        'sticky'
+
+    ) {
+
+        return await handleStickyCommand(
             interaction
         );
     }
