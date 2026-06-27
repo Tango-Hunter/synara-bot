@@ -10,6 +10,10 @@ const {
 } = require('../utils/response-manager');
 
 const {
+    getMessageContext
+} = require('../utils/message-context');
+
+const {
     generateResponse
 } = require('../../core/services/openai-service');
 
@@ -63,10 +67,13 @@ async function handleMention(
             client
         );
 
-    const displayName =
-        await getUserDisplayName(
-            message.member
+    const messageContext =
+        await getMessageContext(
+            message
         );
+
+    const displayName =
+        messageContext.currentAuthor;
 
     const systemPrompt =
         buildSystemPrompt();
@@ -106,8 +113,27 @@ Discord
 Previous Conversation Context:
 ${memoryContext || 'No prior conversation context.'}
 
-Current User Message:
+Conversation Context:
+
+Current User:
+${messageContext.currentAuthor}
+
+Current Message:
 ${cleanedMessage}
+
+${
+    messageContext.repliedMessage
+
+        ? `Replying To
+
+Author:
+${messageContext.repliedAuthor}
+
+Message:
+${messageContext.repliedMessage}`
+
+        : 'This message is not replying to another message.'
+}
 `;
 
     let aiResponse =
