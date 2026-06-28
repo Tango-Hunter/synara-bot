@@ -176,7 +176,7 @@ async function showScheduledEventModal({
                             )
 
                             .setLabel(
-                                'Time (HH:MM 24h)'
+                                'Time (HH:MM 24h UTC)'
                             )
 
                             .setRequired(
@@ -346,7 +346,13 @@ async function handleEventInteraction(
         await interaction.reply({
 
             content:
-                'Select recurrence.',
+`ℹ️ **Reminder**
+
+Scheduled events use **UTC (UTC+0)**.
+
+Please ensure the date and time entered have already been converted to UTC before continuing.
+
+Now select the event recurrence.`,
 
             components: [
 
@@ -831,7 +837,7 @@ Select the new channel.`,
 
                     {
                         name:
-                            'Time',
+                            'Time (UTC)',
 
                         value:
                             draft.time
