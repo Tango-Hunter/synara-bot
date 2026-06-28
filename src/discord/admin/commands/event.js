@@ -145,7 +145,7 @@ You will be prompted for:
 • Title
 • Description
 • Date
-• Time
+• Time (UTC+0)
 • Recurrence
 • Channel
 
