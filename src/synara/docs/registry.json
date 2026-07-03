@@ -1,4 +1,6 @@
 {
+    "version": "v2.5.0",
+
     "documents": [
 
         {
@@ -32,6 +34,19 @@
                 "channel_logs",
                 "channel_automation"
             ],
+            "category": "information",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "knowledge-base",
+            "type": "guide",
+            "name": "Knowledge Base",
+            "path": "setup/knowledge-base",
+            "commands": [
+                "/docs"
+            ],
+            "settings": [],
             "category": "information",
             "footer": "configuration"
         },

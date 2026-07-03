@@ -6,6 +6,10 @@ The registry serves as the central index for all documentation used by SYNARA. I
 
 ---
 
+# Version Control
+
+The current version of SYNARA is listed at the top of the registry. It is updated with each update we make to our repository.
+
 # Registry Structure
 
 Each document registered in `registry.json` should follow the structure below.

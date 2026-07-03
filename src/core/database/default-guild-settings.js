@@ -8,6 +8,12 @@
 const DEFAULT_GUILD_SETTINGS = [
 
     {
+        name: 'current_version',
+        displayName: 'Current Version',
+        description: 'Current version of SYNARA'
+    },
+
+    {
         name: 'role_verified',
         displayName: 'Verified',
         description: 'Verified member role'
