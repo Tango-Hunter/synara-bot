@@ -30,6 +30,10 @@ const {
 } = require('./sticky-handler');
 
 const {
+    handleDocsCommand
+} = require("../admin/commands/docs");
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -44,6 +48,20 @@ async function routeInteraction(
 ) {
 
     try {
+
+        /*
+        ============================
+        DOCUMENTATION
+        ============================
+        */
+        if (
+            interaction.commandName ===
+            "docs"
+        ) {
+            return await handleDocsCommand(
+                interaction
+            );
+        }
 
         /*
         ============================

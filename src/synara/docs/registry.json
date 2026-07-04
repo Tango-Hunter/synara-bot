@@ -42,7 +42,7 @@
             "id": "knowledge-base",
             "type": "guide",
             "name": "Knowledge Base",
-            "path": "setup/knowledge-base",
+            "path": "setup/knowledge-base.md",
             "commands": [
                 "/docs"
             ],

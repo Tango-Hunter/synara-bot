@@ -2,8 +2,7 @@
  * Title: registry-renderer.js
  * Author: Tango Hunter
  * Date Created: 7/3/26
- * Description:
- * Central documentation renderer for SYNARA.
+ * Description: Central documentation renderer for SYNARA.
  * For more details src/synara/docs/registry.json
  */
 
@@ -12,7 +11,7 @@ const path = require("path");
 
 const { EmbedBuilder } = require("discord.js");
 
-const DOCS_ROOT = path.join(__dirname, "..", "docs");
+const DOCS_ROOT = path.join(__dirname, "..", "..", "synara", "docs");
 const RELEASES_ROOT = path.join(DOCS_ROOT, "releases");
 const REGISTRY_PATH = path.join(DOCS_ROOT, "registry.json");
 
@@ -36,7 +35,7 @@ const FOOTERS = {
         "Members may use this feature at any time using the commands listed above.",
 
     configuration:
-        "This document describes an administrative configuration workflow."
+        "This describes an administrative configuration workflow."
 };
 
 /**
@@ -79,6 +78,17 @@ function getDocument(id) {
     return registry.documents.find(
         document => document.id === id
     ) || null;
+}
+
+/**
+ * Loads all documents.
+ */
+function getDocuments() {
+
+    const registry =
+        loadRegistry();
+
+    return registry.documents;
 }
 
 /**
@@ -244,8 +254,12 @@ function parseMarkdown(markdown, document) {
  * Renders a documentation
  * document by id.
  *
+ * Returns both the registry
+ * document metadata and the
+ * rendered Discord embed.
+ *
  * @param {String} id
- * @returns {EmbedBuilder}
+ * @returns {{ document: Object, embed: EmbedBuilder }}
  */
 function renderDocument(id) {
 
@@ -261,10 +275,19 @@ function renderDocument(id) {
     const markdown =
         loadMarkdown(id);
 
-    return parseMarkdown(
-        markdown,
-        document
-    );
+    const embed =
+        parseMarkdown(
+            markdown,
+            document
+        );
+
+    return {
+
+        document,
+
+        embed
+
+    };
 }
 
 /**
@@ -303,11 +326,13 @@ function renderRelease(version) {
 
     for (const document of release.documents) {
 
-        embeds.push(
-
+        const rendered =
             renderDocument(
                 document.id
-            )
+            );
+
+        embeds.push(
+            rendered.embed
         );
     }
 
@@ -317,6 +342,7 @@ function renderRelease(version) {
 module.exports = {
     getCurrentVersion,
     getDocument,
+    getDocuments,
     loadMarkdown,
     renderDocument,
     renderRelease

@@ -78,6 +78,21 @@ const commands = [
 
     /*
     ============================
+    DOCUMENTATION
+    ============================
+    */
+    new SlashCommandBuilder()
+
+    .setName(
+        "docs"
+    )
+
+    .setDescription(
+        "Browse SYNARA documentation."
+    ),
+
+    /*
+    ============================
     MOD APPS
     ============================
     */

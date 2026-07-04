@@ -17,6 +17,10 @@ const {
 } = require('discord.js');
 
 const {
+    handleDocsCommand
+} = require("./commands/docs");
+
+const {
     handleModAppsCommand
 } = require('./commands/modapps');
 
@@ -141,6 +145,22 @@ async function routeAdminCommand(
             flags:
                 MessageFlags.Ephemeral
         });
+    }
+
+    /*
+    ============================
+    DOCUMENTATION
+    ============================
+    */
+
+    if (
+        interaction.commandName ===
+        "docs"
+    ) {
+
+        return await handleDocsCommand(
+            interaction
+        );
     }
 
     /*
