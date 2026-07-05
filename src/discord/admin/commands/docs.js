@@ -8,7 +8,8 @@
 
 const {
     ActionRowBuilder,
-    StringSelectMenuBuilder
+    StringSelectMenuBuilder,
+    MessageFlags
 } = require("discord.js");
 
 const {
@@ -61,7 +62,8 @@ async function handleDocsCommand(
 
     await interaction.reply({
 
-        ephemeral: true,
+        flags:
+            MessageFlags.Ephemeral,
 
         content:
             "Select the documentation you'd like SYNARA to display.",
