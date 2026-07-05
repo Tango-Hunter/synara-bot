@@ -31,7 +31,7 @@ async function handleDocsCommand(
             )
 
             .setPlaceholder(
-                "Select documentation..."
+                "Browse SYNARA Documentation..."
             )
 
             .addOptions(

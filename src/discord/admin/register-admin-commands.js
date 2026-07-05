@@ -83,13 +83,13 @@ const commands = [
     */
     new SlashCommandBuilder()
 
-    .setName(
-        "docs"
-    )
+        .setName(
+            "docs"
+        )
 
-    .setDescription(
-        "Browse SYNARA documentation."
-    ),
+        .setDescription(
+            "Browse SYNARA documentation."
+        ),
 
     /*
     ============================
