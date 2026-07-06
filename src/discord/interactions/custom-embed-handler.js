@@ -17,6 +17,13 @@ const {
 } = require('discord.js');
 
 const {
+    createApprovalButtons,
+    isApproval,
+    isCancellation,
+    buildApprovalFooter
+} = require('../utils/approval-workflow');
+
+const {
     logFeature
 } = require('../../core/logging/logger');
 
@@ -350,12 +357,11 @@ async function handleCustomEmbedInteraction(
                 )
 
                 .setFooter({
-
                     text:
 
 `${draft.footer || ''}
 
-SYNARA Announcement on behalf of ${interaction.user.username}`
+${buildApprovalFooter()}`
                 });
 
         if (
@@ -377,53 +383,21 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
         }
 
         const row =
+            createApprovalButtons({
 
-            new ActionRowBuilder()
+                approveId:
 
-                .addComponents(
+                    'custom_embed_publish',
 
-                    new ButtonBuilder()
+                cancelId:
 
-                        .setCustomId(
-                            'custom_embed_publish'
-                        )
+                    'custom_embed_cancel',
 
-                        .setLabel(
-                            'Publish'
-                        )
+                approveLabel:
 
-                        .setStyle(
-                            ButtonStyle.Success
-                        ),
+                    'Publish'
 
-                    new ButtonBuilder()
-
-                        .setCustomId(
-                            'custom_embed_create'
-                        )
-
-                        .setLabel(
-                            'Edit Draft'
-                        )
-
-                        .setStyle(
-                            ButtonStyle.Primary
-                        ),
-
-                    new ButtonBuilder()
-
-                        .setCustomId(
-                            'custom_embed_cancel'
-                        )
-
-                        .setLabel(
-                            'Cancel'
-                        )
-
-                        .setStyle(
-                            ButtonStyle.Danger
-                        )
-                );
+            });
 
         await interaction.reply({
 
@@ -452,12 +426,13 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
     */
     if (
 
-        interaction.isButton()
+        isApproval(
 
-        &&
+            interaction,
 
-        interaction.customId ===
-        'custom_embed_publish'
+            'custom_embed_publish'
+
+        )
 
     ) {
 
@@ -575,15 +550,16 @@ SYNARA Announcement on behalf of ${interaction.user.username}`
     ============================
     CANCEL
     ============================
-    */
+    */ 
     if (
 
-        interaction.isButton()
+        isCancellation(
 
-        &&
+            interaction,
 
-        interaction.customId ===
-        'custom_embed_cancel'
+            'custom_embed_cancel'
+
+        )
 
     ) {
 
