@@ -148,6 +148,16 @@ const embedThemes = {
             '🗓',
         footer:
             'SYNARA • Scheduled Event'
+    },
+
+    broadcast: {
+
+        color:
+            0xCC3333,
+        icon:
+            '⚠',
+        footer:
+            'Official SYNARA Broadcast • Please read this announcement carefully.'
     }
 };
 

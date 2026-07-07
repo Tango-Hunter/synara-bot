@@ -78,6 +78,22 @@ const commands = [
 
     /*
     ============================
+    BROADCAST
+    ============================
+    */
+
+    new SlashCommandBuilder()
+
+        .setName(
+            "broadcast"
+        )
+
+        .setDescription(
+            "Create an official SYNARA broadcast."
+        ),
+
+    /*
+    ============================
     DOCUMENTATION
     ============================
     */

@@ -17,6 +17,10 @@ const {
 } = require('discord.js');
 
 const {
+    handleBroadcastCommand
+} = require("./commands/broadcast");
+
+const {
     handleDocsCommand
 } = require("./commands/docs");
 
@@ -145,6 +149,22 @@ async function routeAdminCommand(
             flags:
                 MessageFlags.Ephemeral
         });
+    }
+
+    /*
+    ============================
+    BROADCAST
+    ============================
+    */
+
+    if (
+        interaction.commandName ===
+        "broadcast"
+    ) {
+
+        return await handleBroadcastCommand(
+            interaction
+        );
     }
 
     /*

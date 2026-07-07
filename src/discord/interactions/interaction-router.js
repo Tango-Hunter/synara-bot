@@ -34,6 +34,10 @@ const {
 } = require("./docs-handler");
 
 const {
+    handleBroadcastInteraction
+} = require("./broadcast-handler");
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -78,7 +82,6 @@ async function routeInteraction(
         if (
             handledCustomEmbed !== false
         ) {
-
             return;
         }
 
@@ -129,6 +132,23 @@ async function routeInteraction(
 
         if (
             handledDocs !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        BROADCAST INTERACTIONS
+        ============================
+        */
+
+        const handledBroadcast =
+            await handleBroadcastInteraction(
+                interaction
+            );
+
+        if (
+            handledBroadcast !== false
         ) {
             return;
         }
