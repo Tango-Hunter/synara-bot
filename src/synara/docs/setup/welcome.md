@@ -22,11 +22,7 @@ As new features are added, I'll continue to grow alongside your community.
 
 ## Administrator Setup
 
-If you're a server administrator, I recommend creating a private administrator channel before continuing.
-
-Once you're ready, use:
-
-`/setup`
+**Server Administrators: Create (or choose) a private administrative channel and run `/setup` to begin configuring SYNARA**
 
 I'll guide you through configuring your server step by step, including channels, roles, users, and available features.
 

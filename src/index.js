@@ -81,6 +81,9 @@ const {
     initializeAllGuildSettings,
     initializeGuildSettings
 } = require('./core/database/guild-settings-repository');
+const {
+    handleGuildCreate
+} = require('./discord/welcome/welcome-handler');
 
 const {
     logFeature,
@@ -107,9 +110,6 @@ app.use(
 // Starts the SYNARA presence within Discord
 // ===============================
 client.once('clientReady', async () => {
-
-    // Version Updating service
-    await checkVersionUpdates(client);
 
     // Databases
     await initializeDatabase();
@@ -142,6 +142,9 @@ client.once('clientReady', async () => {
     // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);
     await initializeAllGuildSettings(client);
+
+    // Version Updating service
+    await checkVersionUpdates(client);
 
     client.user.setPresence({
         activities: [
@@ -427,6 +430,10 @@ client.on(
             guildName:
                 guild.name
         });
+
+        await handleGuildCreate(
+            guild
+        );
     }
 );
 
