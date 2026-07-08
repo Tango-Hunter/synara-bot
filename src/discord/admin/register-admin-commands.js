@@ -81,7 +81,6 @@ const commands = [
     BROADCAST
     ============================
     */
-
     new SlashCommandBuilder()
 
         .setName(
@@ -105,6 +104,25 @@ const commands = [
 
         .setDescription(
             "Browse SYNARA documentation."
+        ),
+
+    /*
+    ============================
+    SETUP
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+
+            "setup"
+
+        )
+
+        .setDescription(
+
+            "Launch the SYNARA Setup Wizard."
+
         ),
 
     /*
