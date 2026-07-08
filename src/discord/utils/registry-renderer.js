@@ -313,11 +313,15 @@ function renderRelease(version) {
             .setColor(0xCC3333)
 
             .setTitle(
-                `SYNARA ${release.version}`
+                `SYNARA ${release.version} Update`
             )
 
             .setDescription(
                 `## ${release.title}\n\n${release.type}`
+            )
+            
+            .setFooter(
+                `Automatic SYNARA Broadcast • Please Review the following update announcements.`
             );
 
     embeds.push(

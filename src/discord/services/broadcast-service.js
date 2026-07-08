@@ -156,6 +156,10 @@ async function broadcastEmbeds({
 
             0,
 
+        successfulGuilds:
+
+            [],
+
         failed:
 
             []
@@ -181,6 +185,16 @@ async function broadcastEmbeds({
             });
 
             results.successful++;
+
+            results.successfulGuilds.push({
+
+                guildId:
+                    target.guildId,
+
+                guildName:
+                    target.guildName
+
+            });
 
         }
 
@@ -217,17 +231,17 @@ async function broadcastEmbeds({
 
                 details: {
 
-                    guildId:
-                        target.guildId,
+                    attempted:
+                        results.attempted,
 
-                    guildName:
-                        target.guildName,
+                    successful:
+                        results.successful,
 
-                    channelId:
-                        target.channelId,
+                    successfulGuilds:
+                        results.successfulGuilds.length,
 
-                        error:
-                            error.message
+                    failed:
+                        results.failed.length
 
                 }
             });

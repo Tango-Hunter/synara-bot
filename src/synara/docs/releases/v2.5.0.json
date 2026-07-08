@@ -1,0 +1,10 @@
+{
+    "version": "v2.5.0",
+    "title": "Initial versioning setup",
+    "type": "Test Deployment",
+    "documents": [
+        {
+            "id": "nicknames"
+        }
+    ]
+}

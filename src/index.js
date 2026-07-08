@@ -28,6 +28,9 @@ const {
 const {
     registerDiscordEventListeners
 } = require('./discord/interactions/discord-event-listener');
+const {
+    checkVersionUpdates
+} = require('./core/services/version-update-service');
 
 const {
     startDailyQuestionScheduler
@@ -104,6 +107,9 @@ app.use(
 // Starts the SYNARA presence within Discord
 // ===============================
 client.once('clientReady', async () => {
+
+    // Version Updating service
+    await checkVersionUpdates(client);
 
     // Databases
     await initializeDatabase();
