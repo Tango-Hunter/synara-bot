@@ -37,14 +37,14 @@ const DEFAULT_GUILD_SETTINGS = [
         name: 'roles_moderator',
         displayName: 'Moderator',
         description: 'Moderator roles',
-        selectorType: "roles"
+        selectorType: "role"
     },
 
     {
         name: 'roles_admin',
         displayName: 'Admin',
         description: 'Administrative roles',
-        selectorType: "roles"
+        selectorType: "role"
     },
 
     {

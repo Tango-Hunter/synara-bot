@@ -343,10 +343,45 @@ function renderRelease(version) {
     return embeds;
 }
 
+/**
+ * Returns the ids of every
+ * toggleable feature.
+ *
+ * Used by the setup wizard
+ * to determine which features
+ * should be presented during
+ * configuration.
+ *
+ * @returns {String[]}
+ */
+function getToggleableFeatures() {
+
+    return getDocuments()
+
+        .filter(
+
+            document =>
+
+                document.footer ===
+
+                "toggleable"
+
+        )
+
+        .map(
+
+            document =>
+
+                document.id
+
+        );
+}
+
 module.exports = {
     getCurrentVersion,
     getDocument,
     getDocuments,
+    getToggleableFeatures,
     loadMarkdown,
     renderDocument,
     renderRelease
