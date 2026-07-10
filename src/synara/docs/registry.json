@@ -39,6 +39,23 @@
         },
 
         {
+            "id": "setup-confirmation",
+            "type": "guide",
+            "name": "Setup Complete",
+            "path": "setup/setup-confirmation.md",
+            "commands": [
+                "/settings",
+                "/features",
+                "/feature",
+                "/docs",
+                "/commands"
+            ],
+            "settings": [],
+            "category": "information",
+            "footer": "configuration"
+        },
+
+        {
             "id": "knowledge-base",
             "type": "guide",
             "name": "Knowledge Base",

@@ -213,6 +213,38 @@ function advanceFeature(
 
 /*
 ====================================
+RESET FEATURE STATE
+====================================
+*/
+
+function resetFeatureState(
+    guildId
+) {
+
+    const session =
+
+        getSession(
+
+            guildId
+
+        );
+
+    if (
+        !session
+    ) {
+        return null;
+    }
+
+    session.featureSettings = {};
+
+    session.pendingFeature = null;
+
+    return session;
+
+}
+
+/*
+====================================
 CURRENT FEATURE
 ====================================
 */
@@ -323,6 +355,7 @@ module.exports = {
     updateSession,
     deleteSession,
     advanceFeature,
+    resetFeatureState,
     getCurrentFeature,
     hasRemainingFeatures,
     isSessionOwner
