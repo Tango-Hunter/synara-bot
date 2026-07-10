@@ -24,7 +24,6 @@ const {
 const {
     getSession,
     getCurrentFeature,
-    hasRemainingFeatures,
     advanceFeature,
     resetFeatureState,
     isSessionOwner
@@ -326,20 +325,6 @@ async function beginFeatureSetup(
 
     } = validation;
 
-    if (
-
-        !hasRemainingFeatures(
-
-            session.guildId
-
-        )
-
-    ) {
-
-        return null;
-
-    }
-
     session.featureSettings = {};
 
     session.pendingFeature =
@@ -428,9 +413,7 @@ async function enableFeature(
         );
 
     if (
-
         !validation.success
-
     ) {
 
         return interaction.reply({
@@ -442,7 +425,6 @@ async function enableFeature(
                 true
 
         });
-
     }
 
     const {
@@ -460,9 +442,7 @@ async function enableFeature(
         );
 
     if (
-
         !document
-
     ) {
 
         throw new Error(
@@ -470,7 +450,6 @@ async function enableFeature(
             "Unable to determine the current feature."
 
         );
-
     }
 
     /*
@@ -634,16 +613,7 @@ async function disableFeature(
 
     );
 
-    return {
-
-        completed:
-
-            !hasRemainingFeatures(
-
-                session.guildId
-
-            )
-    };
+    return;
 }
 
 
@@ -1015,16 +985,7 @@ async function approveFeature(
 
     );
 
-    return {
-
-        completed:
-
-            !hasRemainingFeatures(
-
-                session.guildId
-
-            )
-    };
+    return;
 }
 
 /*

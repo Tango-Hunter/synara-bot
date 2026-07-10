@@ -34,6 +34,10 @@ const {
 } = require("./docs-handler");
 
 const {
+    handleSetupInteraction
+} = require("./setup-handler");
+
+const {
     handleBroadcastInteraction
 } = require("./broadcast-handler");
 
@@ -132,6 +136,23 @@ async function routeInteraction(
 
         if (
             handledDocs !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        SETUP INTERACTIONS
+        ============================
+        */
+
+        const handledSetup =
+            await handleSetupInteraction(
+                interaction
+            );
+
+        if (
+            handledSetup !== false
         ) {
             return;
         }

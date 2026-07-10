@@ -291,7 +291,7 @@ async function initializeGuildFeatures({
 
                 featureName,
 
-                enabled: true
+                enabled: false
             });
         }
     }

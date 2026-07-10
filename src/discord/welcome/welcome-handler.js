@@ -10,6 +10,14 @@ const {
 } = require("./welcome-service");
 
 const {
+    getCurrentVersion
+} = require("../utils/registry-renderer");
+
+const {
+    setGuildSetting
+} = require("../../core/database/guild-settings-repository");
+
+const {
     logFeature,
     logError
 } = require("../../core/logging/logger");
@@ -49,6 +57,34 @@ async function handleGuildCreate(
 
             }
         });
+
+        /*
+        ====================================
+        INITIALIZE CURRENT VERSION
+        ====================================
+        */
+
+        await setGuildSetting({
+
+            guildId:
+                guild.id,
+
+            guildName:
+                guild.name,
+
+            settingName:
+                "current_version",
+
+            settingValue:
+                getCurrentVersion()
+
+        });
+
+        /*
+        ====================================
+        SEND WELCOME MESSAGE
+        ====================================
+        */
 
         await sendWelcomeMessage(
 
