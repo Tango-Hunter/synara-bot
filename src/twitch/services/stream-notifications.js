@@ -2,7 +2,6 @@
  * Title: stream-notifications.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Date Modified: 5/30/26
  * Description: Service that checks roles, guilds, and promo channels to post live links.
  */
 
@@ -99,6 +98,17 @@ async function postLiveNotifications({
 
             || [];
 
+        const modRoles =
+            await getGuildSetting({
+
+                guildId,
+
+                settingName:
+                    'roles_moderator'
+            })
+
+            || [];
+
         const leadershipChannelId =
             await getGuildSetting({
 
@@ -129,13 +139,25 @@ async function postLiveNotifications({
         let channelId =
             selfPromoChannelId;
 
+        const leadershipRoles = [
+
+            ...adminRoles,
+
+            ...modRoles
+
+        ];
+
         const isLeadership =
-            adminRoles.some(
+            leadershipRoles.some(
+
                 roleId =>
+
                     member.roles.cache.has(
+
                         roleId
+
                     )
-                );
+            );
 
         if (
             isLeadership
