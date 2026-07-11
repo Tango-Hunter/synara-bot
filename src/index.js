@@ -56,9 +56,6 @@ const {
 const {
     initializeTwitchTables
 } = require('./core/database/init-twitch-tables');
-const {
-    initializeActivityTable
-} = require('./core/database/init-activity-table');
 
 const {
     routeInteraction
@@ -117,7 +114,6 @@ client.once('clientReady', async () => {
     // Databases
     await initializeDatabase();
     await initializeTwitchTables();
-    await initializeActivityTable();
 
     logFeature({
 
