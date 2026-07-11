@@ -8,7 +8,8 @@
 const {
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonStyle
+    ButtonStyle,
+    MessageFlags
 } = require("discord.js");
 
 const {
@@ -265,8 +266,8 @@ async function handleSetupCommand(
             content:
                 "An unexpected error occurred while starting the setup wizard.",
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
     }

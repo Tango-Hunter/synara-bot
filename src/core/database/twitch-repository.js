@@ -279,10 +279,57 @@ async function removeGuildTwitchAlerts(
 
 }
 
+/*
+====================================
+UPDATE TWITCH PROFILE
+====================================
+*/
+
+async function updateTwitchProfile({
+
+    twitchUserId,
+
+    twitchLogin,
+
+    twitchDisplayName
+}) {
+
+    await pool.query(
+
+        `
+        UPDATE twitch_users
+
+        SET
+
+            twitch_login = $2,
+
+            twitch_display_name = $3,
+
+            updated_at = NOW()
+
+        WHERE
+
+            twitch_user_id = $1
+        `,
+
+        [
+
+            twitchUserId,
+
+            twitchLogin,
+
+            twitchDisplayName
+
+        ]
+    );
+
+}
+
 module.exports = {
     getEnabledUsersByTwitchUserId,
     getTwitchUserByDiscordId,
     upsertTwitchUser,
     disableNotifications,
-    removeGuildTwitchAlerts
+    removeGuildTwitchAlerts,
+    updateTwitchProfile
 };

@@ -7,6 +7,7 @@
 
 const {
     getGuildSetting,
+    getGuildArraySetting,
     setGuildSetting
 } = require('../../../core/database/guild-settings-repository');
 
@@ -95,7 +96,7 @@ async function handleSetRoleCommand(
     else {
 
         const currentRoles =
-            await getGuildSetting({
+            await getGuildArraySetting({
 
                 guildId:
                     interaction.guild.id,

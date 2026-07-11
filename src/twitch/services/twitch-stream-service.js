@@ -88,6 +88,12 @@ async function getLiveStreamData(
         category:
             stream.game_name,
 
+        twitchLogin:
+            stream.user_login,
+
+        twitchDisplayName:
+            stream.user_name,
+
         thumbnailUrl:
 
             stream.thumbnail_url

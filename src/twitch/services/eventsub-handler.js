@@ -12,7 +12,8 @@ const {
 } = require('../../discord/utils/live-stream-event');
 
 const {
-    getEnabledUsersByTwitchUserId
+    getEnabledUsersByTwitchUserId,
+    updateTwitchProfile
 } = require('../../core/database/twitch-repository');
 
 const {
@@ -76,6 +77,24 @@ async function handleStreamOnline(
 
         return;
     }
+
+    /*
+    ====================================
+    SYNC TWITCH PROFILE
+    ====================================
+    */
+
+    await updateTwitchProfile({
+
+        twitchUserId,
+
+        twitchLogin:
+            streamData.twitchLogin,
+
+        twitchDisplayName:
+            streamData.twitchDisplayName
+
+    });
 
     for (
         const user

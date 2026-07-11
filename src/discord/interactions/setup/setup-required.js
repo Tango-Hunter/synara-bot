@@ -9,7 +9,8 @@ const {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } = require("discord.js");
 
 const {
@@ -503,8 +504,8 @@ async function buildRequiredSettings(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
 

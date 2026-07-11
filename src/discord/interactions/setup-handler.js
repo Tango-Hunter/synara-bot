@@ -835,7 +835,7 @@ async function handleSetupInteraction(
 
         for (
 
-            const featureId
+            const featureName
 
             of
 
@@ -853,7 +853,7 @@ async function handleSetupInteraction(
 
                     interaction.guild.name,
 
-                featureId,
+                featureName,
 
                 enabled:
 

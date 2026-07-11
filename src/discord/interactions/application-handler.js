@@ -652,6 +652,16 @@ async function handleApplicationInteraction(
                 submissionsChannelId
             );
 
+        logFeature({
+
+            category: "MOD_APP",
+
+            message: "Application session before embed",
+
+            details: data
+
+        });
+
         const identityEmbed =
             new EmbedBuilder()
 
@@ -680,7 +690,14 @@ ${interaction.user.id}
                             'Name',
 
                         value:
-                            data.name
+
+                            String(
+
+                                data.name ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -689,7 +706,14 @@ ${interaction.user.id}
                             'Age',
 
                         value:
-                            data.age
+
+                            String(
+
+                                data.age ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -698,7 +722,14 @@ ${interaction.user.id}
                             'Timezone',
 
                         value:
-                            data.timezone
+
+                            String(
+
+                                data.timezone ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -707,7 +738,14 @@ ${interaction.user.id}
                             'Languages',
 
                         value:
-                            data.languages
+
+                            String(
+
+                                data.languages ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -716,7 +754,14 @@ ${interaction.user.id}
                             'Availability',
 
                         value:
-                            data.availability
+
+                            String(
+
+                                data.availability ??
+
+                                "*No response provided.*"
+
+                            )
                     }
                 )
 
@@ -741,7 +786,14 @@ ${interaction.user.id}
                             'Experience',
 
                         value:
-                            data.experience
+
+                            String(
+
+                                data.experience ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -750,7 +802,14 @@ ${interaction.user.id}
                             'Approach',
 
                         value:
-                            data.approach
+
+                            String(
+
+                                data.approach ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -759,7 +818,14 @@ ${interaction.user.id}
                             'Boundaries',
 
                         value:
-                            data.boundaries
+
+                            String(
+
+                                data.boundaries ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -768,7 +834,14 @@ ${interaction.user.id}
                             'De-escalation',
 
                         value:
-                            data.deescalation
+
+                            String(
+
+                                data.deescalation ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -777,7 +850,14 @@ ${interaction.user.id}
                             'Scenario Response',
 
                         value:
-                            data.scenario
+
+                            String(
+
+                                data.scenario ??
+
+                                "*No response provided.*"
+
+                            )
                     }
                 )
 
@@ -802,7 +882,14 @@ ${interaction.user.id}
                             'Community Judgment',
 
                         value:
-                            data.judgment
+
+                            String(
+
+                                data.judgment ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -811,7 +898,14 @@ ${interaction.user.id}
                             'Conflict Handling',
 
                         value:
-                            data.conflict
+
+                            String(
+
+                                data.conflict ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -820,7 +914,14 @@ ${interaction.user.id}
                             'Motivation',
 
                         value:
-                            data.motivation
+
+                            String(
+
+                                data.motivation ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -829,7 +930,14 @@ ${interaction.user.id}
                             'Server Observations',
 
                         value:
-                            data.observations
+
+                            String(
+
+                                data.observations ??
+
+                                "*No response provided.*"
+
+                            )
                     },
 
                     {
@@ -838,7 +946,14 @@ ${interaction.user.id}
                             'Additional Notes',
 
                         value:
-                            data.bonus
+
+                            String(
+
+                                data.bonus ??
+
+                                "*No response provided.*"
+
+                            )
                     }
                 )
 

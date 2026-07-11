@@ -9,7 +9,8 @@ const {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } = require("discord.js");
 
 const {
@@ -311,9 +312,8 @@ async function beginFeatureSetup(
 
                 validation.message,
 
-            ephemeral:
-
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
 
@@ -421,8 +421,8 @@ async function enableFeature(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
     }
@@ -463,12 +463,6 @@ async function enableFeature(
         document.settings.length === 0
 
     ) {
-
-        session.enabledFeatures.push(
-
-            document.id
-
-        );
 
         return await reviewFeatureConfiguration(
 
@@ -583,8 +577,8 @@ async function disableFeature(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
     }
@@ -595,11 +589,21 @@ async function disableFeature(
 
     } = validation;
 
-    session.disabledFeatures.push(
+    if (
 
-        session.pendingFeature
+        !session.disabledFeatures.includes(
 
-    );
+            session.pendingFeature
+
+        )
+    ) {
+
+        session.disabledFeatures.push(
+
+            session.pendingFeature
+
+        );
+    }
 
     resetFeatureState(
 
@@ -644,8 +648,8 @@ async function configureFeature(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
 
@@ -947,8 +951,8 @@ async function approveFeature(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
     }
@@ -959,11 +963,21 @@ async function approveFeature(
 
     } = validation;
 
-    session.enabledFeatures.push(
+    if (
 
-        session.pendingFeature
+        !session.enabledFeatures.includes(
 
-    );
+            session.pendingFeature
+
+        )
+    ) {
+
+        session.enabledFeatures.push(
+
+            session.pendingFeature
+
+        );
+    }
 
     Object.assign(
 
@@ -1015,8 +1029,8 @@ async function cancelFeature(
             content:
                 validation.message,
 
-            ephemeral:
-                true
+            flags:
+                MessageFlags.Ephemeral
 
         });
     }
