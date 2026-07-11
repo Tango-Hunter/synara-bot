@@ -17,6 +17,18 @@ const {
 } = require('discord.js');
 
 const {
+    handleBroadcastCommand
+} = require("./commands/broadcast");
+
+const {
+    handleDocsCommand
+} = require("./commands/docs");
+
+const {
+    handleSetupCommand
+} = require("./commands/setup");
+
+const {
     handleModAppsCommand
 } = require('./commands/modapps');
 
@@ -145,10 +157,54 @@ async function routeAdminCommand(
 
     /*
     ============================
+    BROADCAST
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        "broadcast"
+    ) {
+
+        return await handleBroadcastCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    DOCUMENTATION
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        "docs"
+    ) {
+
+        return await handleDocsCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    SETUP
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        "setup"
+    ) {
+
+        return await handleSetupCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
     MOD APPS
     ============================
     */
-
     if (
         interaction.commandName ===
         'modapps'
@@ -164,7 +220,6 @@ async function routeAdminCommand(
     COMMAND LIST
     ============================
     */
-
     if (
         interaction.commandName ===
         'commands'
@@ -180,7 +235,6 @@ async function routeAdminCommand(
     FEATURE ENABLE/DISABLE
     ============================
     */
-
     if (
         interaction.commandName ===
         'feature'
@@ -196,7 +250,6 @@ async function routeAdminCommand(
     FEATURES LIST
     ============================
     */
-
     if (
         interaction.commandName ===
         'features'
@@ -216,6 +269,7 @@ async function routeAdminCommand(
         interaction.commandName ===
         'settings'
     ) {
+
         return await handleSettingsCommand(
             interaction
         );
@@ -227,10 +281,8 @@ async function routeAdminCommand(
     ============================
     */
     if (
-
         interaction.commandName ===
         'embed'
-
     ) {
 
         return await handleEmbedCommand(
@@ -244,10 +296,8 @@ async function routeAdminCommand(
     ============================
     */
     if (
-
         interaction.commandName ===
         'sticky'
-
     ) {
 
         return await handleStickyCommand(

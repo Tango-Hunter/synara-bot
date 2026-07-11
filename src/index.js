@@ -28,6 +28,9 @@ const {
 const {
     registerDiscordEventListeners
 } = require('./discord/interactions/discord-event-listener');
+const {
+    checkVersionUpdates
+} = require('./core/services/version-update-service');
 
 const {
     startDailyQuestionScheduler
@@ -53,9 +56,6 @@ const {
 const {
     initializeTwitchTables
 } = require('./core/database/init-twitch-tables');
-const {
-    initializeActivityTable
-} = require('./core/database/init-activity-table');
 
 const {
     routeInteraction
@@ -78,6 +78,12 @@ const {
     initializeAllGuildSettings,
     initializeGuildSettings
 } = require('./core/database/guild-settings-repository');
+const {
+    handleGuildCreate
+} = require('./discord/welcome/welcome-handler');
+const {
+    handleGuildRemoval
+} = require("./discord/guild-removal/removal-handler");
 
 const {
     logFeature,
@@ -108,7 +114,6 @@ client.once('clientReady', async () => {
     // Databases
     await initializeDatabase();
     await initializeTwitchTables();
-    await initializeActivityTable();
 
     logFeature({
 
@@ -136,6 +141,9 @@ client.once('clientReady', async () => {
     // Feature Flags and Guild Settings for existing Discord Servers
     await initializeAllGuildFeatures(client);
     await initializeAllGuildSettings(client);
+
+    // Version Updating service
+    await checkVersionUpdates(client);
 
     client.user.setPresence({
         activities: [
@@ -421,7 +429,28 @@ client.on(
             guildName:
                 guild.name
         });
+
+        await handleGuildCreate(
+            guild
+        );
     }
+);
+
+// ===============================
+// Removes Guild from Repositories when SYNARA is removed from a server
+// ===============================
+client.on(
+
+    "guildDelete",
+
+    async guild => {
+
+        await handleGuildRemoval(
+            guild
+        );
+
+    }
+
 );
 
 // ===============================

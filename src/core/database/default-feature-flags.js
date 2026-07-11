@@ -8,30 +8,11 @@
 const DEFAULT_FEATURE_FLAGS = [
 
     {
-
         name:
-            'onboarding',
+            'birthdays',
 
         description:
-            'Member onboarding and verification'
-    },
-
-    {
-
-        name:
-            'modApplications',
-
-        description:
-            'Moderator applications'
-    },
-
-    {
-
-        name:
-            'observations',
-
-        description:
-            'AI observations'
+            'Birthday tracking and announcements'
     },
 
     {
@@ -52,28 +33,42 @@ const DEFAULT_FEATURE_FLAGS = [
 
     {
         name:
-            'birthdays',
+            'modApplications',
 
         description:
-            'Birthday tracking and announcements'
+            'Moderator applications'
     },
 
     {
-
-        name:
-            'qotdScheduler',
-
-        description:
-            'Question of the Day'
-    },
-
-    {
-
         name:
             'motivationalScheduler',
 
         description:
             'Nightly motivational messages'
+    },
+
+    {
+        name:
+            'observations',
+
+        description:
+            'AI observations'
+    },
+
+    {
+        name:
+            'onboarding',
+
+        description:
+            'Member onboarding and verification'
+    },
+
+    {
+        name:
+            'qotdScheduler',
+
+        description:
+            'Question of the Day'
     },
 
     {
@@ -85,7 +80,6 @@ const DEFAULT_FEATURE_FLAGS = [
     },
 
     {
-
         name:
             'twitchMonitoring',
 

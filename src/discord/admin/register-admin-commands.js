@@ -78,6 +78,55 @@ const commands = [
 
     /*
     ============================
+    BROADCAST
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            "broadcast"
+        )
+
+        .setDescription(
+            "Create an official SYNARA broadcast."
+        ),
+
+    /*
+    ============================
+    DOCUMENTATION
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            "docs"
+        )
+
+        .setDescription(
+            "Browse SYNARA documentation."
+        ),
+
+    /*
+    ============================
+    SETUP
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+
+            "setup"
+
+        )
+
+        .setDescription(
+
+            "Launch the SYNARA Setup Wizard."
+
+        ),
+
+    /*
+    ============================
     MOD APPS
     ============================
     */

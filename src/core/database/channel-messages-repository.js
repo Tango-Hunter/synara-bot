@@ -231,9 +231,35 @@ async function deleteChannelMessage({
     );
 }
 
+/*
+====================================
+DELETE GUILD DATA
+====================================
+*/
+
+async function deleteGuildMessages(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM channel_messages
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     createChannelMessage,
     getChannelMessage,
     setChannelMessage,
-    deleteChannelMessage
+    deleteChannelMessage,
+    deleteGuildMessages
 };

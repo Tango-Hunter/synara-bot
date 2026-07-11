@@ -1,0 +1,352 @@
+{
+    "version": "v2.5.0",
+
+    "documents": [
+
+        {
+            "id": "welcome",
+            "type": "welcome",
+            "name": "Welcome to SYNARA",
+            "path": "setup/welcome.md",
+            "commands": [],
+            "settings": [],
+            "category": "information",
+            "footer": "none"
+        },
+
+        {
+            "id": "setup",
+            "type": "guide",
+            "name": "Setup Guide",
+            "path": "setup/setup.md",
+            "commands": [
+                "/setup",
+                "/features",
+                "/settings",
+                "/commands"
+            ],
+            "settings": [
+                "server_leader",
+                "role_verified",
+                "roles_moderator",
+                "roles_admin",
+                "channel_announcements",
+                "channel_logs",
+                "channel_automation"
+            ],
+            "category": "information",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "setup-confirmation",
+            "type": "guide",
+            "name": "Setup Complete",
+            "path": "setup/setup-confirmation.md",
+            "commands": [
+                "/settings",
+                "/features",
+                "/feature",
+                "/docs",
+                "/commands"
+            ],
+            "settings": [],
+            "category": "information",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "knowledge-base",
+            "type": "guide",
+            "name": "Knowledge Base",
+            "path": "setup/knowledge-base.md",
+            "commands": [
+                "/docs"
+            ],
+            "settings": [],
+            "category": "information",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "birthdays",
+            "type": "feature",
+            "name": "Birthdays",
+            "path": "features/birthdays.md",
+            "commands": [
+                "!birthday",
+                "!nextBirthdays"
+            ],
+            "settings": [
+                "channel_birthdays",
+                "role_birthday"
+            ],
+            "category": "community",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "bonks",
+            "type": "feature",
+            "name": "Bonks",
+            "path": "features/bonks.md",
+            "commands": [
+                "!bonk"
+            ],
+            "settings": [],
+            "category": "community",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "counting_penalties",
+            "type": "feature",
+            "name": "Counting Penalties",
+            "path": "features/counting-penalties.md",
+            "commands": [],
+            "settings": [
+                "channel_counting",
+                "role_counting_failure",
+                "counting_bot"
+            ],
+            "category": "automation",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "modapps",
+            "type": "feature",
+            "name": "Moderator Applications",
+            "path": "features/modapps.md",
+            "commands": [
+                "/modapps Open",
+                "/modapps Close",
+                "/modapps Blacklist List",
+                "/modapps Blacklist Add",
+                "/modapps Blacklist Remove"
+            ],
+            "settings": [
+                "channel_modapps_apply",
+                "channel_modapps_submissions"
+            ],
+            "category": "administration",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "nightly_motivation",
+            "type": "feature",
+            "name": "Nightly Motivational",
+            "path": "features/motivational.md",
+            "commands": [],
+            "settings": [
+                "channel_motivational"
+            ],
+            "category": "engagement",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "qotd",
+            "type": "feature",
+            "name": "Question of the Day",
+            "path": "features/qotd.md",
+            "commands": [],
+            "settings": [
+                "channel_qotd"
+            ],
+            "category": "engagement",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "observations",
+            "type": "feature",
+            "name": "Observations",
+            "path": "features/observations.md",
+            "commands": [
+                "/ignoreChannel"
+            ],
+            "settings": [],
+            "category": "automation",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "onboarding",
+            "type": "feature",
+            "name": "Onboarding",
+            "path": "features/onboarding.md",
+            "commands": [],
+            "settings": [
+                "channel_welcome",
+                "channel_roles",
+                "channel_intro"
+            ],
+            "category": "automation",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "scheduled_events",
+            "type": "feature",
+            "name": "Scheduled Events",
+            "path": "features/scheduled-events.md",
+            "commands": [
+                "/event"
+            ],
+            "settings": [],
+            "category": "administration",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "twitch_monitoring",
+            "type": "feature",
+            "name": "Twitch Monitoring",
+            "path": "features/twitch-monitor.md",
+            "commands": [
+                "!linkTwitch",
+                "!unlinkTwitch",
+                "!myTwitch",
+                "!twitchStats"
+            ],
+            "settings": [
+                "channel_stream_leadership",
+                "channel_stream_selfpromo"
+            ],
+            "category": "automation",
+            "footer": "toggleable"
+        },
+
+        {
+            "id": "event_announcements",
+            "type": "feature",
+            "name": "Event Announcements",
+            "path": "features/announcements.md",
+            "commands": [],
+            "settings": [],
+            "category": "automation",
+            "footer": "automatic"
+        },
+
+        {
+            "id": "custom_embeds",
+            "type": "feature",
+            "name": "Custom Embeds",
+            "path": "features/embed.md",
+            "commands": [
+                "/embed"
+            ],
+            "settings": [],
+            "category": "administration",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "sticky_messages",
+            "type": "feature",
+            "name": "Sticky Messages",
+            "path": "features/sticky.md",
+            "commands": [
+                "/sticky"
+            ],
+            "settings": [],
+            "category": "administration",
+            "footer": "configuration"
+        },
+
+        {
+            "id": "draw",
+            "type": "feature",
+            "name": "Draw",
+            "path": "features/draw.md",
+            "commands": [
+                "!draw"
+            ],
+            "settings": [],
+            "category": "engagement",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "facts",
+            "type": "feature",
+            "name": "Facts",
+            "path": "features/fact.md",
+            "commands": [
+                "!fact"
+            ],
+            "settings": [],
+            "category": "engagement",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "jokes",
+            "type": "feature",
+            "name": "Jokes",
+            "path": "features/joke.md",
+            "commands": [
+                "!joke"
+            ],
+            "settings": [],
+            "category": "engagement",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "efficiency_points",
+            "type": "feature",
+            "name": "Efficiency Points",
+            "path": "features/points.md",
+            "commands": [
+                "!points"
+            ],
+            "settings": [],
+            "category": "community",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "system_status",
+            "type": "feature",
+            "name": "System Status",
+            "path": "features/status.md",
+            "commands": [
+                "!status"
+            ],
+            "settings": [],
+            "category": "information",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "nicknames",
+            "type": "feature",
+            "name": "Nicknames",
+            "path": "features/nickname.md",
+            "commands": [
+                "!nickname"
+            ],
+            "settings": [],
+            "category": "community",
+            "footer": "interactive"
+        },
+
+        {
+            "id": "trivia",
+            "type": "feature",
+            "name": "Trivia",
+            "path": "features/trivia.md",
+            "commands": [
+                "!trivia",
+                "!leaderboard"
+            ],
+            "settings": [],
+            "category": "engagement",
+            "footer": "interactive"
+        }
+
+    ]
+}

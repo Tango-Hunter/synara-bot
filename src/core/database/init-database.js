@@ -104,6 +104,24 @@ async function initializeDatabase() {
 
     await pool.query(`
 
+        CREATE TABLE IF NOT EXISTS community_activity (
+
+            discord_user_id TEXT PRIMARY KEY,
+
+            last_activity_at TIMESTAMP NOT NULL,
+
+            message_count INTEGER DEFAULT 0,
+
+            is_inactive BOOLEAN DEFAULT FALSE,
+
+            joined_at TIMESTAMP DEFAULT NOW(),
+
+            updated_at TIMESTAMP DEFAULT NOW()
+        )
+    `);
+
+    await pool.query(`
+
         CREATE TABLE IF NOT EXISTS bonk_counts (
 
             guild_id TEXT NOT NULL,
@@ -291,6 +309,8 @@ async function initializeDatabase() {
                 'guild_settings',
 
                 'ignored_channels',
+
+                'community_activity',
 
                 'bonk_counts',
 

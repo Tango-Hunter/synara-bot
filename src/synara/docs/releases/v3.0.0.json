@@ -1,0 +1,16 @@
+{
+    "version": "v3.0.0",
+    "title": "Knowledge Base and Setup Guide",
+    "type": "New Features",
+    "documents": [
+        {
+            "id": "welcome"
+        },
+        {
+            "id": "setup"
+        },
+        {
+            "id": "knowledge-base"
+        }
+    ]
+}

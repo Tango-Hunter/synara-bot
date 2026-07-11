@@ -211,9 +211,78 @@ async function getEnabledUsersByTwitchUserId(
     return result.rows;
 }
 
+/*
+====================================
+REMOVE GUILD
+====================================
+*/
+
+async function removeGuildTwitchAlerts(
+    guildId
+) {
+
+    /*
+    ====================================
+    REMOVE GUILD FROM ALL ARRAYS
+    ====================================
+    */
+
+    await pool.query(
+
+        `
+        UPDATE twitch_users
+
+        SET
+
+            guild_ids = array_remove(
+
+                guild_ids,
+
+                $1
+
+            ),
+
+            updated_at = NOW()
+
+        WHERE
+
+            $1 = ANY(
+
+                guild_ids
+
+            )
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+    /*
+    ====================================
+    REMOVE ORPHANED RECORDS
+    ====================================
+    */
+
+    await pool.query(
+
+        `
+        DELETE FROM twitch_users
+
+        WHERE cardinality(
+
+            guild_ids
+
+        ) = 0
+        `
+    );
+
+}
+
 module.exports = {
     getEnabledUsersByTwitchUserId,
     getTwitchUserByDiscordId,
     upsertTwitchUser,
-    disableNotifications
+    disableNotifications,
+    removeGuildTwitchAlerts
 };

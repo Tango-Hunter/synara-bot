@@ -30,6 +30,18 @@ const {
 } = require('./sticky-handler');
 
 const {
+    handleDocsInteraction
+} = require("./docs-handler");
+
+const {
+    handleSetupInteraction
+} = require("./setup-handler");
+
+const {
+    handleBroadcastInteraction
+} = require("./broadcast-handler");
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -74,7 +86,6 @@ async function routeInteraction(
         if (
             handledCustomEmbed !== false
         ) {
-
             return;
         }
 
@@ -102,17 +113,64 @@ async function routeInteraction(
         */
 
         const handledSticky =
-
             await handleStickyInteraction(
                 interaction
             );
 
         if (
-
             handledSticky !== false
-
         ) {
+            return;
+        }
 
+        /*
+        ============================
+        DOCUMENTATION INTERACTIONS
+        ============================
+        */
+
+        const handledDocs =
+            await handleDocsInteraction(
+                interaction
+            );
+
+        if (
+            handledDocs !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        SETUP INTERACTIONS
+        ============================
+        */
+
+        const handledSetup =
+            await handleSetupInteraction(
+                interaction
+            );
+
+        if (
+            handledSetup !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        BROADCAST INTERACTIONS
+        ============================
+        */
+
+        const handledBroadcast =
+            await handleBroadcastInteraction(
+                interaction
+            );
+
+        if (
+            handledBroadcast !== false
+        ) {
             return;
         }
 
