@@ -157,9 +157,35 @@ async function getIgnoredChannels(
     return result.rows;
 }
 
+/*
+====================================
+DELETE GUILD DATA
+====================================
+*/
+
+async function deleteGuildIgnoredChannels(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM ignored_channels
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     addIgnoredChannel,
     removeIgnoredChannel,
     isIgnoredChannel,
-    getIgnoredChannels
+    getIgnoredChannels,
+    deleteGuildIgnoredChannels
 };

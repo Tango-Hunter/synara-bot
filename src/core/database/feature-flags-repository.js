@@ -335,6 +335,31 @@ async function initializeAllGuildFeatures(
     });
 }
 
+/*
+====================================
+DELETE GUILD FEATURES
+====================================
+*/
+
+async function deleteGuildFeatures(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM feature_flags
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     getFeatureFlag,
     featureFlagExists,
@@ -343,5 +368,6 @@ module.exports = {
     getAllFeatureFlags,
     getEnabledGuilds,
     initializeGuildFeatures,
-    initializeAllGuildFeatures
+    initializeAllGuildFeatures,
+    deleteGuildFeatures
 };

@@ -154,9 +154,35 @@ async function getBirthdaysForDate({
     return result.rows;
 }
 
+/*
+====================================
+DELETE GUILD DATA
+====================================
+*/
+
+async function deleteGuildBirthdays(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM birthdays
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     getBirthday,
     updateBirthday,
     getUpcomingBirthdays,
-    getBirthdaysForDate
+    getBirthdaysForDate,
+    deleteGuildBirthdays
 };

@@ -84,6 +84,9 @@ const {
 const {
     handleGuildCreate
 } = require('./discord/welcome/welcome-handler');
+const {
+    handleGuildRemoval
+} = require("./discord/guild-removal/removal-handler");
 
 const {
     logFeature,
@@ -435,6 +438,23 @@ client.on(
             guild
         );
     }
+);
+
+// ===============================
+// Removes Guild from Repositories when SYNARA is removed from a server
+// ===============================
+client.on(
+
+    "guildDelete",
+
+    async guild => {
+
+        await handleGuildRemoval(
+            guild
+        );
+
+    }
+
 );
 
 // ===============================

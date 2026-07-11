@@ -134,7 +134,33 @@ async function getBonkCount({
         .received_count;
 }
 
+/*
+====================================
+DELETE GUILD DATA
+====================================
+*/
+
+async function deleteGuildBonks(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM bonk_counts
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     recordBonk,
-    getBonkCount
+    getBonkCount,
+    deleteGuildBonks
 };

@@ -511,6 +511,31 @@ async function initializeAllGuildSettings(
     });
 }
 
+/*
+====================================
+DELETE GUILD SETTINGS
+====================================
+*/
+
+async function deleteGuildSettings(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM guild_settings
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     settingExists,
     getGuildSetting,
@@ -520,5 +545,6 @@ module.exports = {
     removeGuildArrayValue,
     getAllGuildSettings,
     initializeGuildSettings,
-    initializeAllGuildSettings
+    initializeAllGuildSettings,
+    deleteGuildSettings
 };

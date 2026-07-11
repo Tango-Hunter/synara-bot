@@ -174,9 +174,36 @@ async function getDueDiscordEvents() {
     return result.rows;
 }
 
+/*
+====================================
+DELETE GUILD DATA
+====================================
+*/
+
+async function deleteGuildEvents(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM
+            discord_event_announcements
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     createDiscordEventAnnouncement,
     updateDiscordEventAnnouncement,
     deleteDiscordEventAnnouncement,
-    getDueDiscordEvents
+    getDueDiscordEvents,
+    deleteGuildEvents
 };

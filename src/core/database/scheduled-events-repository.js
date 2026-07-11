@@ -485,6 +485,31 @@ async function updateScheduledEvent({
     );
 }
 
+/*
+====================================
+DELETE GUILD EVENTS
+====================================
+*/
+
+async function deleteGuildScheduledEvents(
+    guildId
+) {
+
+    await pool.query(
+
+        `
+        DELETE FROM scheduled_events
+
+        WHERE guild_id = $1
+        `,
+
+        [
+            guildId
+        ]
+    );
+
+}
+
 module.exports = {
     createScheduledEvent,
     getScheduledEvent,
@@ -498,5 +523,6 @@ module.exports = {
     getEventsNeeding1HourReminder,
     setScheduledEventActive,
     skipScheduledEvent,
-    updateScheduledEvent
+    updateScheduledEvent,
+    deleteGuildScheduledEvents
 };
