@@ -57,6 +57,180 @@ const {
 } = require('../../core/logging/error-types');
 
 
+/*
+====================================
+FETCH QUOTE
+====================================
+*/
+
+async function fetchQuote() {
+
+    const delay =
+
+        ms =>
+
+            new Promise(
+
+                resolve =>
+
+                    setTimeout(
+
+                        resolve,
+
+                        ms
+
+                    )
+            );
+
+    /*
+    ====================================
+    ZENQUOTES
+    ====================================
+    */
+
+    for (
+
+        let attempt = 1;
+
+        attempt <= 3;
+
+        attempt++
+
+    ) {
+
+        try {
+
+            const response =
+
+                await axios.get(
+
+                    'https://zenquotes.io/api/today',
+
+                    {
+
+                        timeout: 5000
+
+                    }
+                );
+
+            return {
+
+                quote:
+
+                    response.data[0].q,
+
+                author:
+
+                    response.data[0].a
+
+            };
+        }
+
+        catch (
+            error
+        ) {
+
+            if (
+                attempt < 3
+            ) {
+
+                logFeature({
+
+                    category:
+
+                        'NIGHTLY',
+
+                    message:
+
+                        `ZenQuotes attempt ${attempt} failed. Retrying in 10 seconds.`,
+
+                    details: {
+
+                        error:
+
+                            error.message
+
+                    }
+
+                });
+
+                await delay(
+
+                    10000
+
+                );
+
+                continue;
+
+            }
+        }
+    }
+
+    /*
+    ====================================
+    BACKUP PROVIDER
+    ====================================
+    */
+
+    try {
+
+        const response =
+
+            await axios.get(
+
+                'https://api.quotable.io/random',
+
+                {
+
+                    timeout: 5000
+
+                }
+            );
+
+        logFeature({
+
+            category:
+
+                'NIGHTLY',
+
+            message:
+
+                'Using backup quote provider.',
+
+            details: null
+
+        });
+
+        return {
+
+            quote:
+
+                response.data.content,
+
+            author:
+
+                response.data.author
+
+        };
+    }
+
+    catch (
+        error
+    ) {
+
+        throw new Error(
+
+            `Quote providers unavailable. ${error.message}`
+
+        );
+    }
+}
+
+/*
+====================================
+NIGHTLY MOTIVATIONAL
+====================================
+*/
 async function runNightlyMessage() {
 
     try {
@@ -72,18 +246,13 @@ async function runNightlyMessage() {
         const systemPrompt =
             buildSystemPrompt();
 
-        const quoteResponse =
-            await axios.get(
+        const {
 
-                'https://zenquotes.io/api/today'
-            );
+            quote,
 
-        const quoteData =
-            quoteResponse.data[0];
-        const quote =
-            quoteData.q;
-        const author =
-            quoteData.a;
+            author
+
+        } = await fetchQuote();
 
         const userPrompt = `
 
@@ -145,7 +314,7 @@ Requirements:
                     guildId,
 
                     category:
-                        'NIGHTLY',
+                        'NIGHTLY MOTIVATIONAL',
 
                     details:
                         'Motivational channel not configured',
@@ -188,7 +357,7 @@ ${finalResponse}
                     guildId,
 
                     category:
-                        'NIGHTLY',
+                        'NIGHTLY MOTIVATIONAL',
 
                     details:
                         `Failed to post message: ${error.message}`,
@@ -205,10 +374,10 @@ ${finalResponse}
                 guildId,
 
                 category:
-                    'NIGHTLY',
+                    'NIGHTLY MOTIVATIONAL',
 
                 details:
-                    'Nightly reflection posted',
+                    `Nightly reflection posted in <${channelId}>`,
 
                 status:
                     'SUCCESS'
@@ -245,10 +414,24 @@ ${finalResponse}
 
             type:
                 ERROR_TYPES.SCHEDULER_ERROR,
+
             source:
                 'motivational-scheduler',
+
             message:
-                error.message
+                'Nightly motivational scheduler failed.',
+
+            details: {
+
+                error:
+
+                    error.message,
+
+                stack:
+
+                    error.stack
+
+            }
         });
     }
 }
