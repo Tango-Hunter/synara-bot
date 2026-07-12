@@ -47,6 +47,10 @@ const {
 } = require("../../core/database/guild-settings-repository");
 
 const {
+    getRegistryId
+} = require("../../core/database/default-feature-flags");
+
+const {
     setFeatureFlag
 } = require("../../core/database/feature-flags-repository");
 
@@ -170,63 +174,101 @@ function buildFeatureSummaryEmbed(
 
     const enabled =
 
-    session.enabledFeatures
+        session.enabledFeatures
 
-        .map(
+            .map(
 
-            featureId =>
+                featureName => {
 
-                `🟢 ${
+                    const registryId =
 
-                    getDocument(
+                        getRegistryId(
 
-                        featureId
+                            featureName
 
-                    ).name
+                        );
 
-                }`
+                    const document =
 
-        )
+                        registryId
 
-        .join(
+                            ? getDocument(
 
-            "\n"
+                                registryId
 
-        )
+                            )
 
-        ||
+                            : null;
 
-        "*None*";
+                    return `🟢 ${
 
-const disabled =
+                        document?.name ??
 
-    session.disabledFeatures
+                        featureName
 
-        .map(
+                    }`;
+                }
+            )
 
-            featureId =>
+            .join(
 
-                `🔴 ${
+                "\n"
 
-                    getDocument(
+            )
 
-                        featureId
+            ||
 
-                    ).name
+            "*None*";
 
-                }`
+    const disabled =
 
-        )
+        session.disabledFeatures
 
-        .join(
+            .map(
 
-            "\n"
+                featureName => {
 
-        )
+                    const registryId =
 
-        ||
+                        getRegistryId(
 
-        "*None*";
+                            featureName
+
+                        );
+
+                    const document =
+
+                        registryId
+
+                            ? getDocument(
+
+                                registryId
+
+                            )
+
+                            : null;
+
+                    return `🔴 ${
+
+                        document?.name ??
+
+                        featureName
+
+                    }`;
+
+                }
+
+            )
+
+            .join(
+
+                "\n"
+
+            )
+
+            ||
+
+            "*None*";
 
 return new EmbedBuilder()
 
