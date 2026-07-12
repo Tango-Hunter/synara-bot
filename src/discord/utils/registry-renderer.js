@@ -320,9 +320,10 @@ function renderRelease(version) {
                 `## ${release.title}\n\n${release.type}`
             )
             
-            .setFooter(
-                `Automatic SYNARA Broadcast • Please Review the following update announcements.`
-            );
+            .setFooter({
+                text:
+                    "Automatic SYNARA Broadcast • Please review the following update announcements."
+            });
 
     embeds.push(
         releaseEmbed

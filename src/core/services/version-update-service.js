@@ -195,6 +195,32 @@ async function checkVersionUpdates(
             error
         ) {
 
+            logError({
+
+                type:
+                    ERROR_TYPES.SYSTEM_ERROR,
+
+                source:
+                    "version-update-service",
+
+                message:
+                    "Failed to render release broadcast.",
+
+                details: {
+
+                    version:
+                        currentVersion,
+
+                    error:
+                        error.message,
+
+                    stack:
+                        error.stack
+
+                }
+
+            });
+
             /*
             ====================================
             NO RELEASE BROADCAST REQUIRED
