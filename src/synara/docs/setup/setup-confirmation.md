@@ -33,7 +33,14 @@ To view every command currently available on your server, use:
 - `/commands` — Administrative commands
 - `!commands` — Community commands
 
-These command displays both administrative and community commands that are available based on your current server configuration.
+If you delete channels/roles that are configured for SYNARA or want to change/add any configured channels, roles, etc, these commands are available:
+
+- `/setChannel` — Use this command in the channel you want to add to a setting
+- `/removeChannel` — Use this command to remove the channel from any settings
+- `/ignoreChannel` — Use this command to add the current channel to SYNARA's ignored list for observations and activity tracking
+- `/setRole` — Use this command to select a Role Setting and then assign one of your servers roles to that setting.
+- `/removeRole` — Use this command to remove one of your server's roles from a setting
+- `/setUser` — Use this to add an individual user or bot to a setting.
 
 ## Thank You
 

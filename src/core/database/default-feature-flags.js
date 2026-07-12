@@ -8,84 +8,95 @@
 const DEFAULT_FEATURE_FLAGS = [
 
     {
+        id:
+            'birthdays',
         name:
             'birthdays',
-
         description:
             'Birthday tracking and announcements'
     },
 
     {
+        id:
+            'bonks',
         name:
             'bonks',
-
         description:
             'Community bonk system'
     },
 
     {
+        id:
+            'counting_penalties',
         name:
             'countingPenalties',
-
         description:
             'Counting game failure tracking'
     },
 
     {
+        id:
+            'modapps',
         name:
             'modApplications',
-
         description:
             'Moderator applications'
     },
 
     {
+        id:
+            'nightly_motivation',
         name:
             'motivationalScheduler',
-
         description:
             'Nightly motivational messages'
     },
 
     {
+        id:
+            'observations',
         name:
             'observations',
-
         description:
             'AI observations'
     },
 
     {
+        id:
+            'onboarding',
         name:
             'onboarding',
-
         description:
             'Member onboarding and verification'
     },
 
     {
+        id:
+            'qotd',
         name:
             'qotdScheduler',
-
         description:
             'Question of the Day'
     },
 
     {
+        id:
+            'scheduled_events',
         name:
             'scheduledEvents',
-
         description:
             'Recurring events and automation framework'
     },
 
     {
+        id:
+            'twitch_monitoring',
         name:
             'twitchMonitoring',
-
         description:
             'Twitch live notifications'
     }
+
 ];
 
 function getFeatureNames() {
@@ -111,8 +122,64 @@ function getFeatureChoices() {
     );
 }
 
+/*
+====================================
+FEATURE LOOKUPS
+====================================
+*/
+
+function getFeatureFlagName(
+    registryId
+) {
+
+    return (
+
+        DEFAULT_FEATURE_FLAGS.find(
+
+            feature =>
+
+                feature.id ===
+
+                registryId
+
+        )
+
+        ||
+
+        {}
+
+    ).name ?? null;
+
+}
+
+function getRegistryId(
+    featureName
+) {
+
+    return (
+
+        DEFAULT_FEATURE_FLAGS.find(
+
+            feature =>
+
+                feature.name ===
+
+                featureName
+
+        )
+
+        ||
+
+        {}
+
+    ).id ?? null;
+
+}
+
 module.exports = {
     DEFAULT_FEATURE_FLAGS,
     getFeatureNames,
-    getFeatureChoices
+    getFeatureChoices,
+    getFeatureFlagName,
+    getRegistryId
 };

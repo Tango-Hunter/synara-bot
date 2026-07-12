@@ -18,6 +18,12 @@ const {
 } = require("../../../core/database/default-guild-settings");
 
 const {
+    getFeatureFlagName
+} = require(
+    "../../../core/database/default-feature-flags"
+);
+
+const {
     renderDocument,
     getDocument
 } = require("../../utils/registry-renderer");
@@ -589,18 +595,30 @@ async function disableFeature(
 
     } = validation;
 
+    const featureName =
+
+        getFeatureFlagName(
+
+            session.pendingFeature
+
+        );
+
     if (
+
+        featureName
+
+        &&
 
         !session.disabledFeatures.includes(
 
-            session.pendingFeature
+            featureName
 
         )
     ) {
 
         session.disabledFeatures.push(
 
-            session.pendingFeature
+            featureName
 
         );
     }
@@ -963,21 +981,33 @@ async function approveFeature(
 
     } = validation;
 
+    const featureName =
+
+        getFeatureFlagName(
+
+            session.pendingFeature
+
+        );
+
     if (
+
+        featureName
+
+        &&
 
         !session.enabledFeatures.includes(
 
-            session.pendingFeature
+            featureName
 
         )
     ) {
 
         session.enabledFeatures.push(
 
-            session.pendingFeature
+            featureName
 
         );
-    }
+}
 
     Object.assign(
 
