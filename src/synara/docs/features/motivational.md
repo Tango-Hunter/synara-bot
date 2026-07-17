@@ -15,6 +15,10 @@ The feature runs automatically every day at:
 - **8:00 PM Eastern Time**
 - **12:00 AM UTC**
 
+## Required Settings
+
+- Motivational Channel (Some Servers have a dedicated channel for positivity messages and some use general chat, you can always change the channel later as well)
+
 ## Notes
 
 - Quotes and reflections are generated automatically.

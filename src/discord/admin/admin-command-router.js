@@ -29,6 +29,10 @@ const {
 } = require("./commands/setup");
 
 const {
+    handleContentCreatorCommand
+} = require("./commands/contentcreator");
+
+const {
     handleModAppsCommand
 } = require('./commands/modapps');
 
@@ -196,6 +200,20 @@ async function routeAdminCommand(
     ) {
 
         return await handleSetupCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    CONTENT CREATOR
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'contentcreator'
+    ) {
+        return await handleContentCreatorCommand(
             interaction
         );
     }

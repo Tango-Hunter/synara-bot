@@ -26,6 +26,11 @@ Registers or updates your birthday.
 
 Displays birthdays occurring during the next three months.
 
+## Required Settings
+
+- Birthday Role
+- Birthday Channel
+
 ## Notes
 
 - Birthdays are entered using the **MM/DD** format.

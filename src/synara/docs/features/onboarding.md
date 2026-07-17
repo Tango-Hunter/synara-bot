@@ -17,6 +17,12 @@ After verification, SYNARA directs the member to two important channels:
 
 This process helps new members become part of the community quickly while ensuring they have acknowledged the server rules.
 
+## Required Settings
+
+- Welcome Channel (Some Servers have a dedicated channel for welcome messages and some use general chat, you can always change the channel later as well)
+- Reaction Roles Channel (SYNARA does not have a reaction role feature but if you have one configured, use that, if not, you can just link general chat or whatever channel you want uses to check out)
+- Introduction Channel (this channel is for users to introduce themselves)
+
 ## Notes
 
 - The Verified role must be configured by the server administrators.

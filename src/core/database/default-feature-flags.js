@@ -27,6 +27,15 @@ const DEFAULT_FEATURE_FLAGS = [
 
     {
         id:
+            'content_creator',
+        name:
+            'contentCreatorAnnouncements',
+        description:
+            'Content Creator Announcements'
+    },
+
+    {
+        id:
             'counting_penalties',
         name:
             'countingPenalties',

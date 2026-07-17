@@ -16,6 +16,16 @@ Some features require specific channels, roles, or users to function correctly.
 
 As you progress through setup, I'll explain what each feature requires and guide you through the configuration process.
 
+### Required Settings
+
+- Server Leader
+- Verified Role
+- Moderator Role
+- Administrator Role
+- Announcements Channel (this channel is for automated SYNARA announcements)
+- Logging Channel (this channel will be used for SYNARA logs AND for updates/broadcasts for administrative attention)
+- Automation Channel (this channel is a private channel that can be used to run any configuration or automation settings for SYNARA)
+
 ## Configuration
 
 Throughout setup you'll use Discord's slash (`/`) commands to configure your server.

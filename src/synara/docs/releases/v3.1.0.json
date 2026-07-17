@@ -1,0 +1,10 @@
+{
+    "version": "v3.1.0",
+    "title": "Content Creator Announcements",
+    "type": "New Feature",
+    "documents": [
+        {
+            "id": "content_creator"
+        }
+    ]
+}

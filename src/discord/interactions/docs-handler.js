@@ -6,6 +6,10 @@
  */
 
 const {
+    MessageFlags
+} = require('discord.js');
+
+const {
     renderDocument
 } = require("../utils/registry-renderer");
 
@@ -176,10 +180,11 @@ async function handleDocsInteraction(
 
             await interaction.reply({
 
-                ephemeral: true,
-
                 content:
-                    "I encountered an error while loading that documentation."
+                    "I encountered an error while loading that documentation.",
+
+                flags:
+                    MessageFlags.Ephemeral
 
             }).catch(() => {});
 
