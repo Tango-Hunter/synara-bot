@@ -313,6 +313,8 @@ async function initializeDatabase() {
 
             last_content_id TEXT,
 
+            subscription_expires_at TIMESTAMP,
+
             created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
             updated_at TIMESTAMP NOT NULL DEFAULT NOW(),

@@ -6,22 +6,31 @@
  */
 
 const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
     EmbedBuilder,
-    MessageFlags
+    MessageFlags,
+    StringSelectMenuBuilder
 } = require('discord.js');
 
 const {
-    getGuildCreators
+    getGuildCreators,
+    getCreatorsByUser
 } = require('../../../core/database/content-creators-repository');
+
+const {
+    getPlatformOptions,
+    getPlatformLabel
+} = require('../../interactions/content-creator/platform-selection');
+
+const {
+    createApprovalButtons
+} = require('../../utils/approval-workflow');
 
 const {
     embedThemes
 } = require('../../../core/config/embed-themes');
-
-const {
-    beginCreatorAdd,
-    beginCreatorRemove
-} = require('../../interactions/content-creator/content-creator-handler');
 
 
 async function handleContentCreatorCommand(
@@ -41,9 +50,76 @@ async function handleContentCreatorCommand(
         subcommand === 'add'
     ) {
 
-        return await beginCreatorAdd(
-            interaction
-        );
+        const selector =
+
+            new StringSelectMenuBuilder()
+
+                .setCustomId(
+
+                    'content_creator_platform'
+
+                )
+
+                .setPlaceholder(
+
+                    'Select a content platform...'
+
+                )
+
+                .addOptions(
+
+                    getPlatformOptions()
+
+                );
+
+        const row =
+
+            new ActionRowBuilder()
+
+                .addComponents(
+
+                    selector
+
+                );
+
+        return await interaction.reply({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+
+                        embedThemes.contentCreator.color
+
+                    )
+
+                    .setTitle(
+
+                        `${embedThemes.contentCreator.icon} Register Content Creator`
+
+                    )
+
+                    .setDescription(
+
+                        'Select the platform you would like to register.'
+
+                    )
+
+            ],
+
+            components: [
+
+                row
+
+            ],
+
+            flags:
+
+                MessageFlags.Ephemeral
+
+        });
+
     }
 
     /*
@@ -56,9 +132,120 @@ async function handleContentCreatorCommand(
         subcommand === 'remove'
     ) {
 
-        return await beginCreatorRemove(
-            interaction
-        );
+        const creators =
+
+            await getCreatorsByUser({
+
+                guildId:
+
+                    interaction.guild.id,
+
+                discordUserId:
+
+                    interaction.user.id
+
+            });
+
+        if (
+            creators.length === 0
+        ) {
+
+            return await interaction.reply({
+
+                content:
+
+                    'You have not configured any content creator announcements.',
+
+                flags:
+
+                    MessageFlags.Ephemeral
+
+            });
+        }
+
+        const selector =
+
+            new StringSelectMenuBuilder()
+
+                .setCustomId(
+
+                    'content_creator_remove'
+
+                )
+
+                .setPlaceholder(
+
+                    'Select a platform to remove...'
+
+                )
+
+                .addOptions(
+
+                    creators.map(
+
+                        creator => ({
+
+                            label:
+
+                                getPlatformLabel(
+
+                                    creator.platform
+
+                                ),
+
+                            description:
+
+                                creator.creator_display_name,
+
+                            value:
+
+                                creator.platform
+
+                        })
+                    )
+                );
+
+        return await interaction.reply({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+
+                        embedThemes.contentCreator.color
+
+                    )
+
+                    .setTitle(
+
+                        'Remove Content Creator'
+
+                    )
+
+                    .setDescription(
+
+                        'Select the platform you would like to remove.'
+
+                    )
+            ],
+
+            components: [
+
+                new ActionRowBuilder()
+
+                    .addComponents(
+
+                        selector
+
+                    )
+            ],
+
+            flags:
+
+                MessageFlags.Ephemeral
+
+        });
     }
 
     /*
