@@ -2,7 +2,6 @@
  * Title: twitch.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Date Modified: 5/30/26
  * Description: Express server handling all twitch routes.
  */
 
@@ -150,91 +149,6 @@ module.exports = (
             }
 
             res.sendStatus(200);
-        }
-    );
-
-    // Offline Test
-    router.post(
-
-        '/test-offline',
-
-        async (
-
-            req,
-
-            res
-        ) => {
-
-            await handleEventSub(
-
-                {
-
-                    subscription: {
-
-                        type:
-                            'stream.offline'
-                    },
-
-                    event: {
-
-                        broadcaster_user_id:
-
-                            req.body
-                                .twitchUserId
-                    }
-                },
-
-                client
-            );
-
-            res.sendStatus(
-                200
-            );
-        }
-    );
-
-    // Online Test
-    router.post(
-
-        '/test-online',
-
-        async (
-
-            req,
-
-            res
-        ) => {
-
-            await handleEventSub(
-
-                {
-
-                    subscription: {
-
-                        type:
-                            'stream.online'
-                    },
-
-                    event: {
-
-                        broadcaster_user_id:
-                            req.body
-                                .twitchUserId,
-
-                        title:
-                            'SYNARA EventSub Test',
-
-                        category_name:
-                            'Testing'
-                    }
-                },
-
-                client
-            );
-
-            res.sendStatus(
-                200
-            );
         }
     );
 

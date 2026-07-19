@@ -400,6 +400,44 @@ async function deleteCreator({
     );
 }
 
+async function deleteUserCreator({
+
+    guildId,
+
+    discordUserId,
+
+    platform
+
+}) {
+
+    await pool.query(
+
+        `
+        DELETE FROM content_creators
+
+        WHERE
+
+            guild_id = $1
+
+            AND discord_user_id = $2
+
+            AND platform = $3
+        `,
+
+        [
+
+            guildId,
+
+            discordUserId,
+
+            platform
+
+        ]
+
+    );
+
+}
+
 async function removeGuildCreators({
 
     guildId
@@ -431,5 +469,6 @@ module.exports = {
     updateCreator,
     updateLastContentId,
     deleteCreator,
+    deleteUserCreator,
     removeGuildCreators
 };

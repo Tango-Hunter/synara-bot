@@ -7,16 +7,15 @@
 
 const {
     ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
+    StringSelectMenuBuilder,
     EmbedBuilder,
-    MessageFlags,
-    StringSelectMenuBuilder
+    MessageFlags
 } = require('discord.js');
 
 const {
     getGuildCreators,
-    getCreatorsByUser
+    getCreatorsByUser,
+    deleteCreator
 } = require('../../../core/database/content-creators-repository');
 
 const {
@@ -33,6 +32,11 @@ const {
 } = require('../../../core/config/embed-themes');
 
 
+/*
+====================================
+HANDLE CONTENT CREATOR
+====================================
+*/
 async function handleContentCreatorCommand(
     interaction
 ) {
@@ -105,7 +109,6 @@ async function handleContentCreatorCommand(
                         'Select the platform you would like to register.'
 
                     )
-
             ],
 
             components: [
@@ -119,7 +122,6 @@ async function handleContentCreatorCommand(
                 MessageFlags.Ephemeral
 
         });
-
     }
 
     /*
@@ -199,8 +201,21 @@ async function handleContentCreatorCommand(
 
                             value:
 
-                                creator.platform
+                                JSON.stringify({
 
+                                    platform:
+
+                                        creator.platform,
+
+                                    accountIdentifier:
+
+                                        creator.account_identifier,
+
+                                    creatorDisplayName:
+
+                                        creator.creator_display_name
+
+                                })
                         })
                     )
                 );
@@ -333,6 +348,298 @@ async function handleContentCreatorCommand(
     });
 }
 
+/*
+============================
+CONTENT CREATOR REMOVAL
+============================
+*/
+async function handleRemoveInteraction(
+
+    interaction
+
+) {
+
+    /*
+    ============================
+    REMOVE SELECTED
+    ============================
+    */
+
+    if (
+
+        interaction.isStringSelectMenu()
+
+        &&
+
+        interaction.customId ===
+
+        'content_creator_remove'
+
+    ) {
+
+        const {
+
+            platform,
+
+            accountIdentifier,
+
+            creatorDisplayName
+
+        } =
+
+            JSON.parse(
+
+                interaction.values[0]
+
+            );
+
+        return await interaction.update({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+
+                        embedThemes.contentCreator.color
+
+                    )
+
+                    .setTitle(
+
+                        `${embedThemes.contentCreator.icon} Remove Content Creator`
+
+                    )
+
+                    .setDescription(
+
+                        'Review the selected content creator before removal.'
+
+                    )
+
+                    .addFields(
+
+                        {
+
+                            name:
+
+                                'Platform',
+
+                            value:
+
+                                getPlatformLabel(
+
+                                    platform
+
+                                ),
+
+                            inline:
+
+                                true
+
+                        },
+
+                        {
+
+                            name:
+
+                                'Creator',
+
+                            value:
+
+                                creatorDisplayName,
+
+                            inline:
+
+                                true
+
+                        }
+
+                    )
+
+                    .setFooter({
+
+                        text:
+
+                            embedThemes.contentCreator.footer
+
+                    })
+
+            ],
+
+            components: [
+
+                createApprovalButtons({
+
+                    approveId:
+
+                        `content_creator_remove_confirm:${Buffer
+
+                            .from(
+
+                                interaction.values[0]
+
+                            )
+
+                            .toString(
+
+                                'base64url'
+
+                            )}`,
+
+                    cancelId:
+
+                        'content_creator_remove_cancel'
+
+                })
+
+            ]
+
+        });
+
+    }
+
+    /*
+    ============================
+    APPROVE
+    ============================
+    */
+
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId.startsWith(
+
+            'content_creator_remove_confirm:'
+
+        )
+
+    ) {
+
+        const encoded =
+
+            interaction.customId.split(
+
+                ':'
+
+            )[1];
+
+        const {
+
+            platform,
+
+            accountIdentifier,
+
+            creatorDisplayName
+
+        } =
+
+            JSON.parse(
+
+                Buffer
+
+                    .from(
+
+                        encoded,
+
+                        'base64url'
+
+                    )
+
+                    .toString()
+
+            );
+
+        await deleteCreator({
+
+            guildId:
+
+                interaction.guild.id,
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+        return await interaction.update({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+
+                        embedThemes.contentCreator.color
+
+                    )
+
+                    .setTitle(
+
+                        `${embedThemes.contentCreator.icon} Content Creator Removed`
+
+                    )
+
+                    .setDescription(
+
+                        `${creatorDisplayName} has been removed from automated ${getPlatformLabel(platform)} announcements.`
+
+                    )
+
+                    .setFooter({
+
+                        text:
+
+                            embedThemes.contentCreator.footer
+
+                    })
+
+            ],
+
+            components: []
+
+        });
+
+    }
+
+    /*
+    ============================
+    CANCEL
+    ============================
+    */
+
+    if (
+
+        interaction.isButton()
+
+        &&
+
+        interaction.customId ===
+
+        'content_creator_remove_cancel'
+
+    ) {
+
+        return await interaction.update({
+
+            content:
+
+                'Content creator removal cancelled.',
+
+            embeds: [],
+
+            components: []
+
+        });
+
+    }
+
+}
+
 module.exports = {
-    handleContentCreatorCommand
+    handleContentCreatorCommand,
+    handleRemoveInteraction
 };
