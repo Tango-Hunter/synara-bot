@@ -213,7 +213,7 @@ ${response}
                     guildId,
 
                     category:
-                        'QOTD',
+                        'Daily Scheduled Message',
 
                     details:
                         'Question of the Day posted',

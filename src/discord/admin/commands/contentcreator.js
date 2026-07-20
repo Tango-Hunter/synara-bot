@@ -31,6 +31,10 @@ const {
     embedThemes
 } = require('../../../core/config/embed-themes');
 
+const {
+    logDiscordEvent
+} = require('../../core/logging/discord-logger');
+
 
 /*
 ====================================
@@ -564,6 +568,26 @@ async function handleRemoveInteraction(
             accountIdentifier
 
         });
+
+        await discordLog({
+        
+                guild:
+        
+                    interaction.guild,
+        
+                category:
+        
+                    'Content Creator',
+                
+                details:
+
+                    `${creatorDisplayName} on ${platform} has been removed from automatic announcements.`,
+
+                status:
+
+                    'INFO'
+        
+            });
 
         return await interaction.update({
 

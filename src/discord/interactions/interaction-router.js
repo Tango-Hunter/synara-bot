@@ -42,6 +42,10 @@ const {
 } = require("./broadcast-handler");
 
 const {
+    handleContentCreatorInteraction
+} = require('./content-creator-handler');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -170,6 +174,21 @@ async function routeInteraction(
 
         if (
             handledBroadcast !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        CONTENT CREATOR
+        ============================
+        */
+        const handledContentCreator =
+            await handleContentCreatorInteraction(
+                interaction
+            );
+        if (
+            handledContentCreator !== false
         ) {
             return;
         }

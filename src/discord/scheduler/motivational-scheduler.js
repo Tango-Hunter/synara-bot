@@ -374,10 +374,10 @@ ${finalResponse}
                 guildId,
 
                 category:
-                    'NIGHTLY MOTIVATIONAL',
+                    'Daily Scheduled Message',
 
                 details:
-                    `Nightly reflection posted in <${channelId}>`,
+                    `Nightly reflection posted`,
 
                 status:
                     'SUCCESS'

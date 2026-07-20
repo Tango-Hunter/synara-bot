@@ -181,7 +181,9 @@ async function createCreator({
 
     creatorDisplayName,
 
-    messageTemplate
+    messageTemplate,
+
+    subscriptionExpiresAt
 
 }) {
 
@@ -202,7 +204,9 @@ async function createCreator({
 
             creator_display_name,
 
-            message_template
+            message_template,
+
+            subscription_expires_at
 
         )
 
@@ -220,7 +224,9 @@ async function createCreator({
 
             $6,
 
-            $7
+            $7,
+
+            $8
 
         )
 
@@ -241,7 +247,9 @@ async function createCreator({
 
             creatorDisplayName,
 
-            messageTemplate
+            messageTemplate,
+
+            subscriptionExpiresAt
 
         ]
     );
@@ -400,44 +408,6 @@ async function deleteCreator({
     );
 }
 
-async function deleteUserCreator({
-
-    guildId,
-
-    discordUserId,
-
-    platform
-
-}) {
-
-    await pool.query(
-
-        `
-        DELETE FROM content_creators
-
-        WHERE
-
-            guild_id = $1
-
-            AND discord_user_id = $2
-
-            AND platform = $3
-        `,
-
-        [
-
-            guildId,
-
-            discordUserId,
-
-            platform
-
-        ]
-
-    );
-
-}
-
 async function removeGuildCreators({
 
     guildId
@@ -469,6 +439,5 @@ module.exports = {
     updateCreator,
     updateLastContentId,
     deleteCreator,
-    deleteUserCreator,
     removeGuildCreators
 };
