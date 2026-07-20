@@ -58,6 +58,8 @@ async function discordLog({
 
     guildId,
 
+    title,
+
     category,
 
     details,
@@ -120,7 +122,7 @@ async function discordLog({
 
                         STATUS_ICONS.INFO
 
-                    } ${category}`
+                    } ${title}`
                 )
 
                 .addFields(

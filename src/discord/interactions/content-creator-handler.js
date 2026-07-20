@@ -22,6 +22,10 @@ const {
 } = require('../../core/config/embed-themes');
 
 const {
+    sendDiscordMessage
+} = require('../services/post-message');
+
+const {
     discordLog
 } = require('../../core/logging/discord-logger');
 
@@ -477,55 +481,130 @@ async function finalizeCreator({
 
 }) {
 
-    await createCreator({
+    try {
+
+        await createCreator({
+
+            guildId:
+
+                interaction.guild.id,
+
+            discordChannelId:
+
+                draft.discordChannelId,
+
+            discordUserId:
+
+                interaction.user.id,
+
+            platform:
+
+                draft.platform,
+
+            accountIdentifier:
+
+                draft.accountIdentifier,
+
+            creatorDisplayName:
+
+                draft.creatorDisplayName,
+
+            messageTemplate:
+
+                draft.messageTemplate,
+
+            subscriptionExpiresAt:
+
+                draft.subscriptionExpiresAt
+
+        });
+    }
+
+    catch (
+        error
+    ) {
+
+        /*
+        ====================================
+        DUPLICATE CREATOR
+        ====================================
+        */
+
+        if (
+            error.code === '23505'
+        ) {
+
+            deleteDraft({
+
+                guildId:
+
+                    interaction.guild.id,
+
+                userId:
+
+                    interaction.user.id
+
+            });
+
+            await interaction.update({
+
+                embeds: [
+
+                    new EmbedBuilder()
+
+                        .setColor(
+
+                            embedThemes.alert.color
+
+                        )
+
+                        .setTitle(
+
+                            `${embedThemes.alert.icon} Content Creator Already Exists`
+
+                        )
+
+                        .setDescription(
+
+                            `${draft.creatorDisplayName} is already registered  for ${getPlatformLabel(draft.platform)} announcements on this server.`
+
+                        )
+
+                        .setFooter({
+
+                            text:
+
+                                embedThemes.contentCreator.footer
+
+                        })
+                ],
+
+                components: []
+
+            });
+
+            return;
+        }
+
+        throw error;
+    }
+
+    await discordLog({
 
         guildId:
 
             interaction.guild.id,
 
-        discordChannelId:
-
-            draft.discordChannelId,
-
-        discordUserId:
-
-            interaction.user.id,
-
-        platform:
-
-            draft.platform,
-
-        accountIdentifier:
-
-            draft.accountIdentifier,
-
-        creatorDisplayName:
-
-            draft.creatorDisplayName,
-
-        messageTemplate:
-
-            draft.messageTemplate,
-
-        subscriptionExpiresAt:
-
-            draft.subscriptionExpiresAt
-
-    });
-
-    await discordLog({
-
-        guild:
-
-            interaction.guild,
+        title:
+            'Content Creator Added',
 
         category:
-        
-            'Content Creator',
+
+            'Administrative Action',
                 
         details:
 
-            `${draft.creatorDisplayName} on ${draft.platform} has been added to automatic announcements on <#${draft.discordChannelId}> by <@${interaction.user.id}>.`,
+            `${draft.creatorDisplayName} on ${draft.platform} has been added to automated announcements on <#${draft.discordChannelId}> by <@${interaction.user.id}>.`,
 
         status:
                 
@@ -553,19 +632,19 @@ async function finalizeCreator({
 
                 .setColor(
 
-                    embedThemes.success.color
+                    embedThemes.contentCreator.color
 
                 )
 
                 .setTitle(
 
-                    `${embedThemes.success.icon} Content Creator Added`
+                    `${embedThemes.contentCreator.icon} Content Creator Added`
 
                 )
 
                 .setDescription(
 
-                    `${draft.creatorDisplayName} has been successfully linked to ${getPlatformLabel(draft.platform)} announcements.`
+                    `${draft.creatorDisplayName} has been successfully registered for ${getPlatformLabel(draft.platform)} announcements.`
 
                 )
 
@@ -595,7 +674,7 @@ async function finalizeCreator({
 
                         name:
 
-                            'Announcements',
+                            'Announcement Channel',
 
                         value:
 
@@ -612,13 +691,50 @@ async function finalizeCreator({
 
                     text:
 
-                        embedThemes.success.footer
+                        embedThemes.contentCreator.footer
 
                 })
         ],
 
         components: []
 
+    });
+
+    await sendDiscordMessage({
+
+        channelId:
+        
+            draft.discordChannelId,
+
+        embed:
+
+            new EmbedBuilder()
+
+                .setColor(
+
+                    embedThemes.contentCreator.color
+
+                )
+
+                .setTitle(
+
+                    `${embedThemes.contentCreator.icon} Content Creator Added`
+
+                )
+
+                .setDescription(
+
+                    `${draft.creatorDisplayName} has been successfully registered for ${getPlatformLabel(draft.platform)} announcements on this channel.`
+
+                )
+
+                .setFooter({
+
+                    text:
+
+                        embedThemes.contentCreator.footer
+
+                })
     });
 }
 

@@ -33,8 +33,11 @@ async function handleUnlinkTwitch(
         guildId:
             message.guild.id,
 
+        title:
+            'Twitch Notification notice',
+
         category:
-            'TWITCH UNLINK',
+            'Twitch',
 
         details:
             `Twitch notifications disabled for <@${message.author.id}>`,

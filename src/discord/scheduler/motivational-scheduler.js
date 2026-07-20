@@ -313,8 +313,11 @@ Requirements:
 
                     guildId,
 
+                    title:
+                        'Nightly Motivational',
+
                     category:
-                        'NIGHTLY MOTIVATIONAL',
+                        'Automated Message',
 
                     details:
                         'Motivational channel not configured',
@@ -356,8 +359,11 @@ ${finalResponse}
 
                     guildId,
 
+                    title:
+                        'Nightly Motivational',
+
                     category:
-                        'NIGHTLY MOTIVATIONAL',
+                        'Automated Message',
 
                     details:
                         `Failed to post message: ${error.message}`,
@@ -373,8 +379,11 @@ ${finalResponse}
 
                 guildId,
 
+                title:
+                    'Nightly Motivational',
+
                 category:
-                    'Daily Scheduled Message',
+                    'Automated Message',
 
                 details:
                     `Nightly reflection posted`,

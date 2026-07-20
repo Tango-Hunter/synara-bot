@@ -536,8 +536,11 @@ The collective recognizes your presence.
         guildId:
             member.guild.id,
 
+        title:
+            'New Member',
+
         category:
-            'ONBOARDING',
+            'Onboarding',
 
         details:
             `Verification completed for <@${member.id}>`,

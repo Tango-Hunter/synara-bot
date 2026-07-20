@@ -24,12 +24,12 @@ const {
 } = require('./youtube-api');
 
 const {
+    createApprovalButtons
+} = require('../../utils/approval-workflow');
+
+const {
     embedThemes
 } = require('../../../core/config/embed-themes');
-
-
-const DEFAULT_ANNOUNCEMENT =
-    '{creator} just uploaded a new video to YouTube!\n\nWatch it here:\n{video_link}';
 
 
 /*
@@ -112,13 +112,13 @@ async function showModal(
 
             .setLabel(
 
-                'Announcement Message'
+                'Optional Custom Message'
 
             )
 
             .setPlaceholder(
 
-                'Leave blank to use the default announcement.'
+                'Optional custom message to append to every announcement.'
 
             )
 
@@ -173,28 +173,6 @@ async function showModal(
 HELPERS
 ====================================
 */
-
-function buildAnnouncementMessage(
-
-    announcement
-
-) {
-
-    if (
-
-        !announcement ||
-
-        announcement.trim() === ''
-
-    ) {
-
-        return DEFAULT_ANNOUNCEMENT;
-
-    }
-
-    return announcement.trim();
-
-}
 
 function buildConfirmationEmbed({
 
@@ -264,11 +242,11 @@ function buildConfirmationEmbed({
 
                 name:
 
-                    'Announcement',
+                    'Generated Announcement',
 
                 value:
 
-                    announcement,
+                    `\`\`\`\n${announcement}\n\`\`\``,
 
                 inline:
 
@@ -285,6 +263,33 @@ function buildConfirmationEmbed({
                 embedThemes.contentCreator.footer
 
         });
+}
+
+function normalizeAnnouncementMessage(
+
+    message
+
+) {
+
+    if (
+        !message
+    ) {
+        return null;
+    }
+
+    const normalized =
+
+        message.trim();
+
+    return (
+
+        normalized.length > 0
+
+            ? normalized
+
+            : null
+
+    );
 }
 
 /*
@@ -307,19 +312,15 @@ async function handleModal(
 
         );
 
-    const announcementInput =
+    const customMessage =
 
-        interaction.fields.getTextInputValue(
+        normalizeAnnouncementMessage(
 
-            'announcement_message'
+            interaction.fields.getTextInputValue(
 
-        );
+                'announcement_message'
 
-    const announcement =
-
-        buildAnnouncementMessage(
-
-            announcementInput
+            )
 
         );
 
@@ -365,19 +366,48 @@ async function handleModal(
 
             verification.channelUrl,
 
-        thumbnail:
-
-            verification.thumbnail,
-
         messageTemplate:
 
-            announcement,
-
-        accountName:
-
-            verification.normalizedChannelName
+            customMessage || null
 
     };
+
+    const generatedAnnouncement =
+
+        [
+            '<@&{verified_role}>',
+
+            '',
+
+            '{creator} just uploaded a new YouTube video!',
+
+            '',
+
+            'Watch it here:',
+
+            '{video_link}',
+
+            customMessage
+
+        ]
+
+            .filter(
+
+                line =>
+
+                    line !== null
+
+                    &&
+
+                    line !== ''
+
+            )
+
+            .join(
+
+                '\n'
+
+            );
 
     return {
 
@@ -399,7 +429,7 @@ async function handleModal(
 
                 announcement:
 
-                    draft.messageTemplate
+                    generatedAnnouncement
 
             }),
 

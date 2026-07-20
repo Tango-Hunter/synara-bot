@@ -80,8 +80,11 @@ async function handleIgnoreChannelCommand(
             guildId:
                 interaction.guild.id,
 
+            title:
+                'Ignored Channel Added',
+
             category:
-                'IGNORED_CHANNELS',
+                'Administrative Workflow',
 
             details:
 
@@ -139,8 +142,11 @@ async function handleIgnoreChannelCommand(
         guildId:
             interaction.guild.id,
 
+        title:
+            'Ignored Channel Removed',
+
         category:
-            'IGNORED_CHANNELS',
+            'Administrative Workflow',
 
         details:
 

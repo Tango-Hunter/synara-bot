@@ -32,8 +32,11 @@ const {
 } = require('../../../core/config/embed-themes');
 
 const {
-    logDiscordEvent
-} = require('../../core/logging/discord-logger');
+    discordLog
+} = require('../../../core/logging/discord-logger');
+
+
+const contentCreatorRemoveDrafts = new Map();
 
 
 /*
@@ -152,6 +155,14 @@ async function handleContentCreatorCommand(
 
             });
 
+        contentCreatorRemoveDrafts.set(
+
+            `${interaction.guild.id}:${interaction.user.id}`,
+
+            creators
+
+        );
+
         if (
             creators.length === 0
         ) {
@@ -189,7 +200,13 @@ async function handleContentCreatorCommand(
 
                     creators.map(
 
-                        creator => ({
+                        (
+
+                            creator,
+
+                            index
+
+                        ) => ({
 
                             label:
 
@@ -205,21 +222,8 @@ async function handleContentCreatorCommand(
 
                             value:
 
-                                JSON.stringify({
+                                index.toString()
 
-                                    platform:
-
-                                        creator.platform,
-
-                                    accountIdentifier:
-
-                                        creator.account_identifier,
-
-                                    creatorDisplayName:
-
-                                        creator.creator_display_name
-
-                                })
                         })
                     )
                 );
@@ -381,21 +385,75 @@ async function handleRemoveInteraction(
 
     ) {
 
+        const creators =
+
+            contentCreatorRemoveDrafts.get(
+
+                `${interaction.guild.id}:${interaction.user.id}`
+
+            );
+
+        if (
+            !creators
+        ) {
+
+            await interaction.update({
+
+                content:
+
+                    'This removal session has expired.',
+
+                embeds: [],
+
+                components: []
+
+            });
+
+            return true;
+
+        }
+
+        const creator =
+
+            creators[
+
+                Number(
+
+                    interaction.values[0]
+
+                )
+            ];
+
+        if (
+            !creator
+        ) {
+
+            return await interaction.update({
+
+                content:
+
+                    'Unable to locate the selected content creator.',
+
+                embeds: [],
+
+                components: []
+
+            });
+        }
+
         const {
 
             platform,
 
-            accountIdentifier,
+            account_identifier:
 
-            creatorDisplayName
+                accountIdentifier,
 
-        } =
+            creator_display_name:
 
-            JSON.parse(
+                creatorDisplayName
 
-                interaction.values[0]
-
-            );
+        } = creator;
 
         return await interaction.update({
 
@@ -531,17 +589,9 @@ async function handleRemoveInteraction(
 
             )[1];
 
-        const {
+        const index =
 
-            platform,
-
-            accountIdentifier,
-
-            creatorDisplayName
-
-        } =
-
-            JSON.parse(
+            Number(
 
                 Buffer
 
@@ -557,6 +607,68 @@ async function handleRemoveInteraction(
 
             );
 
+        const creators =
+
+            contentCreatorRemoveDrafts.get(
+
+                `${interaction.guild.id}:${interaction.user.id}`
+
+            );
+
+        if (
+            !creators
+        ) {
+
+            return await interaction.update({
+
+                content:
+
+                    'This removal session has expired.',
+
+                embeds: [],
+
+                components: []
+
+            });
+
+        }
+
+        const creator =
+
+            creators[index];
+
+        if (
+            !creator
+        ) {
+
+            return await interaction.update({
+
+                content:
+
+                    'Unable to locate the selected content creator.',
+
+                embeds: [],
+
+                components: []
+
+            });
+
+        }
+
+        const {
+
+            platform,
+
+            account_identifier:
+
+                accountIdentifier,
+
+            creator_display_name:
+
+                creatorDisplayName
+
+        } = creator;
+
         await deleteCreator({
 
             guildId:
@@ -569,19 +681,28 @@ async function handleRemoveInteraction(
 
         });
 
+        contentCreatorRemoveDrafts.delete(
+
+            `${interaction.guild.id}:${interaction.user.id}`
+
+        );
+
         await discordLog({
         
-                guild:
+                guildId:
         
-                    interaction.guild,
+                    interaction.guild.id,
+
+                title:
+                    'Content Creator Removed',
         
                 category:
         
-                    'Content Creator',
+                    'Administrative Action',
                 
                 details:
 
-                    `${creatorDisplayName} on ${platform} has been removed from automatic announcements.`,
+                    `${creatorDisplayName} on ${platform} has been removed from automated announcements by <@${interaction.user.id}>.`,
 
                 status:
 
@@ -647,6 +768,12 @@ async function handleRemoveInteraction(
 
     ) {
 
+        contentCreatorRemoveDrafts.delete(
+
+            `${interaction.guild.id}:${interaction.user.id}`
+
+        );
+
         return await interaction.update({
 
             content:
@@ -661,6 +788,7 @@ async function handleRemoveInteraction(
 
     }
 
+    return false;
 }
 
 module.exports = {

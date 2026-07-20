@@ -46,6 +46,10 @@ const {
 } = require('./content-creator-handler');
 
 const {
+    handleRemoveInteraction
+} = require('../admin/commands/contentcreator');
+
+const {
     logError,
     logFeature
 } = require('../../core/logging/logger');
@@ -183,12 +187,24 @@ async function routeInteraction(
         CONTENT CREATOR
         ============================
         */
+        // Add
         const handledContentCreator =
             await handleContentCreatorInteraction(
                 interaction
             );
         if (
             handledContentCreator !== false
+        ) {
+            return;
+        }
+
+        // Remove
+        const handledContentCreatorRemoval =
+            await handleRemoveInteraction(
+                interaction
+            );
+        if (
+            handledContentCreatorRemoval !== false
         ) {
             return;
         }

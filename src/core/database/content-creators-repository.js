@@ -5,7 +5,7 @@
  * Description: Database operations for Content Creator Announcements.
  */
 
-const { pool } = require('./postgres');
+const pool = require('./postgres');
 
 
 /*
