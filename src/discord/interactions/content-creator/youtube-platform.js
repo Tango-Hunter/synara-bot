@@ -242,6 +242,22 @@ function buildConfirmationEmbed({
 
                 name:
 
+                    '⚠️ Verify Creator Profile',
+
+                value:
+
+                    'Click the profile link above to verify that it belongs to the intended creator before approving.',
+
+                inline:
+
+                    false
+
+            },
+
+            {
+
+                name:
+
                     'Generated Announcement',
 
                 value:
@@ -379,7 +395,7 @@ async function handleModal(
 
             '',
 
-            '{creator} just uploaded a new YouTube video!',
+            `${draft.creatorDisplayName} just uploaded a new YouTube video!`,
 
             '',
 

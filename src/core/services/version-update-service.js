@@ -227,6 +227,76 @@ async function checkVersionUpdates(
             ====================================
             */
 
+            for (
+
+                const guild
+
+                of
+
+                updateTargets
+
+            ) {
+
+                try {
+
+                    await discordLog({
+
+                        guildId:
+
+                            guild.guildId,
+
+                        title:
+                            'Minor Version update',
+
+                        category:
+
+                            'Automated Maintenance Notification',
+                                
+                        details:
+
+                            `Version has updated to: ${currentVersion}. Patch notes may be reviewed at https://tangohunter.com/SYNARA/patch-notes/updates.`,
+
+                        status:
+                                
+                            'INFO'
+
+                    });
+                }
+
+                catch (
+                    error
+                ) {
+
+                    logError({
+
+                        type:
+                            ERROR_TYPES.SYSTEM_ERROR,
+
+                        source:
+                            "version-update-service",
+
+                        message:
+                            "Failed to synchronize guild version.",
+
+                        details: {
+
+                            guildId:
+                                guild.guildId,
+
+                            guildName:
+                                guild.guildName,
+
+                            version:
+                                currentVersion,
+
+                            error:
+                                error.message
+
+                        }
+                    });
+                }
+            }
+
             logFeature({
 
                 category:
