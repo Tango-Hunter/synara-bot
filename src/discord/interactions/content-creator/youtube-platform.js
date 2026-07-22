@@ -12,7 +12,6 @@
  */
 
 const {
-    EmbedBuilder,
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
@@ -28,8 +27,25 @@ const {
 } = require('../../utils/approval-workflow');
 
 const {
-    embedThemes
-} = require('../../../core/config/embed-themes');
+    buildConfirmationEmbed,
+    buildAnnouncementPreview,
+    normalizeAnnouncementMessage,
+    createDraft
+} = require('./platform-utility');
+
+
+
+/*
+====================================
+CUSTOM IDS
+====================================
+*/
+
+const MODAL_ID = 'content_creator_youtube_modal';
+
+const APPROVE_ID = 'content_creator_youtube_approve';
+
+const CANCEL_ID = 'content_creator_youtube_cancel';
 
 
 /*
@@ -50,7 +66,7 @@ async function showModal(
 
             .setCustomId(
 
-                'content_creator_youtube_modal'
+                MODAL_ID
 
             )
 
@@ -170,146 +186,6 @@ async function showModal(
 
 /*
 ====================================
-HELPERS
-====================================
-*/
-
-function buildConfirmationEmbed({
-
-    creatorDisplayName,
-
-    channelUrl,
-
-    announcement
-
-}) {
-
-    return new EmbedBuilder()
-
-        .setColor(
-
-            embedThemes.contentCreator.color
-
-        )
-
-        .setTitle(
-
-            `${embedThemes.contentCreator.icon} YouTube Content Creator`
-
-        )
-
-        .setDescription(
-
-            'Review the information below before approving.'
-
-        )
-
-        .addFields(
-
-            {
-
-                name:
-
-                    'Creator',
-
-                value:
-
-                    creatorDisplayName,
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    'Channel',
-
-                value:
-
-                    channelUrl,
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    '⚠️ Verify Creator Profile',
-
-                value:
-
-                    'Click the profile link above to verify that it belongs to the intended creator before approving.',
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    'Generated Announcement',
-
-                value:
-
-                    `\`\`\`\n${announcement}\n\`\`\``,
-
-                inline:
-
-                    false
-
-            }
-
-        )
-
-        .setFooter({
-
-            text:
-
-                embedThemes.contentCreator.footer
-
-        });
-}
-
-function normalizeAnnouncementMessage(
-
-    message
-
-) {
-
-    if (
-        !message
-    ) {
-        return null;
-    }
-
-    const normalized =
-
-        message.trim();
-
-    return (
-
-        normalized.length > 0
-
-            ? normalized
-
-            : null
-
-    );
-}
-
-/*
-====================================
 MODAL HANDLER
 ====================================
 */
@@ -364,66 +240,57 @@ async function handleModal(
 
     }
 
-    const draft = {
+    const draft =
 
-        platform:
+        createDraft({
 
-            'youtube',
+            platform:
 
-        accountIdentifier:
+                'youtube',
 
-            verification.channelId,
+            accountIdentifier:
 
-        creatorDisplayName:
+                verification.accountIdentifier,
 
-            verification.creatorDisplayName,
+            creatorDisplayName:
 
-        accountUrl:
+                verification.creatorDisplayName,
 
-            verification.channelUrl,
+            creatorUrl:
 
-        messageTemplate:
-
-            customMessage || null
-
-    };
-
-    const generatedAnnouncement =
-
-        [
-            '<@&{verified_role}>',
-
-            '',
-
-            `${draft.creatorDisplayName} just uploaded a new YouTube video!`,
-
-            '',
-
-            'Watch it here:',
-
-            '{video_link}',
+                verification.creatorUrl,
 
             customMessage
 
-        ]
+        });
 
-            .filter(
+    const DEFAULT_ANNOUNCEMENT = [
 
-                line =>
+        '<@&{verified_role}>',
 
-                    line !== null
+        '',
 
-                    &&
+        '{creator} just uploaded a new YouTube video!',
 
-                    line !== ''
+        '',
 
-            )
+        'Watch it here:',
 
-            .join(
+        '{video_link}'
 
-                '\n'
+    ];
 
-            );
+    const generatedAnnouncement =
+
+        buildAnnouncementPreview({
+
+            defaultAnnouncement:
+
+                DEFAULT_ANNOUNCEMENT,
+
+            customMessage
+
+        });
 
     return {
 
@@ -435,11 +302,19 @@ async function handleModal(
 
             buildConfirmationEmbed({
 
+                title:
+
+                    'Confirm YouTube Content Creator',
+
+                profileLabel:
+
+                    'Channel',
+
                 creatorDisplayName:
 
                     draft.creatorDisplayName,
 
-                channelUrl:
+                creatorUrl:
 
                     draft.accountUrl,
 
@@ -455,25 +330,28 @@ async function handleModal(
 
                 approveId:
 
-                    'content_creator_youtube_approve',
+                    APPROVE_ID,
 
                 cancelId:
 
-                    'content_creator_youtube_cancel'
+                    CANCEL_ID
 
             })
         ]
     };
 }
 
-/*
-====================================
-EXPORTS
-====================================
-*/
-
 module.exports = {
+
+    modalId:
+        MODAL_ID,
+
+    approveId:
+        APPROVE_ID,
+
+    cancelId:
+        CANCEL_ID,
+
     showModal,
-    handleModal,
-    buildConfirmationEmbed
+    handleModal
 };

@@ -13,15 +13,17 @@
 
 const {
     ActionRowBuilder,
-    EmbedBuilder,
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle
 } = require('discord.js');
 
 const {
-    embedThemes
-} = require('../../../core/config/embed-themes');
+    buildConfirmationEmbed,
+    buildAnnouncementPreview,
+    normalizeAnnouncementMessage,
+    createDraft
+} = require('./platform-utility');
 
 const {
     createApprovalButtons
@@ -97,7 +99,7 @@ async function showModal(
 
             .setTitle(
 
-                'Register TikTok Creator'
+                'Add TikTok Creator'
 
             );
 
@@ -197,187 +199,13 @@ async function showModal(
 
 /*
 ====================================
-HELPERS
-====================================
-*/
-
-function normalizeAnnouncementMessage(
-
-    message
-
-) {
-
-    if (
-        !message
-    ) {
-        return null;
-    }
-
-    const normalized =
-
-        message.trim();
-
-    return (
-
-        normalized.length > 0
-
-            ? normalized
-
-            : null
-
-    );
-}
-
-function buildAnnouncementPreview(
-
-    customMessage
-
-) {
-
-    return [
-
-        ...DEFAULT_ANNOUNCEMENT,
-
-        '',
-
-        customMessage
-
-    ]
-
-        .filter(
-
-            line =>
-
-                line !== null
-
-                &&
-
-                line !== ''
-
-        )
-
-        .join(
-
-            '\n'
-
-        );
-}
-
-/*
-====================================
-CONFIRMATION EMBED
-====================================
-*/
-
-async function buildConfirmationEmbed({
-
-    creatorDisplayName,
-    creatorUrl,
-    generatedAnnouncement
-
-}) {
-
-    return new EmbedBuilder()
-
-        .setColor(
-
-            embedThemes.contentCreator.color
-
-        )
-
-        .setTitle(
-
-            `${embedThemes.contentCreator.icon} Confirm TikTok Content Creator`
-
-        )
-
-        .addFields(
-
-            {
-
-                name:
-
-                    'Creator',
-
-                value:
-
-                    creatorDisplayName,
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    'Profile',
-
-                value:
-
-                    creatorUrl,
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    '⚠️ Verify Creator Profile',
-
-                value:
-
-                    'Click the profile link above to verify that it belongs to the intended creator before approving.',
-
-                inline:
-
-                    false
-
-            },
-
-            {
-
-                name:
-
-                    'Generated Announcement',
-
-                value:
-
-                    `\`\`\`\n${generatedAnnouncement}\n\`\`\``,
-
-                inline:
-
-                    false
-
-            }
-        )
-
-        .setFooter({
-
-            text:
-
-                embedThemes.contentCreator.footer
-
-        });
-}
-
-/*
-====================================
 MODAL HANDLER
 ====================================
 */
 
 async function handleModal(
 
-    interaction,
-
-    draft
+    interaction
 
 ) {
 
@@ -404,7 +232,7 @@ async function handleModal(
 
         category:
 
-            'Content Creator',
+            'CONTENT_CREATOR',
 
         message:
 
@@ -452,15 +280,27 @@ async function handleModal(
 
     const generatedAnnouncement =
 
-        buildAnnouncementPreview(
+        buildAnnouncementPreview({
+
+            defaultAnnouncement:
+
+                DEFAULT_ANNOUNCEMENT,
 
             customMessage
 
-        );
+        });
 
     const embed =
 
-        await buildConfirmationEmbed({
+        buildConfirmationEmbed({
+
+            title:
+
+                'Confirm TikTok Content Creator',
+
+            profileLabel:
+
+                'Profile',
 
             creatorDisplayName:
 
@@ -470,13 +310,13 @@ async function handleModal(
 
                 verification.creatorUrl,
 
-            generatedAnnouncement:
+            announcement:
 
                 generatedAnnouncement
 
         });
 
-    const components =
+    const components = [
 
         createApprovalButtons({
 
@@ -488,37 +328,37 @@ async function handleModal(
 
                 CANCEL_ID
 
-        });
+        })
+
+    ];
 
     return {
 
         success: true,
 
-        draft: {
+        draft:
 
-            ...draft,
+            createDraft({
 
-            platform:
+                platform:
 
-                'tiktok',
+                    'tiktok',
 
-            accountIdentifier:
+                accountIdentifier:
 
-                verification.accountIdentifier,
+                    verification.accountIdentifier,
 
-            creatorDisplayName:
+                creatorDisplayName:
 
-                verification.creatorDisplayName,
+                    verification.creatorDisplayName,
 
-            accountUrl:
+                creatorUrl:
 
-                verification.creatorUrl,
+                    verification.creatorUrl,
 
-            messageTemplate:
+                customMessage
 
-                customMessage ?? null
-
-        },
+            }),
 
         embed,
 
@@ -530,15 +370,12 @@ async function handleModal(
 module.exports = {
 
     modalId:
-
         MODAL_ID,
 
     approveId:
-
         APPROVE_ID,
 
     cancelId:
-
         CANCEL_ID,
 
     showModal,

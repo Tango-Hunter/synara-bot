@@ -321,11 +321,11 @@ async function verifyChannelName({
 
                 success: true,
 
-                normalizedChannelName:
+                normalizedIdentifier:
 
                     normalized,
 
-                channelId:
+                accountIdentifier:
 
                     channel.id,
 
@@ -333,21 +333,9 @@ async function verifyChannelName({
 
                     channel.snippet.title,
 
-                channelUrl:
+                creatorUrl:
 
-                    `https://www.youtube.com/channel/${channel.id}`,
-
-                thumbnail:
-
-                    channel.snippet.thumbnails?.high?.url
-
-                    ||
-
-                    channel.snippet.thumbnails?.default?.url
-
-                    ||
-
-                    null
+                    `https://www.youtube.com/channel/${channel.id}`
 
             };
         }

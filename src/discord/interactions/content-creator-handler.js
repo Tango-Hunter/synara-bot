@@ -47,6 +47,9 @@ SUPPORTED PROVIDER IMPORTS
 const YouTubePlatform =
     require('./content-creator/youtube-platform');
 
+const TikTokPlatform =
+    require('./content-creator/tiktok-platform');
+
 
 /*
 ====================================
@@ -60,11 +63,10 @@ platform.
 const PLATFORM_MODULES = {
 
     youtube:
+        YouTubePlatform,
 
-        YouTubePlatform
-
-    // tiktok:
-    //     TikTokPlatform
+     tiktok:
+         TikTokPlatform
 
 };
 

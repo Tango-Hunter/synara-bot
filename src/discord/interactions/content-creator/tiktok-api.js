@@ -7,6 +7,10 @@
  */
 
 const {
+    criticalLog
+} = require('../../../core/logging/discord-logger');
+
+const {
     logFeature
 } = require('../../../core/logging/logger');
 
@@ -25,6 +29,22 @@ const TIKTOK_BASE_URL = 'https://www.tiktok.com';
 const REQUEST_TIMEOUT = 10000;
 
 const MAX_RETRIES = 2;
+
+const TIKTOK_STATUS = Object.freeze({
+
+    OK:
+        0,
+
+    USER_NOT_EXIST:
+        10202,
+
+    USER_BAN:
+        10221,
+
+    USER_PRIVATE:
+        10222
+
+});
 
 /*
 ====================================
@@ -391,36 +411,134 @@ async function verifyUsername(
 
             /*
             ====================================
-            Basic existence check
+            Parse hydration data
             ====================================
             */
 
+            const hydrationMatch =
+
+                html.match(
+
+                    /<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>([\s\S]*?)<\/script>/
+
+                );
+
             if (
-
-                html.includes(
-
-                    '"statusCode":10202'
-
-                )
-
-                ||
-
-                html.includes(
-
-                    '"userInfo":null'
-
-                )
+                !hydrationMatch
             ) {
 
-                return {
+                throw new Error(
 
-                    success: false,
+                    'Unable to locate TikTok hydration data.'
 
-                    error:
+                );
 
-                        'No TikTok account was found with that username.'
+            }
 
-                };
+            const hydration =
+
+                JSON.parse(
+
+                    hydrationMatch[1]
+
+                );
+
+            const userDetail =
+
+                hydration
+
+                    .__DEFAULT_SCOPE__
+
+                    ['webapp.user-detail'];
+
+            if (
+                !userDetail
+            ) {
+
+                throw new Error(
+
+                    'TikTok response did not include user detail.'
+
+                );
+
+            }
+
+            const statusCode =
+
+                userDetail.statusCode;
+
+            switch (
+                statusCode
+            ) {
+
+                case TIKTOK_STATUS.OK:
+
+                    break;
+
+                case TIKTOK_STATUS.USER_NOT_EXIST:
+
+                case TIKTOK_STATUS.USER_BAN:
+
+                    return {
+
+                        success: false,
+
+                        error:
+
+                            'No TikTok account was found with that username.'
+
+                    };
+
+                case TIKTOK_STATUS.USER_PRIVATE:
+
+                    return {
+
+                        success: false,
+
+                        error:
+
+                            'This TikTok account is private and cannot be added.'
+
+                    };
+
+                default:
+
+                    await criticalLog({
+
+                        title:
+
+                            'Unknown TikTok Status Code',
+
+                        category:
+
+                            'CONTENT_CREATOR',
+
+                        details: {
+
+                            statusCode,
+
+                            username:
+
+                                normalizedUsername,
+
+                            file:
+
+                                'tiktok-api.js',
+
+                            function:
+
+                                'verifyUsername'
+
+                        }
+
+                    });
+
+                    throw new Error(
+
+                        `Unknown TikTok status code: ${statusCode}`
+
+                    );
+
             }
 
             /*
@@ -429,37 +547,13 @@ async function verifyUsername(
             ====================================
             */
 
-            let creatorDisplayName =
+            const creatorDisplayName =
+
+                userDetail.userInfo?.user?.nickname
+
+                ??
 
                 normalizedUsername;
-
-            const displayMatch =
-
-                html.match(
-
-                    /"nickname":"([^"]+)"/
-
-                );
-
-            if (
-                displayMatch
-            ) {
-
-                creatorDisplayName =
-
-                    displayMatch[1]
-
-                        .replace(
-
-                            /\\"/g,
-
-                            '"'
-
-                        )
-
-                        .trim();
-
-            }
 
             /*
             ====================================
