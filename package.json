@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "register-commands": "node src/discord/admin/register-admin-commands.js",
+    "check-eventsub": "node src/twitch/services/check-eventsub.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -2,7 +2,6 @@
  * Title: eventsub-service.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Date Modified: 5/30/26
  * Description: Creates eventSub.
  */
 
@@ -14,7 +13,8 @@ const {
 
 const {
     getSubscription,
-    saveSubscription
+    saveSubscription,
+    touchSubscription
 } = require('../../core/database/twitch-eventsub-repository');
 
 const {
@@ -30,157 +30,220 @@ const {
 async function ensureEventSubSubscription({
 
     twitchUserId
+
 }) {
 
-    const existing =
-        await getSubscription(
-            twitchUserId
-        );
+    const accessToken =
 
-    if (
-        existing
+        await getAccessToken();
+
+    const requiredSubscriptions = [
+
+        'stream.online',
+
+        'stream.offline'
+
+    ];
+
+    for (
+
+        const subscriptionType
+
+        of requiredSubscriptions
+
     ) {
+
+        const existing =
+
+            await getSubscription({
+
+                twitchUserId,
+
+                subscriptionType
+
+            });
+
+        if (
+            existing
+        ) {
+
+            await touchSubscription({
+
+                twitchUserId,
+
+                subscriptionType
+
+            });
+
+            logFeature({
+
+                category:
+
+                    'EVENTSUB',
+
+                message:
+
+                    'Verified EventSub subscription',
+
+                details: {
+
+                    twitchUserId,
+
+                    subscriptionType
+
+                }
+
+            });
+
+            continue;
+
+        }
+
+        let response;
+
+        try {
+
+            response =
+
+                await axios.post(
+
+                    'https://api.twitch.tv/helix/eventsub/subscriptions',
+
+                    {
+
+                        type:
+
+                            subscriptionType,
+
+                        version:
+
+                            '1',
+
+                        condition: {
+
+                            broadcaster_user_id:
+
+                                twitchUserId
+
+                        },
+
+                        transport: {
+
+                            method:
+
+                                'webhook',
+
+                            callback:
+
+                                `${process.env.PUBLIC_URL}/twitch/eventsub`,
+
+                            secret:
+
+                                process.env.TWITCH_EVENTSUB_SECRET
+
+                        }
+
+                    },
+
+                    {
+
+                        headers: {
+
+                            Authorization:
+
+                                `Bearer ${accessToken}`,
+
+                            'Client-Id':
+
+                                process.env.TWITCH_CLIENT_ID,
+
+                            'Content-Type':
+
+                                'application/json'
+
+                        }
+
+                    }
+
+                );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            logError({
+
+                type:
+
+                    ERROR_TYPES.TWITCH_ERROR,
+
+                source:
+
+                    'eventsub-service',
+
+                message:
+
+                    error.message,
+
+                details: {
+
+                    twitchUserId,
+
+                    subscriptionType,
+
+                    twitchResponse:
+
+                        error.response?.data
+
+                }
+
+            });
+
+            throw error;
+
+        }
+
+        const subscription =
+
+            response.data.data[0];
+
+        await saveSubscription({
+
+            twitchUserId,
+
+            subscriptionType,
+
+            subscriptionId:
+
+                subscription.id
+
+        });
 
         logFeature({
 
             category:
+
                 'EVENTSUB',
 
             message:
-                'Existing EventSub found',
 
-            details: {
-
-                twitchUserId
-            }
-        });
-
-        return;
-    }
-
-const accessToken =
-
-    await getAccessToken();
-
-    let response;
-
-    try {
-
-        for (
-            const eventType
-            of [
-
-                'stream.online',
-
-                'stream.offline'
-            ]
-        ) {
-
-        response =
-
-            await axios.post(
-                'https://api.twitch.tv/helix/eventsub/subscriptions',
-
-                {
-
-                    type:
-                        eventType,
-
-                    version:
-                        '1',
-
-                    condition: {
-
-                        broadcaster_user_id:
-                            twitchUserId
-                    },
-
-                    transport: {
-
-                        method:
-                            'webhook',
-
-                        callback:
-
-                            `${process.env.PUBLIC_URL}/twitch/eventsub`,
-
-                        secret:
-
-                            process.env
-                                .TWITCH_EVENTSUB_SECRET
-                    }
-                },
-
-                {
-
-                    headers: {
-
-                        Authorization:
-                            `Bearer ${accessToken}`,
-
-                        'Client-Id':
-                            process.env.TWITCH_CLIENT_ID,
-
-                        'Content-Type':
-                            'application/json'
-                    }
-                }
-            );
-        }
-
-    } catch (error) {
-
-        logError({
-
-            type:
-                ERROR_TYPES.TWITCH_ERROR,
-
-            source:
-                'eventsub-service',
-
-            message:
-                error.message,
+                'Created EventSub subscription',
 
             details: {
 
                 twitchUserId,
 
-                twitchResponse:
-                    error.response?.data
+                subscriptionType,
+
+                subscriptionId:
+
+                    subscription.id
+
             }
         });
-
-        throw error;
     }
-
-    const subscription =
-
-        response.data.data[0];
-
-    await saveSubscription({
-
-        twitchUserId,
-
-        subscriptionId:
-            subscription.id
-    });
-
-    logFeature({
-
-        category:
-            'EVENTSUB',
-
-        message:
-            'EventSub subscription created',
-
-        details: {
-
-            twitchUserId,
-
-            subscriptionId:
-                subscription.id
-        }
-    });
 }
 
 module.exports = {

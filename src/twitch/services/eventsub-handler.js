@@ -66,6 +66,68 @@ async function handleStreamOnline(
             twitchUserId
         );
 
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Repository lookup complete',
+
+        details: {
+
+            twitchUserId,
+
+            matchedUsers:
+
+                users.length,
+
+            guilds:
+
+                users.reduce(
+
+                    (
+
+                        total,
+
+                        user
+
+                    ) =>
+
+                        total +
+
+                        user.guild_ids.length,
+
+                    0
+
+                )
+        }
+    });
+
+    if (
+        users.length === 0
+    ) {
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'No linked Discord users for Twitch account',
+
+            details: {
+
+                twitchUserId
+
+            }
+
+        });
+
+        return;
+
+    }
+
     const streamData =
         await getLiveStreamData(
             twitchUserId
@@ -270,15 +332,24 @@ async function handleStreamOnline(
                 'TWITCH',
 
             message:
-                'Live notifications posted',
+                'Notification delivery complete',
 
             details: {
 
                 discordUserId:
                     user.discord_user_id,
 
-                guildCount:
-                    user.guild_ids.length
+                twitchUserId,
+
+                guildsAttempted:
+                    user.guild_ids.length,
+
+                messagesPosted:
+
+                    Object.keys(
+                        messageIds
+                    ).length
+
             }
         });
     }
@@ -302,6 +373,46 @@ async function handleStreamOffline(
         await getEnabledUsersByTwitchUserId(
             twitchUserId
         );
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Repository lookup complete',
+
+        details: {
+
+            twitchUserId,
+
+            matchedUsers:
+
+                users.length,
+
+            guilds:
+
+                users.reduce(
+
+                    (
+
+                        total,
+
+                        user
+
+                    ) =>
+
+                        total +
+
+                        user.guild_ids.length,
+
+                    0
+
+                )
+
+        }
+
+    });
 
     if (
         users.length === 0
