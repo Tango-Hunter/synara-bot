@@ -368,6 +368,172 @@ async function updateLastContentId({
 
 /*
 ====================================
+UPDATE EXPIRATION
+====================================
+*/
+async function updateSubscriptionExpiration({
+
+    guildId,
+
+    platform,
+
+    accountIdentifier,
+
+    subscriptionExpiresAt
+
+}) {
+
+    const result =
+
+        await pool.query(
+
+            `
+
+            UPDATE content_creators
+
+            SET
+
+                subscription_expires_at = $4,
+
+                updated_at = NOW()
+
+            WHERE
+
+                guild_id = $1
+
+                AND platform = $2
+
+                AND account_identifier = $3
+
+            RETURNING *
+
+            `,
+
+            [
+
+                guildId,
+
+                platform,
+
+                accountIdentifier,
+
+                subscriptionExpiresAt
+
+            ]
+
+        );
+
+    return result.rows[0] ?? null;
+}
+
+/*
+====================================
+GET RENEWAL
+====================================
+*/
+async function getCreatorsNeedingSubscriptionRenewal({
+
+    platform,
+
+    expiresBefore
+
+}) {
+
+    const result =
+
+        await pool.query(
+
+            `
+
+            SELECT *
+
+            FROM content_creators
+
+            WHERE
+
+                platform = $1
+
+                AND (
+
+                    subscription_expires_at IS NULL
+
+                    OR
+
+                    subscription_expires_at <= $2
+
+                )
+
+            ORDER BY
+
+                subscription_expires_at NULLS FIRST,
+
+                creator_display_name
+
+            `,
+
+            [
+
+                platform,
+
+                expiresBefore
+
+            ]
+
+        );
+
+    return result.rows;
+}
+
+/*
+====================================
+GET CREATOR BY PLATFORM
+====================================
+*/
+async function getCreatorByPlatformAccount({
+
+    platform,
+
+    accountIdentifier
+
+}) {
+
+    const result =
+
+        await pool.query(
+
+            `
+
+            SELECT *
+
+            FROM content_creators
+
+            WHERE
+
+                platform = $1
+
+                AND account_identifier = $2
+
+            ORDER BY
+
+                created_at
+
+            `,
+
+            [
+
+                platform,
+
+                accountIdentifier
+
+            ]
+
+        );
+
+    return result.rows;
+}
+
+/*
+====================================
 DELETE
 ====================================
 */
@@ -435,9 +601,12 @@ module.exports = {
     getCreatorsByUser,
     getCreatorsByPlatform,
     getCreator,
+    getCreatorByPlatformAccount,
+    getCreatorsNeedingSubscriptionRenewal,
     createCreator,
     updateCreator,
     updateLastContentId,
+    updateSubscriptionExpiration,
     deleteCreator,
     removeGuildCreators
 };
