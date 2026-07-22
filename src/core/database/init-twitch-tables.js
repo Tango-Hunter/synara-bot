@@ -2,7 +2,6 @@
  * Title: init-twitch-table.js
  * Author: Tango Hunter
  * Date Created: 5/29/26
- * Date Modified: 5/29/26
  * Description:  Creates Twitch Database Initialization.
  */
 
@@ -93,15 +92,30 @@ async function initializeTwitchTables() {
 
     await pool.query(`
 
-            CREATE TABLE IF NOT EXISTS twitch_eventsub (
+        CREATE TABLE IF NOT EXISTS twitch_eventsub (
 
-            twitch_user_id TEXT PRIMARY KEY,
+            id BIGSERIAL PRIMARY KEY,
+
+            twitch_user_id TEXT NOT NULL,
+
+            subscription_type TEXT NOT NULL,
 
             subscription_id TEXT NOT NULL,
 
-            created_at TIMESTAMP DEFAULT NOW(),
+            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-            updated_at TIMESTAMP DEFAULT NOW()
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            last_verified_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            UNIQUE (
+
+                twitch_user_id,
+
+                subscription_type
+
+            )
+
         );
     `);
 
