@@ -2,7 +2,6 @@
  * Title: twitch.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Date Modified: 5/30/26
  * Description: Express server handling all twitch routes.
  */
 
@@ -109,12 +108,27 @@ module.exports = (
 
                     details: {
 
-                        type:
+                        messageId:
+                            req.header(
+                                'Twitch-Eventsub-Message-Id'
+                            ),
+
+                        retry:
+                            req.header(
+                                'Twitch-Eventsub-Message-Retry'
+                            ) ?? '0',
+
+                        subscriptionType:
                             req.body.subscription?.type,
+
+                        subscriptionId:
+                            req.body.subscription?.id,
 
                         broadcasterId:
                             req.body.event?.broadcaster_user_id
+
                     }
+
                 });
 
                 try {
@@ -150,91 +164,6 @@ module.exports = (
             }
 
             res.sendStatus(200);
-        }
-    );
-
-    // Offline Test
-    router.post(
-
-        '/test-offline',
-
-        async (
-
-            req,
-
-            res
-        ) => {
-
-            await handleEventSub(
-
-                {
-
-                    subscription: {
-
-                        type:
-                            'stream.offline'
-                    },
-
-                    event: {
-
-                        broadcaster_user_id:
-
-                            req.body
-                                .twitchUserId
-                    }
-                },
-
-                client
-            );
-
-            res.sendStatus(
-                200
-            );
-        }
-    );
-
-    // Online Test
-    router.post(
-
-        '/test-online',
-
-        async (
-
-            req,
-
-            res
-        ) => {
-
-            await handleEventSub(
-
-                {
-
-                    subscription: {
-
-                        type:
-                            'stream.online'
-                    },
-
-                    event: {
-
-                        broadcaster_user_id:
-                            req.body
-                                .twitchUserId,
-
-                        title:
-                            'SYNARA EventSub Test',
-
-                        category_name:
-                            'Testing'
-                    }
-                },
-
-                client
-            );
-
-            res.sendStatus(
-                200
-            );
         }
     );
 
