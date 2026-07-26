@@ -21,6 +21,8 @@ const createMessageRoutes =
     require('./routes/messages');
 const createTwitchRoutes =
     require('./routes/twitch');
+const createContentCreatorRoutes =
+    require('./routes/content-creators');
 
 const {
     discordMessageHandler
@@ -100,9 +102,11 @@ app.use(
 );
 app.use(
     '/twitch',
-    createTwitchRoutes(
-        client
-    )
+    createTwitchRoutes(client)
+);
+app.use(
+    '/content-creators',
+    createContentCreatorRoutes(client)
 );
 
 
