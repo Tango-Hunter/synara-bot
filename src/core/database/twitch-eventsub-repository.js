@@ -58,6 +58,38 @@ async function getSubscription({
     );
 }
 
+async function getSubscriptions(
+    twitchUserId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+
+            SELECT *
+
+            FROM twitch_eventsub
+
+            WHERE
+
+                twitch_user_id = $1
+
+            `,
+
+            [
+
+                twitchUserId
+
+            ]
+
+        );
+
+    return result.rows;
+
+}
+
 async function saveSubscription({
 
     twitchUserId,
@@ -176,6 +208,7 @@ async function touchSubscription({
 
 module.exports = {
     getSubscription,
+    getSubscriptions,
     saveSubscription,
     touchSubscription
 };
