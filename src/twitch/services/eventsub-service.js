@@ -27,6 +27,101 @@ const {
 } = require('../../core/logging/error-types');
 
 
+async function synchronizeSubscription({
+
+    twitchUserId,
+
+    subscriptionType,
+
+    accessToken
+
+}) {
+
+    const response =
+
+        await axios.get(
+
+            'https://api.twitch.tv/helix/eventsub/subscriptions',
+
+            {
+
+                headers: {
+
+                    Authorization:
+
+                        `Bearer ${accessToken}`,
+
+                    'Client-Id':
+
+                        process.env.TWITCH_CLIENT_ID
+
+                }
+            }
+        );
+
+    const subscription =
+
+        response.data.data.find(
+
+            entry =>
+
+                entry.type ===
+
+                    subscriptionType
+
+                &&
+
+                entry.condition
+                    ?.broadcaster_user_id ===
+
+                    twitchUserId
+
+        );
+
+    if (
+        !subscription
+    ) {
+        return false;
+    }
+
+    await saveSubscription({
+
+        twitchUserId,
+
+        subscriptionType,
+
+        subscriptionId:
+
+            subscription.id
+
+    });
+
+    logFeature({
+
+        category:
+
+            'EVENTSUB',
+
+        message:
+
+            'EventSub repository synchronized.',
+
+        details: {
+
+            twitchUserId,
+
+            subscriptionType,
+
+            subscriptionId:
+
+                subscription.id
+
+        }
+    });
+
+    return true;
+}
+
 async function ensureEventSubSubscription({
 
     twitchUserId
@@ -173,6 +268,52 @@ async function ensureEventSubSubscription({
             error
         ) {
 
+            if (
+                error.response?.status === 409
+            ) {
+
+                const synchronized =
+
+                    await synchronizeSubscription({
+
+                        twitchUserId,
+
+                        subscriptionType,
+
+                        accessToken
+
+                    });
+
+                if (
+                    synchronized
+                ) {
+
+                    logFeature({
+
+                        category:
+
+                            'EVENTSUB',
+
+                        message:
+
+                            'Recovered existing EventSub subscription.',
+
+                        details: {
+
+                            twitchUserId,
+
+                            subscriptionType
+
+                        }
+
+                    });
+
+                    continue;
+
+                }
+
+            }
+
             logError({
 
                 type:
@@ -198,7 +339,6 @@ async function ensureEventSubSubscription({
                         error.response?.data
 
                 }
-
             });
 
             throw error;
