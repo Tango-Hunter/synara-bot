@@ -22,6 +22,10 @@
 const crypto = require('crypto');
 
 const {
+    XMLParser
+} = require('fast-xml-parser');
+
+const {
     logFeature
 } = require('../../core/logging/logger');
 
@@ -606,55 +610,33 @@ async function initialize({
 
 /*
 ====================================
-SUBSCRIPTION REFRESH
+WEBSUB VERIFICATION
 ====================================
 */
 
-async function refreshSubscription({
+async function handleChallenge(
 
-    accountIdentifier,
+    req,
 
-    leaseSeconds = DEFAULT_LEASE_SECONDS
+    res
 
-}) {
+) {
 
-    try {
+    const {
 
-        logFeature({
+        'hub.mode': mode,
 
-            category:
+        'hub.topic': topic,
 
-                'CONTENT_CREATORS',
+        'hub.challenge': challenge,
 
-            message:
+        'hub.lease_seconds': leaseSeconds
 
-                'Refreshing YouTube WebSub subscription.',
+    } = req.query;
 
-            details: {
+    if (
 
-                channelId:
-
-                    accountIdentifier
-
-            }
-
-        });
-
-        return await subscribe({
-
-            channelId:
-
-                accountIdentifier,
-
-            leaseSeconds
-
-        });
-
-    }
-
-    catch (
-
-        error
+        mode !== 'subscribe'
 
     ) {
 
@@ -670,24 +652,152 @@ async function refreshSubscription({
 
             message:
 
-                'Failed to refresh YouTube WebSub subscription.',
+                'Received invalid WebSub verification mode.',
 
             details: {
 
-                channelId:
+                mode,
 
-                    accountIdentifier,
-
-                error:
-
-                    error.message
+                topic
 
             }
 
         });
 
-        throw error;
+        return res
+
+            .status(
+
+                400
+
+            )
+
+            .send(
+
+                'Invalid verification mode.'
+
+            );
 
     }
 
+    if (
+
+        !topic
+
+        ||
+
+        !challenge
+
+    ) {
+
+        logError({
+
+            type:
+
+                ERROR_TYPES.UNKNOWN_ERROR,
+
+            source:
+
+                'youtube-websub',
+
+            message:
+
+                'Received incomplete WebSub verification request.',
+
+            details: {
+
+                topic,
+
+                challenge:
+
+                    !!challenge
+
+            }
+
+        });
+
+        return res
+
+            .status(
+
+                400
+
+            )
+
+            .send(
+
+                'Missing verification parameters.'
+
+            );
+
+    }
+
+    const accountIdentifier =
+
+        topic
+
+            .split(
+
+                'channel_id='
+
+            )[1];
+
+    const subscriptionExpiresAt =
+
+        calculateSubscriptionExpiration(
+
+            Number(
+
+                leaseSeconds
+
+            )
+
+        );
+
+    logFeature({
+
+        category:
+
+            'CONTENT_CREATORS',
+
+        message:
+
+            'YouTube WebSub verified.',
+
+        details: {
+
+            accountIdentifier,
+
+            leaseSeconds,
+
+            subscriptionExpiresAt
+
+        }
+
+    });
+
+    return {
+
+        accountIdentifier,
+
+        leaseSeconds:
+
+            Number(
+
+                leaseSeconds
+
+            ),
+
+        subscriptionExpiresAt,
+
+        challenge
+
+    };
+
 }
+
+module.exports = {
+    initialize,
+    subscribe,
+    handleChallenge
+};
