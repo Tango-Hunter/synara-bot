@@ -101,10 +101,8 @@ const embedThemes = {
 
         color:
             0x8B5CF6,
-
         icon:
             '📌',
-
         footer:
             'SYNARA • Sticky Message'
     },
@@ -166,6 +164,21 @@ const embedThemes = {
 
         icon:
             '🎥',
+
+        youtube:
+            '▶️',
+
+        tiktok:
+            '♪',
+
+        instagram:
+            '📷',
+
+        x:
+            '𝕏',
+
+        threads:
+            '🧵',
 
         footer:
             'SYNARA • Content Creator Announcements'

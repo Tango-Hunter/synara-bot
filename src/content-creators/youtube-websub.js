@@ -509,9 +509,7 @@ async function initialize({
 
         return await subscribe({
 
-            channelId:
-
-                accountIdentifier,
+            accountIdentifier,
 
             leaseSeconds
 

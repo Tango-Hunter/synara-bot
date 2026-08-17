@@ -16,6 +16,14 @@ const {
 } = require('../content-creators/subscription-service');
 
 const {
+    handleNotification
+} = require('../content-creators/youtube-notifications');
+
+const {
+    processContent
+} = require('../content-creators/announcement-service');
+
+const {
     logFeature,
     logError
 } = require('../core/logging/logger');
@@ -219,44 +227,139 @@ module.exports = client => {
         '/youtube/websub',
 
         express.text({
-
             type: [
-
                 'application/atom+xml',
-
                 'application/xml',
-
                 'text/xml'
-
             ]
-
         }),
 
         async (
-
             req,
             res
-
         ) => {
 
-            logFeature({
+            try {
 
-                category:
+                /*
+                ====================================
+                PROCESS YOUTUBE WEBSUB NOTIFICATION
+                ====================================
 
-                    'CONTENT_CREATORS',
+                The notification handler owns all
+                YouTube-specific XML parsing and
+                normalization.
 
-                message:
+                This route is responsible only for
+                receiving the HTTP request and passing
+                the notification body to the handler.
+                */
 
-                    'YouTube upload notification received.',
+                const notification =
 
-                details: {}
+                    await handleNotification({
 
-            });
+                        body:
+                            req.body,
 
-            return res.sendStatus(200);
+                        headers:
+                            req.headers
 
+                    });
+
+                await processContent({
+                    content:
+                        notification
+                });
+
+
+                /*
+                ====================================
+                LOG NOTIFICATION
+                ====================================
+
+                Only log the normalized identifiers
+                here. The notification service will
+                handle the actual content processing
+                and announcement workflow.
+                */
+
+                logFeature({
+
+                    category:
+                        'CONTENT_CREATORS',
+
+                    message:
+                        'YouTube upload notification processed.',
+
+                    details: {
+
+                        accountIdentifier:
+                            notification.accountIdentifier,
+
+                        contentId:
+                            notification.contentId
+
+                    }
+                });
+
+
+                /*
+                ====================================
+                COMPLETE REQUEST
+                ====================================
+
+                YouTube only needs a successful HTTP
+                response after the notification has
+                been accepted for processing.
+                */
+
+                return res.sendStatus(200);
+
+            }
+
+            catch (
+                error
+            ) {
+
+                logError({
+
+                    type:
+                        ERROR_TYPES.API_ERROR,
+
+                    source:
+                        'content-creators-route',
+
+                    message:
+                        error.message,
+
+                    details: {
+
+                        platform:
+                            'youtube',
+
+                        endpoint:
+                            'POST /youtube/websub'
+
+                    }
+                });
+
+
+                /*
+                ====================================
+                NOTIFICATION PROCESSING FAILURE
+                ====================================
+
+                Return 500 so the failure is visible
+                to the WebSub sender rather than
+                silently acknowledging a notification
+                that SYNARA could not process.
+                */
+
+                return res.sendStatus(500);
+
+            }
         }
-
     );
 
     return router;

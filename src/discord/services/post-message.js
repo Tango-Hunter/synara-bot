@@ -33,11 +33,15 @@ async function sendDiscordMessage({
     ) {
 
         await channel.send({
-            embeds: [embed]
+
+            content:
+                message || undefined,
+            embeds:
+                [embed]
+
         });
 
     } else {
-
         await channel.send(
             message
         );
