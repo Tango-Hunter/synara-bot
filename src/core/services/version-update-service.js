@@ -254,7 +254,7 @@ async function checkVersionUpdates(
                                 
                         details:
 
-                            `Version has updated to: ${currentVersion}. Patch notes may be reviewed at https://tangohunter.com/SYNARA/patch-notes/updates.`,
+                            `Version has updated to: ${currentVersion}. Patch notes may be reviewed at https://tangohunter.com/synara/updates.`,
 
                         status:
                                 

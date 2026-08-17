@@ -8,9 +8,12 @@
 const express = require('express');
 
 const {
-    handleChallenge,
-    handleNotification
-} = require('../content-creators/platforms/youtube/youtube-websub');
+    handleChallenge
+} = require('../content-creators/youtube-websub');
+
+const {
+    handleSubscriptionVerification
+} = require('../content-creators/subscription-service');
 
 const {
     logFeature,
@@ -29,6 +32,7 @@ module.exports = client => {
     // ============================================
     // YouTube WebSub Challenge Verification
     // ============================================
+
     router.get(
 
         '/youtube/websub',
@@ -36,20 +40,140 @@ module.exports = client => {
         async (
 
             req,
+
             res
 
         ) => {
 
             try {
 
-                await handleChallenge(
+                const verification =
 
-                    req,
-                    res
+                    await handleChallenge(
+
+                        req,
+
+                        res
+
+                    );
+
+
+                /*
+                ====================================
+                HANDLE RESPONSE ALREADY SENT
+                ====================================
+
+                handleChallenge() sends its own
+                HTTP 400 response when the
+                verification request is invalid.
+
+                Do not attempt to send another
+                response in that situation.
+                */
+
+                if (
+                    !verification
+                ) {
+                    return;
+                }
+
+
+                /*
+                ====================================
+                UPDATE SUBSCRIPTION EXPIRATION
+                ====================================
+
+                YouTube is the source of truth for
+                the actual lease duration.
+
+                handleChallenge() has already
+                calculated the expiration from
+                YouTube's hub.lease_seconds value.
+
+                Persist that value through the
+                centralized subscription service.
+                */
+
+                const databaseUpdate =
+
+                    await handleSubscriptionVerification({
+
+                        platform:
+
+                            'youtube',
+
+                        accountIdentifier:
+
+                            verification.accountIdentifier,
+
+                        subscriptionExpiresAt:
+
+                            verification.subscriptionExpiresAt
+
+                    });
+
+
+                /*
+                ====================================
+                LOG VERIFICATION
+                ====================================
+                */
+
+                logFeature({
+
+                    category:
+
+                        'CONTENT_CREATORS',
+
+                    message:
+
+                        'YouTube WebSub challenge accepted.',
+
+                    details: {
+
+                        accountIdentifier:
+
+                            verification.accountIdentifier,
+
+                        leaseSeconds:
+
+                            verification.leaseSeconds,
+
+                        subscriptionExpiresAt:
+
+                            verification.subscriptionExpiresAt,
+
+                        creatorsUpdated:
+
+                            databaseUpdate.creatorsUpdated,
+
+                        subscriptionUpdated:
+
+                            databaseUpdate.subscriptionUpdated
+
+                    }
+                });
+
+
+                /*
+                ====================================
+                COMPLETE WEBSUB VERIFICATION
+                ====================================
+
+                YouTube expects the challenge value
+                returned exactly as received.
+                */
+
+                return res.send(
+
+                    verification.challenge
 
                 );
+            }
 
-            } catch (error) {
+            catch (
+                error
+            ) {
 
                 logError({
 
@@ -78,8 +202,12 @@ module.exports = client => {
                     }
                 });
 
-                return res.sendStatus(500);
 
+                return res.sendStatus(
+
+                    500
+
+                );
             }
         }
     );
@@ -88,7 +216,6 @@ module.exports = client => {
     // YouTube Upload Notifications
     // ============================================
     router.post(
-
         '/youtube/websub',
 
         express.text({
@@ -112,71 +239,24 @@ module.exports = client => {
 
         ) => {
 
-            try {
+            logFeature({
 
-                logFeature({
+                category:
 
-                    category:
+                    'CONTENT_CREATORS',
 
-                        'CONTENT_CREATORS',
+                message:
 
-                    message:
+                    'YouTube upload notification received.',
 
-                        'YouTube WebSub notification received',
+                details: {}
 
-                    details: {}
+            });
 
-                });
+            return res.sendStatus(200);
 
-                await handleNotification({
-
-                    client,
-
-                    body:
-
-                        req.body,
-
-                    headers:
-
-                        req.headers
-
-                });
-
-                return res.sendStatus(200);
-
-            } catch (error) {
-
-                logError({
-
-                    type:
-
-                        ERROR_TYPES.API_ERROR,
-
-                    source:
-
-                        'content-creators-route',
-
-                    message:
-
-                        error.message,
-
-                    details: {
-
-                        platform:
-
-                            'youtube',
-
-                        endpoint:
-
-                            'POST /youtube/websub'
-
-                    }
-                });
-
-                return res.sendStatus(500);
-
-            }
         }
+
     );
 
     return router;

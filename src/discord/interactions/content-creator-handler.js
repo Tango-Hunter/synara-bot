@@ -34,6 +34,10 @@ const {
 } = require('../../core/database/content-creators-repository');
 
 const {
+    initializeSubscription
+} = require('../../content-creators/subscription-service');
+
+const {
     getPlatform,
     getPlatformLabel
 } = require('./content-creator/platform-selection');
@@ -485,6 +489,63 @@ async function finalizeCreator({
 
     try {
 
+        /*
+        ====================================
+        INITIALIZE PLATFORM SUBSCRIPTION
+        ====================================
+
+        The subscription service determines
+        whether this platform supports a
+        subscription mechanism.
+
+        Platforms without subscription
+        support return:
+
+            subscriptionSupported: false
+            subscriptionRequested: false
+            subscriptionExpiresAt: null
+
+        Platforms with subscription support
+        initialize their platform-specific
+        subscription here.
+
+        For YouTube, the initial expiration
+        will normally be null because the
+        actual WebSub lease is provided later
+        by YouTube's verification challenge.
+        */
+
+        const subscriptionResult =
+
+            await initializeSubscription({
+
+                platform:
+
+                    draft.platform,
+
+                accountIdentifier:
+
+                    draft.accountIdentifier
+
+            });
+
+
+        /*
+        ====================================
+        CREATE CONTENT CREATOR RECORD
+        ====================================
+
+        subscriptionExpiresAt may be null.
+
+        This is intentional.
+
+        For WebSub platforms such as YouTube,
+        the actual expiration is supplied by
+        the platform during verification and
+        is subsequently written to the
+        database by the subscription service.
+        */
+
         await createCreator({
 
             guildId:
@@ -517,7 +578,7 @@ async function finalizeCreator({
 
             subscriptionExpiresAt:
 
-                draft.subscriptionExpiresAt
+                subscriptionResult.subscriptionExpiresAt
 
         });
     }
@@ -548,6 +609,7 @@ async function finalizeCreator({
 
             });
 
+
             await interaction.update({
 
                 embeds: [
@@ -568,7 +630,7 @@ async function finalizeCreator({
 
                         .setDescription(
 
-                            `${draft.creatorDisplayName} is already registered  for ${getPlatformLabel(draft.platform)} announcements on this server.`
+                            `${draft.creatorDisplayName} is already registered for ${getPlatformLabel(draft.platform)} announcements on this server.`
 
                         )
 
@@ -585,11 +647,15 @@ async function finalizeCreator({
 
             });
 
+
             return;
+
         }
 
         throw error;
+
     }
+
 
     await discordLog({
 
@@ -598,21 +664,23 @@ async function finalizeCreator({
             interaction.guild.id,
 
         title:
+
             'Content Creator Added',
 
         category:
 
             'Administrative Action',
-                
+
         details:
 
             `${draft.creatorDisplayName} on ${draft.platform} has been added to automated announcements on <#${draft.discordChannelId}> by <@${interaction.user.id}>.`,
 
         status:
-                
+
             'SUCCESS'
 
     });
+
 
     deleteDraft({
 
@@ -625,6 +693,7 @@ async function finalizeCreator({
             interaction.user.id
 
     });
+
 
     await interaction.update({
 
@@ -687,6 +756,7 @@ async function finalizeCreator({
                             true
 
                     }
+
                 )
 
                 .setFooter({
@@ -696,16 +766,18 @@ async function finalizeCreator({
                         embedThemes.contentCreator.footer
 
                 })
+
         ],
 
         components: []
 
     });
 
+
     await sendDiscordMessage({
 
         channelId:
-        
+
             draft.discordChannelId,
 
         embed:

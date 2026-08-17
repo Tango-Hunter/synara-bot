@@ -10,9 +10,7 @@ const {
 } = require('discord.js');
 
 const {
-
     embedThemes
-
 } = require('../../../core/config/embed-themes');
 
 

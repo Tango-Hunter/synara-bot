@@ -19,23 +19,15 @@
  * • Parse YouTube API metadata
  */
 
-const crypto = require('crypto');
 
 const {
-    XMLParser
-} = require('fast-xml-parser');
-
-const {
-    logFeature
-} = require('../../core/logging/logger');
-
-const {
+    logFeature,
     logError
-} = require('../../core/logging/logger');
+} = require('../core/logging/logger');
 
 const {
     ERROR_TYPES
-} = require('../../core/logging/error-types');
+} = require('../core/logging/error-types');
 
 const fetch = global.fetch;
 
@@ -60,9 +52,6 @@ const DEFAULT_LEASE_SECONDS =
 
 const REQUEST_TIMEOUT =
     10000;
-
-const RENEWAL_BUFFER_SECONDS =
-    3600; // Renew one hour early
 
 
 
@@ -152,33 +141,11 @@ function calculateSubscriptionExpiration(
 
 
 
-function generateSecret() {
-
-    return crypto
-
-        .randomBytes(
-
-            32
-
-        )
-
-        .toString(
-
-            'hex'
-
-        );
-
-}
-
-
-
 function buildSubscriptionBody({
 
     topic,
 
     callback,
-
-    secret,
 
     leaseSeconds = DEFAULT_LEASE_SECONDS
 
@@ -217,14 +184,6 @@ function buildSubscriptionBody({
         'hub.verify',
 
         'async'
-
-    );
-
-    body.append(
-
-        'hub.secret',
-
-        secret
 
     );
 
@@ -346,11 +305,16 @@ WEBSUB OPERATIONS
 
 async function subscribe({
 
-    channelId,
+    accountIdentifier,
 
     leaseSeconds = DEFAULT_LEASE_SECONDS
 
 }) {
+
+    const channelId =
+
+        accountIdentifier;
+
 
     const topic =
 
@@ -360,13 +324,11 @@ async function subscribe({
 
         );
 
+
     const callback =
 
         buildCallbackUrl();
 
-    const secret =
-
-        generateSecret();
 
     const body =
 
@@ -376,11 +338,10 @@ async function subscribe({
 
             callback,
 
-            secret,
-
             leaseSeconds
 
         });
+
 
     await requestHub({
 
@@ -388,13 +349,6 @@ async function subscribe({
 
     });
 
-    const subscriptionExpiresAt =
-
-        calculateSubscriptionExpiration(
-
-            leaseSeconds
-
-        );
 
     logFeature({
 
@@ -404,44 +358,41 @@ async function subscribe({
 
         message:
 
-            'YouTube WebSub subscription created.',
+            'YouTube WebSub subscription requested.',
 
         details: {
 
-            channelId,
+            accountIdentifier,
 
             topic,
 
             callback,
 
-            leaseSeconds,
+            requestedLeaseSeconds:
 
-            subscriptionExpiresAt
+                leaseSeconds
 
         }
-
     });
+
 
     return {
 
-        channelId,
+        accountIdentifier,
 
         topic,
 
         callback,
 
-        secret,
+        requestedLeaseSeconds:
 
-        leaseSeconds,
-
-        subscriptionExpiresAt
+            leaseSeconds
 
     };
-
 }
 
 
-
+/*
 async function unsubscribe({
 
     channelId
@@ -523,7 +474,7 @@ async function unsubscribe({
     });
 
 }
-
+*/
 
 
 async function initialize({
@@ -710,7 +661,9 @@ async function handleChallenge(
 
                 challenge:
 
-                    !!challenge
+                    !!challenge,
+
+                leaseSeconds
 
             }
 
@@ -732,6 +685,68 @@ async function handleChallenge(
 
     }
 
+    const numericLeaseSeconds =
+
+        Number(
+
+            leaseSeconds
+
+        );
+
+    if (
+
+        !Number.isFinite(
+
+            numericLeaseSeconds
+
+        )
+
+        ||
+
+        numericLeaseSeconds <= 0
+
+    ) {
+
+        logError({
+
+            type:
+
+                ERROR_TYPES.UNKNOWN_ERROR,
+
+            source:
+
+                'youtube-websub',
+
+            message:
+
+                'YouTube WebSub verification returned an invalid lease duration.',
+
+            details: {
+
+                topic,
+
+                leaseSeconds
+
+            }
+
+        });
+
+        return res
+
+            .status(
+
+                400
+
+            )
+
+            .send(
+
+                'Invalid lease duration.'
+
+            );
+
+    }
+
     const accountIdentifier =
 
         topic
@@ -742,15 +757,55 @@ async function handleChallenge(
 
             )[1];
 
+    if (
+
+        !accountIdentifier
+
+    ) {
+
+        logError({
+
+            type:
+
+                ERROR_TYPES.UNKNOWN_ERROR,
+
+            source:
+
+                'youtube-websub',
+
+            message:
+
+                'Unable to determine YouTube channel from WebSub topic.',
+
+            details: {
+
+                topic
+
+            }
+
+        });
+
+        return res
+
+            .status(
+
+                400
+
+            )
+
+            .send(
+
+                'Invalid WebSub topic.'
+
+            );
+
+    }
+
     const subscriptionExpiresAt =
 
         calculateSubscriptionExpiration(
 
-            Number(
-
-                leaseSeconds
-
-            )
+            numericLeaseSeconds
 
         );
 
@@ -762,13 +817,15 @@ async function handleChallenge(
 
         message:
 
-            'YouTube WebSub verified.',
+            'YouTube WebSub subscription verified.',
 
         details: {
 
             accountIdentifier,
 
-            leaseSeconds,
+            leaseSeconds:
+
+                numericLeaseSeconds,
 
             subscriptionExpiresAt
 
@@ -782,11 +839,7 @@ async function handleChallenge(
 
         leaseSeconds:
 
-            Number(
-
-                leaseSeconds
-
-            ),
+            numericLeaseSeconds,
 
         subscriptionExpiresAt,
 
