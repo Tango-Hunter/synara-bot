@@ -333,6 +333,40 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS tiktok_authorizations (
+
+            id BIGSERIAL PRIMARY KEY,
+
+            account_identifier TEXT NOT NULL,
+
+            access_token TEXT NOT NULL,
+
+            refresh_token TEXT NOT NULL,
+
+            access_token_expires_at TIMESTAMP NOT NULL,
+
+            refresh_token_expires_at TIMESTAMP NOT NULL,
+
+            scope TEXT NOT NULL,
+
+            token_type TEXT NOT NULL DEFAULT 'Bearer',
+
+            authorization_status TEXT NOT NULL DEFAULT 'active',
+
+            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            UNIQUE (
+                account_identifier
+            )
+
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -366,7 +400,9 @@ async function initializeDatabase() {
 
                 'channel_messages',
 
-                'content_creators'
+                'content_creators',
+
+                'tiktok_authorizations'
             ] 
         }
     });

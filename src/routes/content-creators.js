@@ -24,6 +24,10 @@ const {
 } = require('../content-creators/announcement-service');
 
 const {
+    handleOAuthCallback
+} = require('../discord/interactions/content-creator/tiktok-platform')
+
+const {
     logFeature,
     logError
 } = require('../core/logging/logger');
@@ -33,9 +37,264 @@ const {
 } = require('../core/logging/error-types');
 
 
+const SYNARA_STATUS_URL =
+    'https://tangohunter.com/synara/status';
+
+
 module.exports = client => {
 
     const router = express.Router();
+
+    // ============================================
+    // TikTok Login Kit OAuth Callback
+    // ============================================
+
+    router.get(
+
+        '/tiktok/callback',
+
+        async (
+
+            req,
+
+            res
+
+        ) => {
+
+            try {
+
+                /*
+                ====================================
+                RECEIVE TIKTOK OAUTH CALLBACK
+                ====================================
+
+                TikTok redirects the user's browser
+                here after Login Kit authorization.
+
+                The route owns the HTTP request.
+
+                The TikTok platform module owns
+                the OAuth workflow.
+                */
+
+                const {
+
+                    code,
+
+                    state,
+
+                    error,
+
+                    error_description:
+                        errorDescription
+
+                } = req.query;
+
+
+                /*
+                ====================================
+                PROCESS OAUTH CALLBACK
+                ====================================
+
+                handleOAuthCallback() is responsible
+                for:
+
+                - validating the temporary OAuth state
+                - exchanging the authorization code
+                - retrieving the TikTok account
+                - storing the account information in
+                  the temporary OAuth Map
+                - updating the original Discord message
+                */
+
+                const result =
+
+                    await handleOAuthCallback({
+
+                        code,
+
+                        state,
+
+                        error,
+
+                        errorDescription
+
+                    });
+
+
+                /*
+                ====================================
+                REDIRECT TO STATUS PAGE
+                ====================================
+
+                The OAuth processing has completed.
+
+                The Discord interaction has already
+                been updated by tiktok-platform.js.
+
+                The browser is now redirected to the
+                public SYNARA status page.
+
+                Only non-sensitive presentation
+                information is included in the URL.
+                */
+
+                if (
+                    result?.success
+                ) {
+
+                    return res.redirect(
+
+                        `${SYNARA_STATUS_URL}?status=success&platform=tiktok`
+
+                    );
+
+                }
+
+
+                /*
+                ====================================
+                HANDLE EXPIRED OAUTH SESSION
+                ====================================
+
+                A missing or expired OAuth transaction
+                is different from a general OAuth error.
+
+                The status page provides the appropriate
+                user-facing message.
+                */
+
+                if (
+                    result?.expired
+                ) {
+
+                    return res.redirect(
+
+                        `${SYNARA_STATUS_URL}?status=timeout&platform=tiktok`
+
+                    );
+
+                }
+
+
+                /*
+                ====================================
+                HANDLE USER CANCELLATION
+                ====================================
+
+                TikTok normally reports a declined
+                authorization through the OAuth error
+                response.
+
+                access_denied is treated as a deliberate
+                cancellation rather than a server error.
+                */
+
+                if (
+                    error ===
+                        'access_denied'
+                ) {
+
+                    return res.redirect(
+
+                        `${SYNARA_STATUS_URL}?status=cancelled&platform=tiktok`
+
+                    );
+
+                }
+
+
+                /*
+                ====================================
+                HANDLE OAUTH FAILURE
+                ====================================
+
+                Do not expose the raw TikTok error
+                message in the browser.
+
+                The status page contains controlled,
+                generic messaging.
+                */
+
+                return res.redirect(
+
+                    `${SYNARA_STATUS_URL}?status=error&platform=tiktok&code=authorization_failed`
+
+                );
+
+            }
+
+            catch (
+                error
+            ) {
+
+                /*
+                ====================================
+                LOG CALLBACK FAILURE
+                ====================================
+                */
+
+                logError({
+
+                    type:
+
+                        ERROR_TYPES.API_ERROR,
+
+                    source:
+
+                        'content-creators-route',
+
+                    message:
+
+                        error.message,
+
+                    details: {
+
+                        platform:
+
+                            'tiktok',
+
+                        endpoint:
+
+                            'GET /tiktok/callback',
+
+                        hasCode:
+
+                            Boolean(
+                                req.query.code
+                            ),
+
+                        hasState:
+
+                            Boolean(
+                                req.query.state
+                            )
+
+                    }
+
+                });
+
+
+                /*
+                ====================================
+                RETURN GENERIC SERVER ERROR
+                ====================================
+
+                Never expose internal server errors
+                through the OAuth redirect.
+                */
+
+                return res.redirect(
+
+                    `${SYNARA_STATUS_URL}?status=error&platform=tiktok&code=server`
+
+                );
+
+            }
+
+        }
+
+    );
 
     // ============================================
     // YouTube WebSub Challenge Verification

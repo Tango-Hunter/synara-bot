@@ -2,9 +2,24 @@
  * Title: tiktok-api.js
  * Author: Tango Hunter
  * Date Created: 7/21/26
- * Description: Verifies TikTok creator accounts using public profile pages.
- * This service is responsible only for account lookup and verification. It does not perform polling or upload detection.
+ * Date Modified: 8/18/26
+ * Description: TikTok API integration for Login Kit,
+ * OAuth token management, and authorized user lookup.
+ *
+ * This service is responsible only for communicating
+ * with TikTok's API.
+ *
+ * It does not:
+ *
+ * - Manage Discord interactions
+ * - Store authorization records
+ * - Manage content creator records
+ * - Poll for new content
+ * - Post Discord announcements
  */
+
+
+const crypto = require('crypto');
 
 const {
     criticalLog
@@ -15,7 +30,20 @@ const {
 } = require('../../../core/logging/logger');
 
 
-const fetch = global.fetch;
+/*
+====================================
+ENVIRONMENT
+====================================
+*/
+
+const TIKTOK_CLIENT_KEY =
+    process.env.TIKTOK_CLIENT_KEY;
+
+const TIKTOK_CLIENT_SECRET =
+    process.env.TIKTOK_CLIENT_SECRET;
+
+const TIKTOK_REDIRECT_URI =
+    process.env.TIKTOK_REDIRECT_URI;
 
 
 /*
@@ -24,208 +52,111 @@ CONSTANTS
 ====================================
 */
 
-const TIKTOK_BASE_URL = 'https://www.tiktok.com';
+const TIKTOK_AUTHORIZE_URL =
+    'https://www.tiktok.com/v2/auth/authorize/';
 
-const REQUEST_TIMEOUT = 10000;
+const TIKTOK_TOKEN_URL =
+    'https://open.tiktokapis.com/v2/oauth/token/';
 
-const MAX_RETRIES = 2;
+const TIKTOK_USER_INFO_URL =
+    'https://open.tiktokapis.com/v2/user/info/';
 
-const TIKTOK_STATUS = Object.freeze({
+const TIKTOK_BASE_URL =
+    'https://www.tiktok.com';
 
-    OK:
-        0,
+const REQUEST_TIMEOUT =
+    10000;
 
-    USER_NOT_EXIST:
-        10202,
+const STATE_MAX_AGE =
+    10 * 60 * 1000;
 
-    USER_BAN:
-        10221,
+const TIKTOK_SCOPES = [
 
-    USER_PRIVATE:
-        10222
+    'user.info.basic',
 
-});
+    'video.list'
 
-/*
-====================================
-UTILITY HELPERS
-====================================
-*/
+].join(',');
 
-function sleep(
-
-    milliseconds
-
-) {
-
-    return new Promise(
-
-        resolve =>
-
-            setTimeout(
-
-                resolve,
-
-                milliseconds
-
-            )
-    );
-}
 
 /*
 ====================================
-USERNAME NORMALIZATION
+CONFIGURATION VALIDATION
 ====================================
 */
 
-function normalizeUsername(
+function validateConfiguration() {
 
-    username
-
-) {
+    const missing = [];
 
     if (
-        !username
+        !TIKTOK_CLIENT_KEY
     ) {
-        return '';
-    }
 
-    return username
-
-        .trim()
-
-        .replace(
-
-            /^@/,
-
-            ''
-
-        )
-
-        .replace(
-
-            /^https?:\/\/(www\.)?tiktok\.com\/@/i,
-
-            ''
-
-        )
-
-        .replace(
-
-            /\/$/,
-
-            ''
-
-        )
-
-        .toLowerCase();
-
-}
-
-/*
-====================================
-USERNAME VALIDATION
-====================================
-*/
-
-function validateUsername(
-
-    username
-
-) {
-
-    const normalized =
-
-        normalizeUsername(
-
-            username
-
+        missing.push(
+            'TIKTOK_CLIENT_KEY'
         );
 
-    if (
-        normalized.length === 0
-    ) {
-
-        return {
-
-            success: false,
-
-            error:
-
-                'Please enter a TikTok username.'
-
-        };
     }
 
-    /*
-    TikTok usernames:
-
-    - letters
-    - numbers
-    - underscores
-    - periods
-
-    Maximum length: 24 characters
-    */
-
-    const validPattern =
-
-        /^[a-zA-Z0-9._]{2,24}$/;
-
     if (
-
-        !validPattern.test(
-
-            normalized
-
-        )
+        !TIKTOK_CLIENT_SECRET
     ) {
 
-        return {
+        missing.push(
+            'TIKTOK_CLIENT_SECRET'
+        );
 
-            success: false,
-
-            error:
-
-                'That is not a valid TikTok username.'
-
-        };
     }
 
-    return {
+    if (
+        !TIKTOK_REDIRECT_URI
+    ) {
 
-        success: true,
+        missing.push(
+            'TIKTOK_REDIRECT_URI'
+        );
 
-        normalizedUsername:
+    }
 
-            normalized
+    if (
+        missing.length > 0
+    ) {
 
-    };
+        throw new Error(
+            `Missing TikTok configuration: ${missing.join(', ')}`
+        );
+
+    }
+
 }
+
 
 /*
 ====================================
-HTTP REQUEST
+REQUEST HELPER
 ====================================
 */
 
-async function requestTikTok(
+async function requestTikTok({
 
-    normalizedUsername
+    url,
 
-) {
+    options = {}
+
+}) {
 
     const controller =
-
         new AbortController();
 
     const timeout =
-
         setTimeout(
 
-            () =>
+            () => {
 
-                controller.abort(),
+                controller.abort();
+
+            },
 
             REQUEST_TIMEOUT
 
@@ -234,41 +165,247 @@ async function requestTikTok(
     try {
 
         const response =
-
             await fetch(
 
-                `${TIKTOK_BASE_URL}/@${normalizedUsername}`,
+                url,
 
                 {
 
-                    method: 'GET',
-
-                    headers: {
-
-                        'User-Agent':
-
-                            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-
-                        'Accept':
-
-                            'text/html'
-
-                    },
+                    ...options,
 
                     signal:
-
                         controller.signal
 
                 }
+
             );
 
+        return response;
+
+    }
+
+    finally {
+
         clearTimeout(
-
             timeout
-
         );
 
-        return response;
+    }
+
+}
+
+
+/*
+====================================
+OAUTH STATE
+====================================
+
+The state value protects the OAuth
+callback from unsolicited requests.
+
+The state payload is signed with the
+TikTok client secret so we do not need
+a separate state table.
+
+The payload contains only information
+needed to restore the Discord setup
+workflow.
+====================================
+*/
+
+function createOAuthState({
+
+    guildId,
+
+    userId
+
+}) {
+
+    validateConfiguration();
+
+    if (
+        !guildId ||
+        !userId
+    ) {
+
+        throw new Error(
+            'guildId and userId are required to create TikTok OAuth state.'
+        );
+
+    }
+
+    const payload = {
+
+        guildId,
+
+        userId,
+
+        timestamp:
+            Date.now(),
+
+        nonce:
+            crypto.randomBytes(
+                16
+            ).toString(
+                'hex'
+            )
+
+    };
+
+    const encodedPayload =
+        Buffer
+            .from(
+                JSON.stringify(
+                    payload
+                )
+            )
+            .toString(
+                'base64url'
+            );
+
+    const signature =
+        crypto
+            .createHmac(
+                'sha256',
+                TIKTOK_CLIENT_SECRET
+            )
+            .update(
+                encodedPayload
+            )
+            .digest(
+                'base64url'
+            );
+
+    return `${encodedPayload}.${signature}`;
+
+}
+
+
+/*
+====================================
+VALIDATE OAUTH STATE
+====================================
+*/
+
+function validateOAuthState(
+    state
+) {
+
+    validateConfiguration();
+
+    if (
+        !state ||
+        typeof state !== 'string'
+    ) {
+
+        return {
+
+            valid: false,
+
+            error:
+                'Missing OAuth state.'
+
+        };
+
+    }
+
+    const parts =
+        state.split('.');
+
+    if (
+        parts.length !== 2
+    ) {
+
+        return {
+
+            valid: false,
+
+            error:
+                'Invalid OAuth state format.'
+
+        };
+
+    }
+
+    const [
+        encodedPayload,
+        suppliedSignature
+    ] = parts;
+
+    const expectedSignature =
+        crypto
+            .createHmac(
+                'sha256',
+                TIKTOK_CLIENT_SECRET
+            )
+            .update(
+                encodedPayload
+            )
+            .digest(
+                'base64url'
+            );
+
+    const suppliedBuffer =
+        Buffer.from(
+            suppliedSignature
+        );
+
+    const expectedBuffer =
+        Buffer.from(
+            expectedSignature
+        );
+
+    if (
+        suppliedBuffer.length !==
+        expectedBuffer.length
+    ) {
+
+        return {
+
+            valid: false,
+
+            error:
+                'Invalid OAuth state signature.'
+
+        };
+
+    }
+
+    if (
+        !crypto.timingSafeEqual(
+            suppliedBuffer,
+            expectedBuffer
+        )
+    ) {
+
+        return {
+
+            valid: false,
+
+            error:
+                'Invalid OAuth state signature.'
+
+        };
+
+    }
+
+    let payload;
+
+    try {
+
+        payload =
+            JSON.parse(
+
+                Buffer
+                    .from(
+                        encodedPayload,
+                        'base64url'
+                    )
+                    .toString(
+                        'utf8'
+                    )
+
+            );
 
     }
 
@@ -276,420 +413,922 @@ async function requestTikTok(
         error
     ) {
 
-        clearTimeout(
+        return {
 
-            timeout
+            valid: false,
 
-        );
+            error:
+                'Unable to decode OAuth state.'
 
-        throw error;
+        };
 
     }
-}
 
-/*
-====================================
-VERIFY USERNAME
-====================================
-*/
+    if (
+        !payload.guildId ||
+        !payload.userId ||
+        !payload.timestamp
+    ) {
 
-async function verifyUsername(
+        return {
 
-    username
+            valid: false,
 
-) {
+            error:
+                'OAuth state is missing required information.'
 
-    /*
-    ====================================
-    Normalize / Validate
-    ====================================
-    */
+        };
 
-    const validation =
+    }
 
-        validateUsername(
-
-            username
-
+    const age =
+        Date.now() -
+        Number(
+            payload.timestamp
         );
 
     if (
-        !validation.success
-
-    ) {
-        return validation;
-    }
-
-    const {
-
-        normalizedUsername
-
-    } = validation;
-
-    /*
-    ====================================
-    Retry Loop
-    ====================================
-    */
-
-    for (
-
-        let attempt = 1;
-
-        attempt <= MAX_RETRIES;
-
-        attempt++
-
+        age < 0 ||
+        age > STATE_MAX_AGE
     ) {
 
-        try {
+        return {
 
-            logFeature({
+            valid: false,
 
-                category:
+            error:
+                'TikTok authorization request has expired.'
 
-                    'CONTENT_CREATOR',
+        };
 
-                message:
-
-                    'Verifying TikTok account.',
-
-                details: {
-
-                    username:
-
-                        normalizedUsername,
-
-                    attempt
-
-                }
-            });
-
-            const response =
-
-                await requestTikTok(
-
-                    normalizedUsername
-
-                );
-
-            /*
-            ====================================
-            HTTP Status
-            ====================================
-            */
-
-            if (
-                response.status === 404
-            ) {
-
-                return {
-
-                    success: false,
-
-                    error:
-
-                        'No TikTok account was found with that username.'
-
-                };
-            }
-
-            if (
-                !response.ok
-            ) {
-
-                throw new Error(
-
-                    `TikTok returned HTTP ${response.status}`
-
-                );
-            }
-
-            const html =
-
-                await response.text();
-
-            /*
-            ====================================
-            Parse hydration data
-            ====================================
-            */
-
-            const hydrationMatch =
-
-                html.match(
-
-                    /<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>([\s\S]*?)<\/script>/
-
-                );
-
-            if (
-                !hydrationMatch
-            ) {
-
-                throw new Error(
-
-                    'Unable to locate TikTok hydration data.'
-
-                );
-
-            }
-
-            const hydration =
-
-                JSON.parse(
-
-                    hydrationMatch[1]
-
-                );
-
-            const userDetail =
-
-                hydration
-
-                    .__DEFAULT_SCOPE__
-
-                    ['webapp.user-detail'];
-
-            if (
-                !userDetail
-            ) {
-
-                throw new Error(
-
-                    'TikTok response did not include user detail.'
-
-                );
-
-            }
-
-            const statusCode =
-
-                userDetail.statusCode;
-
-            switch (
-                statusCode
-            ) {
-
-                case TIKTOK_STATUS.OK:
-
-                    break;
-
-                case TIKTOK_STATUS.USER_NOT_EXIST:
-
-                case TIKTOK_STATUS.USER_BAN:
-
-                    return {
-
-                        success: false,
-
-                        error:
-
-                            'No TikTok account was found with that username.'
-
-                    };
-
-                case TIKTOK_STATUS.USER_PRIVATE:
-
-                    return {
-
-                        success: false,
-
-                        error:
-
-                            'This TikTok account is private and cannot be added.'
-
-                    };
-
-                default:
-
-                    await criticalLog({
-
-                        title:
-
-                            'Unknown TikTok Status Code',
-
-                        category:
-
-                            'CONTENT_CREATOR',
-
-                        details: {
-
-                            statusCode,
-
-                            username:
-
-                                normalizedUsername,
-
-                            file:
-
-                                'tiktok-api.js',
-
-                            function:
-
-                                'verifyUsername'
-
-                        }
-
-                    });
-
-                    throw new Error(
-
-                        `Unknown TikTok status code: ${statusCode}`
-
-                    );
-
-            }
-
-            /*
-            ====================================
-            Attempt to extract creator display name.
-            ====================================
-            */
-
-            const creatorDisplayName =
-
-                userDetail.userInfo?.user?.nickname
-
-                ??
-
-                normalizedUsername;
-
-            /*
-            ====================================
-            Success
-            ====================================
-            */
-
-            logFeature({
-
-                category:
-
-                    'CONTENT_CREATOR',
-
-                message:
-
-                    'TikTok account verified.',
-
-                details: {
-
-                    username:
-
-                        normalizedUsername
-
-                }
-            });
-
-            return {
-
-                success: true,
-
-                normalizedUsername,
-
-                accountIdentifier:
-
-                    normalizedUsername,
-
-                creatorDisplayName,
-
-                creatorUrl:
-
-                    `${TIKTOK_BASE_URL}/@${normalizedUsername}`
-
-            };
-
-        }
-
-        catch (
-            error
-        ) {
-
-            logFeature({
-
-                category:
-
-                    'CONTENT_CREATOR',
-
-                message:
-
-                    'TikTok verification attempt failed.',
-
-                details: {
-
-                    username:
-
-                        normalizedUsername,
-
-                    attempt,
-
-                    error:
-
-                        error.message
-
-                }
-            });
-
-            if (
-                attempt < MAX_RETRIES
-            ) {
-
-                await sleep(
-
-                    1000
-
-                );
-
-                continue;
-
-            }
-
-            logFeature({
-
-                category:
-
-                    'CONTENT_CREATOR',
-
-                message:
-
-                    'Unable to verify TikTok account.',
-
-                details: {
-
-                    username:
-
-                        normalizedUsername,
-
-                    error:
-
-                        error.message
-
-                }
-            });
-
-            return {
-
-                success: false,
-
-                error:
-
-                    'Unable to contact TikTok. Please try again in a few moments.'
-
-            };
-        }
     }
 
     return {
 
-        success: false,
+        valid: true,
 
-        error:
+        guildId:
+            payload.guildId,
 
-            'Unable to contact TikTok. Please try again in a few moments.'
+        userId:
+            payload.userId,
+
+        timestamp:
+            payload.timestamp,
+
+        nonce:
+            payload.nonce
 
     };
+
 }
 
+
+/*
+====================================
+BUILD AUTHORIZATION URL
+====================================
+*/
+
+function buildAuthorizationUrl({
+
+    guildId,
+
+    userId
+
+}) {
+
+    validateConfiguration();
+
+    const state =
+        createOAuthState({
+
+            guildId,
+
+            userId
+
+        });
+
+    const params =
+        new URLSearchParams({
+
+            client_key:
+                TIKTOK_CLIENT_KEY,
+
+            response_type:
+                'code',
+
+            scope:
+                TIKTOK_SCOPES,
+
+            redirect_uri:
+                TIKTOK_REDIRECT_URI,
+
+            state
+
+        });
+
+    return {
+
+        authorizationUrl:
+            `${TIKTOK_AUTHORIZE_URL}?${params.toString()}`,
+
+        state
+
+    };
+
+}
+
+
+/*
+====================================
+EXCHANGE AUTHORIZATION CODE
+====================================
+*/
+
+async function exchangeAuthorizationCode(
+    code
+) {
+
+    validateConfiguration();
+
+    if (
+        !code
+    ) {
+
+        throw new Error(
+            'TikTok authorization code is required.'
+        );
+
+    }
+
+    const body =
+        new URLSearchParams({
+
+            client_key:
+                TIKTOK_CLIENT_KEY,
+
+            client_secret:
+                TIKTOK_CLIENT_SECRET,
+
+            code,
+
+            grant_type:
+                'authorization_code',
+
+            redirect_uri:
+                TIKTOK_REDIRECT_URI
+
+        });
+
+    try {
+
+        const response =
+            await requestTikTok({
+
+                url:
+                    TIKTOK_TOKEN_URL,
+
+                options: {
+
+                    method:
+                        'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/x-www-form-urlencoded'
+
+                    },
+
+                    body:
+                        body.toString()
+
+                }
+
+            });
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok Authorization Failed',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'exchangeAuthorizationCode',
+
+                    status:
+                        response.status,
+
+                    error:
+                        data.error,
+
+                    errorDescription:
+                        data.error_description
+
+                }
+
+            });
+
+            throw new Error(
+                data.error_description
+                ||
+                data.error
+                ||
+                `TikTok returned HTTP ${response.status}.`
+            );
+
+        }
+
+        if (
+            !data.access_token ||
+            !data.refresh_token ||
+            !data.open_id
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'Invalid TikTok Authorization Response',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'exchangeAuthorizationCode',
+
+                    hasAccessToken:
+                        Boolean(
+                            data.access_token
+                        ),
+
+                    hasRefreshToken:
+                        Boolean(
+                            data.refresh_token
+                        ),
+
+                    hasOpenId:
+                        Boolean(
+                            data.open_id
+                        )
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok authorization response did not contain the required account information.'
+            );
+
+        }
+
+        logFeature({
+
+            category:
+                'CONTENT_CREATOR',
+
+            message:
+                'TikTok authorization completed.',
+
+            details: {
+
+                accountIdentifier:
+                    data.open_id,
+
+                scope:
+                    data.scope
+
+            }
+
+        });
+
+        return {
+
+            accountIdentifier:
+                data.open_id,
+
+            accessToken:
+                data.access_token,
+
+            refreshToken:
+                data.refresh_token,
+
+            accessTokenExpiresIn:
+                Number(
+                    data.expires_in
+                ),
+
+            refreshTokenExpiresIn:
+                Number(
+                    data.refresh_expires_in
+                ),
+
+            scope:
+                data.scope
+                ||
+                TIKTOK_SCOPES,
+
+            tokenType:
+                data.token_type
+                ||
+                'Bearer'
+
+        };
+
+    }
+
+    catch (
+        error
+    ) {
+
+        if (
+            error.name ===
+            'AbortError'
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok Authorization Timeout',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'exchangeAuthorizationCode',
+
+                    timeout:
+                        REQUEST_TIMEOUT
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok authorization request timed out.'
+            );
+
+        }
+
+        throw error;
+
+    }
+
+}
+
+
+/*
+====================================
+REFRESH ACCESS TOKEN
+====================================
+*/
+
+async function refreshAccessToken(
+    refreshToken
+) {
+
+    validateConfiguration();
+
+    if (
+        !refreshToken
+    ) {
+
+        throw new Error(
+            'TikTok refresh token is required.'
+        );
+
+    }
+
+    const body =
+        new URLSearchParams({
+
+            client_key:
+                TIKTOK_CLIENT_KEY,
+
+            client_secret:
+                TIKTOK_CLIENT_SECRET,
+
+            grant_type:
+                'refresh_token',
+
+            refresh_token:
+                refreshToken
+
+        });
+
+    try {
+
+        const response =
+            await requestTikTok({
+
+                url:
+                    TIKTOK_TOKEN_URL,
+
+                options: {
+
+                    method:
+                        'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/x-www-form-urlencoded'
+
+                    },
+
+                    body:
+                        body.toString()
+
+                }
+
+            });
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok Token Refresh Failed',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'refreshAccessToken',
+
+                    status:
+                        response.status,
+
+                    error:
+                        data.error,
+
+                    errorDescription:
+                        data.error_description
+
+                }
+
+            });
+
+            throw new Error(
+                data.error_description
+                ||
+                data.error
+                ||
+                `TikTok returned HTTP ${response.status}.`
+            );
+
+        }
+
+        if (
+            !data.access_token ||
+            !data.refresh_token
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'Invalid TikTok Refresh Response',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'refreshAccessToken',
+
+                    hasAccessToken:
+                        Boolean(
+                            data.access_token
+                        ),
+
+                    hasRefreshToken:
+                        Boolean(
+                            data.refresh_token
+                        )
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok token refresh response did not contain the required token information.'
+            );
+
+        }
+
+        logFeature({
+
+            category:
+                'CONTENT_CREATOR',
+
+            message:
+                'TikTok access token refreshed.',
+
+            details: {
+
+                accessTokenExpiresIn:
+                    Number(
+                        data.expires_in
+                    ),
+
+                refreshTokenExpiresIn:
+                    Number(
+                        data.refresh_expires_in
+                    ),
+
+                scope:
+                    data.scope
+
+            }
+
+        });
+
+        return {
+
+            accessToken:
+                data.access_token,
+
+            refreshToken:
+                data.refresh_token,
+
+            accessTokenExpiresIn:
+                Number(
+                    data.expires_in
+                ),
+
+            refreshTokenExpiresIn:
+                Number(
+                    data.refresh_expires_in
+                ),
+
+            scope:
+                data.scope
+                ||
+                TIKTOK_SCOPES,
+
+            tokenType:
+                data.token_type
+                ||
+                'Bearer'
+
+        };
+
+    }
+
+    catch (
+        error
+    ) {
+
+        if (
+            error.name ===
+            'AbortError'
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok Token Refresh Timeout',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'refreshAccessToken',
+
+                    timeout:
+                        REQUEST_TIMEOUT
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok token refresh request timed out.'
+            );
+
+        }
+
+        throw error;
+
+    }
+
+}
+
+
+/*
+====================================
+GET AUTHORIZED USER
+====================================
+*/
+
+async function getAuthorizedUser(
+    accessToken
+) {
+
+    if (
+        !accessToken
+    ) {
+
+        throw new Error(
+            'TikTok access token is required.'
+        );
+
+    }
+
+    const fields =
+        [
+
+            'open_id',
+
+            'display_name',
+
+            'profile_deep_link'
+
+        ].join(',');
+
+    try {
+
+        const response =
+            await requestTikTok({
+
+                url:
+                    `${TIKTOK_USER_INFO_URL}?fields=${fields}`,
+
+                options: {
+
+                    method:
+                        'GET',
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${accessToken}`,
+
+                        Accept:
+                            'application/json'
+
+                    }
+
+                }
+
+            });
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok User Lookup Failed',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'getAuthorizedUser',
+
+                    status:
+                        response.status,
+
+                    error:
+                        data.error,
+
+                    errorDescription:
+                        data.error_description
+
+                }
+
+            });
+
+            throw new Error(
+                data.error_description
+                ||
+                data.error
+                ||
+                `TikTok returned HTTP ${response.status}.`
+            );
+
+        }
+
+        const user =
+            data.data?.user;
+
+        if (
+            !user?.open_id
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'Invalid TikTok User Response',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'getAuthorizedUser',
+
+                    hasUser:
+                        Boolean(
+                            user
+                        ),
+
+                    hasOpenId:
+                        Boolean(
+                            user?.open_id
+                        )
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok did not return a valid authorized user.'
+            );
+
+        }
+
+        logFeature({
+
+            category:
+                'CONTENT_CREATOR',
+
+            message:
+                'TikTok authorized user retrieved.',
+
+            details: {
+
+                accountIdentifier:
+                    user.open_id,
+
+                creatorDisplayName:
+                    user.display_name
+
+            }
+
+        });
+
+        return {
+
+            accountIdentifier:
+                user.open_id,
+
+            creatorDisplayName:
+                user.display_name
+                ||
+                'TikTok Creator',
+
+            creatorUrl:
+                user.profile_deep_link
+                ||
+                null
+
+        };
+
+    }
+
+    catch (
+        error
+    ) {
+
+        if (
+            error.name ===
+            'AbortError'
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'TikTok User Lookup Timeout',
+
+                category:
+                    'CONTENT_CREATOR',
+
+                details: {
+
+                    function:
+                        'getAuthorizedUser',
+
+                    timeout:
+                        REQUEST_TIMEOUT
+
+                }
+
+            });
+
+            throw new Error(
+                'TikTok user lookup request timed out.'
+            );
+
+        }
+
+        throw error;
+
+    }
+
+}
+
+
+/*
+====================================
+CALCULATE TOKEN EXPIRATION
+====================================
+
+Converts TikTok's expires_in values
+into actual timestamps for storage
+in tiktok_authorizations.
+====================================
+*/
+
+function calculateTokenExpiration(
+    expiresIn
+) {
+
+    const seconds =
+        Number(
+            expiresIn
+        );
+
+    if (
+        !Number.isFinite(
+            seconds
+        )
+        ||
+        seconds <= 0
+    ) {
+
+        throw new Error(
+            'TikTok returned an invalid token expiration value.'
+        );
+
+    }
+
+    return new Date(
+
+        Date.now() +
+        (
+            seconds *
+            1000
+        )
+
+    );
+
+}
+
+
+/*
+====================================
+EXPORTS
+====================================
+*/
+
 module.exports = {
-    normalizeUsername,
-    verifyUsername
+
+    createOAuthState,
+
+    validateOAuthState,
+
+    buildAuthorizationUrl,
+
+    exchangeAuthorizationCode,
+
+    refreshAccessToken,
+
+    getAuthorizedUser,
+
+    calculateTokenExpiration
+
 };
