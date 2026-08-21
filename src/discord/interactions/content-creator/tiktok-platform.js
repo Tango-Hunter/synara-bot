@@ -63,6 +63,9 @@ CUSTOM IDS
 const MODAL_ID =
     'content_creator_tiktok_modal';
 
+const AUTHORIZE_ID =
+    'content_creator_tiktok_authorize';
+
 const APPROVE_ID =
     'content_creator_tiktok_approve';
 
@@ -563,7 +566,6 @@ function buildAuthenticatedAccountEmbed({
 BUILD AUTHENTICATED ACCOUNT BUTTONS
 ====================================
 */
-
 function buildAuthenticatedAccountButtons() {
 
     return [
@@ -571,7 +573,7 @@ function buildAuthenticatedAccountButtons() {
         createApprovalButtons({
 
             approveId:
-                APPROVE_ID,
+                AUTHORIZE_ID,
 
             cancelId:
                 CANCEL_ID
@@ -888,19 +890,7 @@ function buildAnnouncementModal() {
 
 /*
 ====================================
-HANDLE APPROVAL BUTTON
-====================================
-
-The authenticated account has already
-been retrieved from TikTok.
-
-The approval button does NOT write to
-the database yet.
-
-It simply opens the announcement modal.
-
-The database write occurs after the
-user submits that modal.
+HANDLE TIKTOK AUTHORIZATION APPROVAL
 ====================================
 */
 
@@ -922,13 +912,11 @@ async function handleApproval(
 
     const transaction =
         findOAuthTransactionForUser({
-
             guildId:
                 interaction.guild.id,
 
             userId:
                 interaction.user.id
-
         });
 
     if (
@@ -966,6 +954,106 @@ async function handleApproval(
 
         });
 
+        return {
+            handled:
+                true,
+
+            success:
+                false
+        };
+    }
+
+    const {
+        oauthData
+    } =
+        transaction;
+
+    /*
+    ====================================
+    CALCULATE TOKEN EXPIRATION
+    ====================================
+    */
+
+    let accessTokenExpiresAt;
+
+    let refreshTokenExpiresAt;
+
+
+    try {
+
+        accessTokenExpiresAt =
+            calculateTokenExpiration(
+                oauthData.accessTokenExpiresIn
+            );
+
+
+        refreshTokenExpiresAt =
+            calculateTokenExpiration(
+                oauthData.refreshTokenExpiresIn
+            );
+    }
+
+    catch (
+        error
+    ) {
+
+        logFeature({
+
+            category:
+                'Content Creator',
+
+            message:
+                'TikTok authorization returned invalid token expiration data.',
+
+            details: {
+
+                guildId:
+                    transaction.guildId,
+
+                userId:
+                    transaction.userId,
+
+                accountIdentifier:
+                    oauthData.accountIdentifier,
+
+                error:
+                    error.message
+
+            }
+        });
+
+        await interaction.update({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+                        embedThemes.alert.color
+                    )
+
+                    .setTitle(
+                        `${embedThemes.alert.icon} TikTok Authorization Failed`
+                    )
+
+                    .setDescription(
+                        'TikTok returned invalid authorization expiration information. Please try again.'
+                    )
+
+                    .setFooter({
+                        text:
+                            embedThemes.contentCreator.footer
+                    })
+
+            ],
+
+            components: []
+
+        });
+
+        deleteOAuthTransaction(
+            transaction.state
+        );
 
         return {
             handled:
@@ -976,9 +1064,153 @@ async function handleApproval(
         };
     }
 
-    return await interaction.showModal(
+    /*
+    ====================================
+    PERSIST TIKTOK AUTHORIZATION
+    ====================================
+    */
+    try {
+
+        await createTikTokAuthorization({
+
+            accountIdentifier:
+                oauthData.accountIdentifier,
+
+            accessToken:
+                oauthData.accessToken,
+
+            refreshToken:
+                oauthData.refreshToken,
+
+            accessTokenExpiresAt,
+
+            refreshTokenExpiresAt,
+
+            scope:
+                oauthData.scope,
+
+            tokenType:
+                oauthData.tokenType
+
+        });
+    }
+
+    catch (
+        error
+    ) {
+
+        logFeature({
+
+            category:
+                'Content Creator',
+
+            message:
+                'Failed to store TikTok authorization.',
+
+            details: {
+
+                guildId:
+                    transaction.guildId,
+
+                userId:
+                    transaction.userId,
+
+                accountIdentifier:
+                    oauthData.accountIdentifier,
+
+                error:
+                    error.message
+
+            }
+        });
+
+
+        await interaction.update({
+
+            embeds: [
+
+                new EmbedBuilder()
+
+                    .setColor(
+                        embedThemes.alert.color
+                    )
+
+                    .setTitle(
+                        `${embedThemes.alert.icon} TikTok Authorization Failed`
+                    )
+
+                    .setDescription(
+                        'SYNARA could not save the TikTok authorization. Please try again.'
+                    )
+
+                    .setFooter({
+                        text:
+                            embedThemes.contentCreator.footer
+                    })
+
+            ],
+
+            components: []
+        });
+
+        return {
+            handled:
+                true,
+
+            success:
+                false
+        };
+    }
+
+
+    /*
+    ====================================
+    AUTHORIZATION PERSISTED
+    ====================================
+    */
+
+    logFeature({
+
+        category:
+            'Content Creator',
+
+        message:
+            'TikTok account authorization confirmed and persisted.',
+
+        details: {
+
+            guildId:
+                transaction.guildId,
+
+            userId:
+                transaction.userId,
+
+            accountIdentifier:
+                oauthData.accountIdentifier,
+
+            creatorDisplayName:
+                oauthData.creatorDisplayName
+
+        }
+    });
+
+
+    /*
+    ====================================
+    OPEN ANNOUNCEMENT MODAL
+    ====================================
+    */
+    await interaction.showModal(
         buildAnnouncementModal()
     );
+
+    return {
+        handled:
+            true,
+
+        success:
+            true
+    };
 }
 
 
@@ -1117,16 +1349,7 @@ async function handleCancel(
 ====================================
 MODAL HANDLER
 ====================================
-
-This is called by the generic
-content-creator handler after the
-user submits the announcement modal.
-
-This is the point where the TikTok
-authorization is permanently stored.
-====================================
 */
-
 async function handleModal(
     interaction
 ) {
@@ -1138,25 +1361,20 @@ async function handleModal(
             )
         );
 
-
     const transaction =
         findOAuthTransactionForUser({
-
             guildId:
                 interaction.guild.id,
 
             userId:
                 interaction.user.id
-
         });
-
 
     if (
         !transaction
         ||
         !transaction.oauthData
     ) {
-
         return {
 
             success:
@@ -1168,172 +1386,17 @@ async function handleModal(
         };
     }
 
-
     const {
         oauthData
     } =
         transaction;
 
 
-    let accessTokenExpiresAt;
-    let refreshTokenExpiresAt;
-
-
-    try {
-
-        accessTokenExpiresAt =
-            calculateTokenExpiration(
-                oauthData.accessTokenExpiresIn
-            );
-
-
-        refreshTokenExpiresAt =
-            calculateTokenExpiration(
-                oauthData.refreshTokenExpiresIn
-            );
-    }
-
-    catch (
-        error
-    ) {
-
-        logFeature({
-
-            category:
-                'Content Creator',
-
-            message:
-                'TikTok authorization returned invalid token expiration data.',
-
-            details: {
-
-                guildId:
-                    transaction.guildId,
-
-                userId:
-                    transaction.userId,
-
-                accountIdentifier:
-                    oauthData.accountIdentifier,
-
-                error:
-                    error.message
-
-            }
-        });
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                'TikTok returned invalid authorization expiration information. Please try again.'
-
-        };
-    }
-
-
-    try {
-
-        await createTikTokAuthorization({
-
-            accountIdentifier:
-                oauthData.accountIdentifier,
-
-            accessToken:
-                oauthData.accessToken,
-
-            refreshToken:
-                oauthData.refreshToken,
-
-            accessTokenExpiresAt,
-
-            refreshTokenExpiresAt,
-
-            scope:
-                oauthData.scope,
-
-            tokenType:
-                oauthData.tokenType
-
-        });
-    }
-
-    catch (
-        error
-    ) {
-
-        logFeature({
-
-            category:
-                'Content Creator',
-
-            message:
-                'Failed to store TikTok authorization.',
-
-            details: {
-
-                guildId:
-                    transaction.guildId,
-
-                userId:
-                    transaction.userId,
-
-                accountIdentifier:
-                    oauthData.accountIdentifier,
-
-                error:
-                    error.message
-
-            }
-        });
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                'SYNARA could not save the TikTok authorization. Please try again.'
-
-        };
-    }
-
-
-    const generatedAnnouncement =
-        buildAnnouncementPreview(
-            customMessage
-        );
-
-
-    const embed =
-        buildConfirmationEmbed({
-
-            creatorDisplayName:
-                oauthData.creatorDisplayName,
-
-            creatorUrl:
-                oauthData.creatorUrl,
-
-            generatedAnnouncement
-
-        });
-
-
-    const components =
-        createApprovalButtons({
-
-            approveId:
-                APPROVE_ID,
-
-            cancelId:
-                CANCEL_ID
-
-        });
-
+    /*
+    ====================================
+    BUILD NORMALIZED CONTENT CREATOR DRAFT
+    ====================================
+    */
 
     const draft = {
 
@@ -1358,10 +1421,56 @@ async function handleModal(
     };
 
 
+    /*
+    ====================================
+    BUILD ANNOUNCEMENT PREVIEW
+    ====================================
+    */
+
+    const generatedAnnouncement =
+        buildAnnouncementPreview(
+            customMessage
+        );
+
+    /*
+    ====================================
+    BUILD FINAL CONTENT CREATOR CONFIRMATION
+    ====================================
+    */
+
+    const embed =
+        buildConfirmationEmbed({
+
+            creatorDisplayName:
+                draft.creatorDisplayName,
+
+            creatorUrl:
+                draft.accountUrl,
+
+            generatedAnnouncement
+
+        });
+
+    const components =
+        createApprovalButtons({
+
+            approveId:
+                APPROVE_ID,
+
+            cancelId:
+                CANCEL_ID
+
+        });
+
+    /*
+    ====================================
+    OAUTH TRANSACTION COMPLETE
+    ====================================
+    */
+
     deleteOAuthTransaction(
         transaction.state
     );
-
 
     logFeature({
 
@@ -1369,7 +1478,7 @@ async function handleModal(
             'Content Creator',
 
         message:
-            'TikTok content creator configuration confirmed.',
+            'TikTok content creator draft prepared.',
 
         details: {
 
@@ -1387,7 +1496,6 @@ async function handleModal(
 
         }
     });
-
 
     return {
 
@@ -1488,6 +1596,8 @@ module.exports = {
 
     modalId:
         MODAL_ID,
+    authorizeId:
+        AUTHORIZE_ID,
     approveId:
         APPROVE_ID,
     cancelId:

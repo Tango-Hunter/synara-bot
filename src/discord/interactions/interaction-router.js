@@ -45,6 +45,9 @@ const {
     handleContentCreatorInteraction
 } = require('./content-creator-handler');
 
+const TikTokPlatform =
+    require('./content-creator/tiktok-platform');
+
 const {
     handleRemoveInteraction
 } = require('../admin/commands/contentcreator');
@@ -187,11 +190,64 @@ async function routeInteraction(
         CONTENT CREATOR
         ============================
         */
-        // Add
+
+        /*
+        ====================================
+        TIKTOK AUTHORIZATION WORKFLOW
+        ====================================
+        TikTok has an additional approval step
+        that occurs AFTER TikTok OAuth succeeds
+        but BEFORE the normal Content Creator
+        configuration workflow begins.
+        */
+
+        if (
+            interaction.isButton()
+            &&
+            interaction.customId ===
+                TikTokPlatform.authorizeId
+        ) {
+            const handledTikTokAuthorization =
+                await TikTokPlatform.handleApproval(
+                    interaction
+                );
+
+            if (
+                handledTikTokAuthorization?.handled
+            ) {
+                return;
+            }
+        }
+
+        if (
+            interaction.isButton()
+            &&
+            interaction.customId ===
+                TikTokPlatform.cancelId
+        ) {
+            const handledTikTokCancellation =
+                await TikTokPlatform.handleCancel(
+                    interaction
+                );
+
+            if (
+                handledTikTokCancellation?.handled
+            ) {
+                return;
+            }
+        }
+
+
+        /*
+        ====================================
+        GENERIC CONTENT CREATOR WORKFLOW
+        ====================================
+        */
         const handledContentCreator =
             await handleContentCreatorInteraction(
                 interaction
             );
+
         if (
             handledContentCreator !== false
         ) {
