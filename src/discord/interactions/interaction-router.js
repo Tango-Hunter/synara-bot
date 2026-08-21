@@ -223,7 +223,7 @@ async function routeInteraction(
             interaction.isButton()
             &&
             interaction.customId ===
-                TikTokPlatform.cancelId
+                TikTokPlatform.authorizeCancelId
         ) {
             const handledTikTokCancellation =
                 await TikTokPlatform.handleCancel(

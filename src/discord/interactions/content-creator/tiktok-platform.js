@@ -66,6 +66,9 @@ const MODAL_ID =
 const AUTHORIZE_ID =
     'content_creator_tiktok_authorize';
 
+const AUTHORIZE_CANCEL_ID =
+    'content_creator_tiktok_authorize_cancel';
+
 const APPROVE_ID =
     'content_creator_tiktok_approve';
 
@@ -576,7 +579,7 @@ function buildAuthenticatedAccountButtons() {
                 AUTHORIZE_ID,
 
             cancelId:
-                CANCEL_ID
+                AUTHORIZE_CANCEL_ID
 
         })
     ];
@@ -902,7 +905,7 @@ async function handleApproval(
         !interaction.isButton()
         ||
         interaction.customId !==
-            APPROVE_ID
+            AUTHORIZE_ID
     ) {
         return {
             handled:
@@ -1292,7 +1295,7 @@ async function handleCancel(
         !interaction.isButton()
         ||
         interaction.customId !==
-            CANCEL_ID
+            AUTHORIZE_CANCEL_ID
     ) {
         return {
             handled:
@@ -1598,6 +1601,8 @@ module.exports = {
         MODAL_ID,
     authorizeId:
         AUTHORIZE_ID,
+    authorizeCancelId:
+        AUTHORIZE_CANCEL_ID,
     approveId:
         APPROVE_ID,
     cancelId:
