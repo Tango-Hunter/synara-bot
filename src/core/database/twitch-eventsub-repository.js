@@ -2,7 +2,7 @@
  * Title: twitch-eventsub-repository.js
  * Author: Tango Hunter
  * Date Created: 5/29/26
- * Description: EventSub Repository Functions.
+ * Description: EventSub .
  */
 
 const pool
@@ -56,6 +56,38 @@ async function getSubscription({
         null
 
     );
+}
+
+async function getSubscriptions(
+    twitchUserId
+) {
+
+    const result =
+
+        await pool.query(
+
+            `
+
+            SELECT *
+
+            FROM twitch_eventsub
+
+            WHERE
+
+                twitch_user_id = $1
+
+            `,
+
+            [
+
+                twitchUserId
+
+            ]
+
+        );
+
+    return result.rows;
+
 }
 
 async function saveSubscription({
@@ -176,6 +208,7 @@ async function touchSubscription({
 
 module.exports = {
     getSubscription,
+    getSubscriptions,
     saveSubscription,
     touchSubscription
 };
