@@ -1064,7 +1064,6 @@ async function getAuthorizedUser(
         [
             'open_id',
             'display_name',
-            'profile_deep_link',
             'avatar_url'
         ].join(',');
 
@@ -1208,10 +1207,8 @@ async function getAuthorizedUser(
                 'TikTok Creator',
 
             creatorUrl:
-                user.profile_deep_link
-                ||
                 null,
-
+                
             avatarUrl:
                 user.avatar_url
                 ||
