@@ -108,12 +108,27 @@ module.exports = (
 
                     details: {
 
-                        type:
+                        messageId:
+                            req.header(
+                                'Twitch-Eventsub-Message-Id'
+                            ),
+
+                        retry:
+                            req.header(
+                                'Twitch-Eventsub-Message-Retry'
+                            ) ?? '0',
+
+                        subscriptionType:
                             req.body.subscription?.type,
+
+                        subscriptionId:
+                            req.body.subscription?.id,
 
                         broadcasterId:
                             req.body.event?.broadcaster_user_id
+
                     }
+
                 });
 
                 try {

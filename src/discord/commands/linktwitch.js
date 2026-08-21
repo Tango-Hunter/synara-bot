@@ -19,7 +19,7 @@ const {
 } = require('../../twitch/services/eventsub-service');
 
 const {
-    getSubscription
+    getSubscriptions
 } = require('../../core/database/twitch-eventsub-repository');
 
 const {
@@ -134,46 +134,136 @@ async function handleLinkTwitch(
             twitchUser.profile_image_url
     });
 
-    const existingSubscription =
+    const subscriptions =
 
-        await getSubscription(
+        await getSubscriptions(
+
             twitchUser.id
+
+        );
+
+    const hasOnline =
+
+        subscriptions.some(
+
+            subscription =>
+
+                subscription.subscription_type ===
+
+                'stream.online'
+
+        );
+
+    const hasOffline =
+
+        subscriptions.some(
+
+            subscription =>
+
+                subscription.subscription_type ===
+
+                'stream.offline'
+
         );
 
     if (
-        !existingSubscription
+
+        !hasOnline
+
+        ||
+
+        !hasOffline
 
     ) {
-        await ensureEventSubSubscription({
-            twitchUserId:
-                twitchUser.id
+
+        logFeature({
+
+            category:
+
+                'TWITCH',
+
+            message:
+
+                'Missing EventSub subscription detected.',
+
+            details: {
+
+                guildName:
+
+                    message.guild.name,
+
+                guildId:
+
+                    message.guild.id,
+
+                discordUserId:
+
+                    message.author.id,
+
+                twitchUserId:
+
+                    twitchUser.id,
+
+                twitchLogin:
+
+                    twitchUser.login,
+
+                hasOnline,
+
+                hasOffline
+
+            }
+
         });
+
+        await ensureEventSubSubscription({
+
+            twitchUserId:
+
+                twitchUser.id
+
+        });
+
     }
+
     else {
 
         logFeature({
 
             category:
+
                 'TWITCH',
 
             message:
-                'Existing EventSub detected',
+
+                'All EventSub subscriptions already exist.',
 
             details: {
 
+                guildName:
+
+                    message.guild.name,
+
                 guildId:
+
                     message.guild.id,
 
                 discordUserId:
+
                     message.author.id,
 
                 twitchUserId:
+
                     twitchUser.id,
 
                 twitchLogin:
+
                     twitchUser.login
+
             }
+
         });
+
     }
 
     await discordLog({
