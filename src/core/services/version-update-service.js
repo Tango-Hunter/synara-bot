@@ -96,24 +96,38 @@ async function checkVersionUpdates(
 
         /*
         ====================================
-        BUILD UPDATE TARGETS
+        BUILD GUILD UPDATE TARGETS
         ====================================
+
+        Broadcast targets may include destinations
+        that are not Discord guilds, such as the
+        global SYNARA Support Server updates channel.
+
+        Only actual guild targets participate in
+        guild version synchronization.
+
+        The support server remains a broadcast
+        destination but has no guild_settings row.
         */
+
+        const guildTargets =
+            targets.filter(
+
+                target =>
+                    Boolean(
+                        target.guildId
+                    )
+            );
 
         const updateTargets = [];
 
         for (
-
             const target
-
             of
-
-            targets
-
+            guildTargets
         ) {
 
             const guildVersion =
-
                 await getGuildSetting({
 
                     guildId:
@@ -131,19 +145,15 @@ async function checkVersionUpdates(
             */
 
             if (
-
                 guildVersion ===
-
                 currentVersion
-
             ) {
                 continue;
             }
 
+
             updateTargets.push(
-
                 target
-
             );
         }
 
@@ -303,19 +313,41 @@ async function checkVersionUpdates(
         ====================================
         BROADCAST RELEASE
         ====================================
+
+        Only guilds requiring a version update
+        are eligible for the version transition.
+
+        The support server is a global broadcast
+        destination and must receive the release
+        broadcast as well.
+
+        Build the broadcast target list from the
+        original resolved targets so the support
+        server remains included.
         */
 
-        const results =
+        const broadcastTargets =
+            targets.filter(
 
+                target =>
+
+                    updateTargets.includes(
+                        target
+                    )
+                    ||
+                    !target.guildId
+
+            );
+
+        const results =
             await broadcastEmbeds({
 
                 embeds,
 
                 targets:
+                    broadcastTargets
 
-                    updateTargets
-
-            });
+        });
 
         /*
         ====================================
