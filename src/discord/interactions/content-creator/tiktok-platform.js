@@ -744,7 +744,7 @@ async function handleOAuthCallback({
             authorizedUser.creatorDisplayName,
 
         creatorUrl:
-            authorizedUser.creatorUrl,
+            `https://www.tiktok.com/@${authorizedUser.creatorDisplayName}`,
 
         avatarUrl:
             authorizedUser.avatarUrl
