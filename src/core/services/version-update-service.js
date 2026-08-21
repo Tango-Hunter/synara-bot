@@ -15,6 +15,10 @@
  */
 
 const {
+    EmbedBuilder
+} = require("discord.js");
+
+const {
     getCurrentVersion,
     renderRelease
 } = require("../../discord/utils/registry-renderer");
@@ -182,12 +186,18 @@ async function checkVersionUpdates(
 
         try {
 
+            /*
+            ====================================
+            NORMAL RELEASE
+            ====================================
+
+            Full releases have a registry entry
+            and are rendered normally.
+            */
+
             embeds =
-
                 renderRelease(
-
                     currentVersion
-
                 );
         }
 
@@ -195,107 +205,21 @@ async function checkVersionUpdates(
             error
         ) {
 
-            logError({
-
-                type:
-                    ERROR_TYPES.SYSTEM_ERROR,
-
-                source:
-                    "version-update-service",
-
-                message:
-                    "Failed to render release broadcast.",
-
-                details: {
-
-                    version:
-                        currentVersion,
-
-                    error:
-                        error.message,
-
-                    stack:
-                        error.stack
-
-                }
-
-            });
-
             /*
             ====================================
-            NO RELEASE BROADCAST REQUIRED
+            PATCH / UNREGISTERED RELEASE
             ====================================
+
+            Not every version requires a full
+            release document.
+
+            Patch releases intentionally use the
+            public SYNARA updates page instead
+            of Discord release notes.
+
+            A missing registry release is therefore
+            NOT an error condition.
             */
-
-            for (
-
-                const guild
-
-                of
-
-                updateTargets
-
-            ) {
-
-                try {
-
-                    await discordLog({
-
-                        guildId:
-
-                            guild.guildId,
-
-                        title:
-                            'Minor Version update',
-
-                        category:
-
-                            'Automated Maintenance Notification',
-                                
-                        details:
-
-                            `Version has updated to: ${currentVersion}. Patch notes may be reviewed at https://tangohunter.com/synara/updates.`,
-
-                        status:
-                                
-                            'INFO'
-
-                    });
-                }
-
-                catch (
-                    error
-                ) {
-
-                    logError({
-
-                        type:
-                            ERROR_TYPES.SYSTEM_ERROR,
-
-                        source:
-                            "version-update-service",
-
-                        message:
-                            "Failed to synchronize guild version.",
-
-                        details: {
-
-                            guildId:
-                                guild.guildId,
-
-                            guildName:
-                                guild.guildName,
-
-                            version:
-                                currentVersion,
-
-                            error:
-                                error.message
-
-                        }
-                    });
-                }
-            }
 
             logFeature({
 
@@ -303,90 +227,76 @@ async function checkVersionUpdates(
                     "VERSION_UPDATE",
 
                 message:
-                    "No release broadcast found. Synchronizing guild versions only.",
+                    "No Discord release notes found. Using updates page fallback.",
 
                 details: {
 
                     version:
                         currentVersion,
 
-                    guilds:
-                        updateTargets.length
+                    updatesUrl:
+                        "https://tangohunter.com/synara/updates",
+
+                    reason:
+                        error.message
 
                 }
+
             });
 
-            /*
-            ====================================
-            UPDATE GUILD VERSIONS
-            ====================================
-            */
 
-            for (
+            const patchEmbed =
+                new EmbedBuilder()
 
-                const guild
+                    .setColor(
+                        0x00FF78
+                    )
 
-                of
+                    .setTitle(
+                        `SYNARA ${currentVersion}`
+                    )
 
-                updateTargets
+                    .setDescription(
+                        [
+                            "SYNARA has been updated.",
 
-            ) {
+                            "",
 
-                try {
+                            "This update does not include Discord release notes.",
 
-                    await setGuildSetting({
+                            "",
 
-                        guildId:
-                            guild.guildId,
+                            "View the latest updates and patch notes online:"
+                        ].join("\n")
+                    )
 
-                        guildName:
-                            guild.guildName,
+                    .addFields({
 
-                        settingName:
-                            "current_version",
+                        name:
+                            "Updates",
 
-                        settingValue:
-                            currentVersion
+                        value:
+                            "https://tangohunter.com/synara/updates",
 
-                    });
+                        inline:
+                            false
 
-                }
+                    })
 
-                catch (
-                    error
-                ) {
+                    .setFooter({
 
-                    logError({
+                        text:
+                            "SYNARA • Automated Version Update"
 
-                        type:
-                            ERROR_TYPES.SYSTEM_ERROR,
+                    })
 
-                        source:
-                            "version-update-service",
+                    .setTimestamp();
 
-                        message:
-                            "Failed to synchronize guild version.",
 
-                        details: {
+            embeds = [
+                patchEmbed
+            ];
 
-                            guildId:
-                                guild.guildId,
-
-                            guildName:
-                                guild.guildName,
-
-                            version:
-                                currentVersion,
-
-                            error:
-                                error.message
-
-                        }
-                    });
-                }
-            }
-
-            return;
         }
 
         /*

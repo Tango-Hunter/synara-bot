@@ -121,10 +121,105 @@ async function resolveBroadcastTargets(
         }
     }
 
+    /*
+    ====================================
+    SUPPORT SERVER BROADCAST TARGET
+    ====================================
+
+    The support-server updates channel is a
+    global broadcast destination.
+
+    Any feature using broadcastEmbeds()
+    automatically includes this channel.
+    */
+
+    const supportServerUpdatesChannelId =
+        process.env.SUPPORT_SERVER_UPDATES;
+
+    if (
+        supportServerUpdatesChannelId
+    ) {
+
+        try {
+
+            /*
+            Avoid duplicating the channel if
+            it is already configured as a guild
+            broadcast target.
+            */
+
+            const alreadyIncluded =
+                targets.some(
+                    target =>
+                        target.channelId ===
+                        supportServerUpdatesChannelId
+                );
+
+
+            if (
+                !alreadyIncluded
+            ) {
+
+                const supportChannel =
+                    await client.channels.fetch(
+                        supportServerUpdatesChannelId
+                    );
+
+
+                if (
+                    supportChannel
+                ) {
+
+                    targets.push({
+
+                        guildId:
+                            null,
+
+                        guildName:
+                            "SYNARA Support Server",
+
+                        channelId:
+                            supportServerUpdatesChannelId,
+
+                        channel:
+                            supportChannel
+
+                    });
+                }
+            }
+        }
+
+        catch (
+            error
+        ) {
+
+            logError({
+
+                type:
+                    ERROR_TYPES.SYSTEM_ERROR,
+
+                source:
+                    "broadcast-service",
+
+                message:
+                    "Failed to resolve support server broadcast target.",
+
+                details: {
+
+                    channelId:
+                        supportServerUpdatesChannelId,
+
+                    error:
+                        error.message
+
+                }
+            });
+        }
+    }
+
     return {
 
         totalServers:
-
             targets.length,
 
         targets
