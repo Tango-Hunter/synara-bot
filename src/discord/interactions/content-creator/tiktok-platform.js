@@ -1454,7 +1454,8 @@ async function handleModal(
 
         });
 
-    const components =
+    const components = [
+
         createApprovalButtons({
 
             approveId:
@@ -1463,7 +1464,9 @@ async function handleModal(
             cancelId:
                 CANCEL_ID
 
-        });
+        })
+
+    ];
 
     /*
     ====================================
