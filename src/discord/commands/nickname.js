@@ -15,6 +15,10 @@ const {
     validateNickname
 } = require('../utils/nickname-validator');
 
+const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
 
 async function runNicknameCommand({
 
@@ -124,6 +128,29 @@ Please choose another nickname.`
 
         nickname:
             validation.nickname
+    });
+
+    await discordLog({
+
+        guildId:
+
+            message.guild.id,
+
+        title:
+            'Nickname Updated',
+
+        category:
+
+            'User Commands',
+                
+        details:
+
+            `<@${message.author.id}> updated their nickname to: ${validation.nickname}.`,
+
+        status:
+                
+            'INFO'
+
     });
 
     return {

@@ -655,8 +655,11 @@ Press the button below to begin.
             guildId:
                 interaction.guild.id,
 
+            title:
+                'Applications OPEN',
+
             category:
-                'MOD_APP',
+                'Moderator Applications',
 
             details:
                 `Moderator applications opened by <@${interaction.user.id}>`,
@@ -779,8 +782,11 @@ Please monitor future announcements for reopening information.
             guildId:
                 interaction.guild.id,
 
+            title:
+                'Applications CLOSED',
+
             category:
-                'MOD_APP',
+                'Moderator Applications',
 
             details:
                 `Moderator applications closed by <@${interaction.user.id}>`,

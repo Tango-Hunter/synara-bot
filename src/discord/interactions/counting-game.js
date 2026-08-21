@@ -14,6 +14,10 @@ const {
 } = require('../../core/database/feature-flags-repository');
 
 const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
     logFeature,
     logError
 } = require('../../core/logging/logger');
@@ -290,6 +294,29 @@ async function handleCountingGame(
         await message.channel.send(
             response
         );
+
+        await discordLog({
+
+        guildId:
+
+            message.guild.id,
+
+        title:
+            'Counting Game Notification',
+
+        category:
+
+            'Monitoring System',
+                
+        details:
+
+            `The Counting Game has been reset and the ${failureRole} has been reassigned`,
+
+        status:
+                
+            'INFO'
+
+    });
 
     } catch (error) {
 

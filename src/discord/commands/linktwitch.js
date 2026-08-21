@@ -271,8 +271,11 @@ async function handleLinkTwitch(
         guildId:
             message.guild.id,
 
+        title:
+            'New Twitch Account Linked',
+
         category:
-            'TWITCH',
+            'Twitch',
 
         details:
             `Twitch account linked for <@${message.author.id}>`,

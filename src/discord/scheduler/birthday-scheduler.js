@@ -195,11 +195,14 @@ async function runBirthdayScheduler() {
 
                 guildId,
 
+                title:
+                    'Birthday Announcement',
+
                 category:
-                    'BIRTHDAY',
+                    'Automated Announcement',
 
                 details:
-                    'Birthday announcements posted',
+                    'Birthday Role Assigned for the day and Birthday Announcement sent',
 
                 status:
                     'SUCCESS'

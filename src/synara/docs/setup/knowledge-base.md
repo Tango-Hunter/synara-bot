@@ -22,8 +22,6 @@ Future versions of SYNARA will include a `/docs` command that allows documentati
 
 Browse SYNARA's available documentation.
 
-*This command is planned for a future update.*
-
 ## Notes
 
 - Documentation is bundled directly with SYNARA and updates automatically when new versions are released.

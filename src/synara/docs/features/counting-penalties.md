@@ -15,6 +15,12 @@ Whenever the counting sequence fails and the count resets, SYNARA automatically:
 
 This role is meant to be humorous and serves as a temporary reminder of who most recently broke the count.
 
+## Required Settings
+
+- Counting Bot
+- Penalty Role
+- Counting Channel
+
 ## Notes
 
 - SYNARA does not control the counting game itself.

@@ -18,6 +18,10 @@ const {
 } = require('../database/guild-settings-repository');
 
 
+const CRITICAL_LOGS_CHANNEL_ID =
+    process.env.SYNARA_CRITICAL_LOGS_ID;
+
+
 // ===============================
 // Status settings
 // ===============================
@@ -57,6 +61,8 @@ const STATUS_ICONS = {
 async function discordLog({
 
     guildId,
+
+    title,
 
     category,
 
@@ -120,7 +126,7 @@ async function discordLog({
 
                         STATUS_ICONS.INFO
 
-                    } ${category}`
+                    } ${title}`
                 )
 
                 .addFields(
@@ -198,6 +204,163 @@ async function discordLog({
     }
 }
 
+// ===============================
+// Critical SYNARA logging
+// ===============================
+async function criticalLog({
+
+    title,
+
+    category,
+
+    details,
+
+    status = 'ERROR'
+
+}) {
+
+    try {
+
+        if (
+            !CRITICAL_LOGS_CHANNEL_ID
+        ) {
+            return;
+        }
+
+        const channel =
+
+            await client.channels.fetch(
+
+                CRITICAL_LOGS_CHANNEL_ID
+
+            );
+
+        if (
+            !channel
+        ) {
+            return;
+        }
+
+        const embed =
+
+            new EmbedBuilder()
+
+                .setColor(
+
+                    STATUS_COLORS[status]
+
+                    ||
+
+                    STATUS_COLORS.ERROR
+
+                )
+
+                .setTitle(
+
+                    `${
+
+                        STATUS_ICONS[status]
+
+                        ||
+
+                        STATUS_ICONS.ERROR
+
+                    } ${title}`
+
+                )
+
+                .addFields(
+
+                    {
+
+                        name:
+
+                            'Category',
+
+                        value:
+
+                            category,
+
+                        inline:
+
+                            false
+
+                    },
+
+                    {
+
+                        name:
+
+                            'Details',
+
+                        value:
+
+                            `\`\`\`json\n${JSON.stringify(
+
+                                details,
+
+                                null,
+
+                                2
+
+                            )}\n\`\`\``,
+
+                        inline:
+
+                            false
+
+                    }
+                )
+
+                .setFooter({
+
+                    text:
+
+                        `SYNARA • ${
+                            new Date()
+
+                                .toLocaleString(
+
+                                    'en-US',
+
+                                    {
+
+                                        timeZone:
+
+                                            'America/New_York'
+
+                                    }
+                                )
+                        }`
+                })
+
+                .setTimestamp();
+
+        await channel.send({
+
+            embeds: [
+
+                embed
+
+            ]
+        });
+    }
+
+    catch (
+        error
+    ) {
+
+        console.error(
+
+            '[CRITICAL LOGGER ERROR]',
+
+            error
+
+        );
+    }
+}
+
 module.exports = {
-    discordLog
+    discordLog,
+    criticalLog
 };

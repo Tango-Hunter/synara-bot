@@ -127,6 +127,69 @@ const commands = [
 
     /*
     ============================
+    CONTENT CREATOR
+    ============================
+    */
+    new SlashCommandBuilder()
+
+        .setName(
+            'contentcreator'
+        )
+
+        .setDescription(
+            'Manage Content Creator Announcements.'
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'add'
+                    )
+
+                    .setDescription(
+                        'Register a content platform.'
+                    )
+
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'remove'
+                    )
+
+                    .setDescription(
+                        'Remove a registered platform.'
+                    )
+
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'list'
+                    )
+
+                    .setDescription(
+                        'View all registered content creator platforms.'
+                    )
+
+        ),
+
+    /*
+    ============================
     MOD APPS
     ============================
     */

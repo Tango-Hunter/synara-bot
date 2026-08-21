@@ -17,6 +17,10 @@ The feature runs automatically every day at:
 - **8:00 AM Eastern Time**
 - **12:00 PM UTC**
 
+## Required Settings
+
+- QOTD Channel (Some Servers have a dedicated channel for QOTD messages and some use general chat, you can always change the channel later as well)
+
 ## Notes
 
 - Questions are intended to encourage meaningful discussion rather than simple yes-or-no answers.

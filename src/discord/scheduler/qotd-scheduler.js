@@ -149,8 +149,11 @@ Requirements:
 
                     guildId,
 
-                    category:
+                    title:
                         'QOTD',
+
+                    category:
+                        'Automated Message',
 
                     details:
                         'QOTD channel not configured',
@@ -195,8 +198,11 @@ ${response}
 
                         guildId,
 
-                        category:
+                        title:
                             'QOTD',
+
+                        category:
+                            'Automated Message',
 
                         details:
                             `Failed to post question: ${error.message}`,
@@ -212,8 +218,11 @@ ${response}
 
                     guildId,
 
-                    category:
+                    title:
                         'QOTD',
+
+                    category:
+                        'Automated Message',
 
                     details:
                         'Question of the Day posted',

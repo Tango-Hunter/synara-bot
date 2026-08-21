@@ -342,8 +342,11 @@ async function handleApplicationInteraction(
             guildId:
                 interaction.guild.id,
 
+            title:
+                'Application Started',
+
             category:
-                'MOD_APP',
+                'Moderator Applications',
 
             details:
                 `Moderator application started by <@${interaction.user.id}>`,
@@ -989,8 +992,11 @@ ${interaction.user.id}
             guildId:
                 interaction.guild.id,
 
+            title:
+                'Application Submitted',
+
             category:
-                'MOD_APP',
+                'Moderator Applications',
 
             details:
                 `Moderator application submitted by <@${interaction.user.id}>`,

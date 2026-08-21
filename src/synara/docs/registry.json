@@ -220,6 +220,22 @@
         },
 
         {
+            "id": "content_creator",
+            "type": "feature",
+            "name": "Content Creator Announcements",
+            "path": "features/content-creator.md",
+            "commands": [
+                "/creator add",
+                "/creator edit",
+                "/creator remove",
+                "/creator list"
+            ],
+            "settings": [],
+            "category": "automation",
+            "footer": "toggleable"
+        },
+
+        {
             "id": "event_announcements",
             "type": "feature",
             "name": "Event Announcements",

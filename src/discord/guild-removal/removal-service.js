@@ -42,6 +42,10 @@ const {
 } = require("../../core/database/twitch-repository");
 
 const {
+    removeGuildCreators
+} = require("../../core/database/content-creators-repository")
+
+const {
     logError
 } = require("../../core/logging/logger");
 
@@ -88,6 +92,9 @@ async function removeGuildData(
 
         // TWITCH ALERTS
         await removeGuildTwitchAlerts(guild.id);
+
+        // CONTENT CREATOR ANNOUNCEMENTS
+        await removeGuildCreators(guild.id);
 
     }
 

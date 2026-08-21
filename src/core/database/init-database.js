@@ -291,6 +291,82 @@ async function initializeDatabase() {
 
     `);
 
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS content_creators (
+
+            id BIGSERIAL PRIMARY KEY,
+
+            guild_id TEXT NOT NULL,
+
+            discord_channel_id TEXT NOT NULL,
+
+            discord_user_id TEXT NOT NULL,
+
+            platform TEXT NOT NULL,
+
+            account_identifier TEXT NOT NULL,
+
+            creator_display_name TEXT,
+
+            message_template TEXT,
+
+            last_content_id TEXT,
+
+            subscription_expires_at TIMESTAMP,
+
+            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            UNIQUE (
+
+                guild_id,
+
+                platform,
+
+                account_identifier
+
+            )
+
+        );
+
+    `);
+
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS tiktok_authorizations (
+
+            id BIGSERIAL PRIMARY KEY,
+
+            account_identifier TEXT NOT NULL,
+
+            access_token TEXT NOT NULL,
+
+            refresh_token TEXT NOT NULL,
+
+            access_token_expires_at TIMESTAMP NOT NULL,
+
+            refresh_token_expires_at TIMESTAMP NOT NULL,
+
+            scope TEXT NOT NULL,
+
+            token_type TEXT NOT NULL DEFAULT 'Bearer',
+
+            authorization_status TEXT NOT NULL DEFAULT 'active',
+
+            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+            UNIQUE (
+                account_identifier
+            )
+
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -322,7 +398,11 @@ async function initializeDatabase() {
 
                 'nicknames',
 
-                'channel_messages'
+                'channel_messages',
+
+                'content_creators',
+
+                'tiktok_authorizations'
             ] 
         }
     });

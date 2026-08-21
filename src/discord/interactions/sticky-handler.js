@@ -21,6 +21,10 @@ const {
 } = require('../../core/config/embed-themes');
 
 const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+const {
     refreshSticky,
     deleteSticky
 } = require('../utils/sticky-manager');
@@ -229,9 +233,17 @@ async function handleStickyInteraction(
 
                     interaction.guild,
 
+                guildId:
+
+                    interaction.guild.id,
+
                 channel:
 
                     interaction.channel,
+
+                channelId:
+                
+                    interaction.channel.id,
 
                 authorId:
 
@@ -444,6 +456,29 @@ async function handleStickyInteraction(
             interaction.user.id
 
         );
+
+        await discordLog({
+
+            guildId:
+
+                draft.guild,
+
+            title:
+                'Sticky Message Created',
+
+            category:
+
+                'Administrative Workflow',
+                    
+            details:
+
+                `${draft.authorId} created a sticky message for channel: <#${draft.channelId}>`,
+
+            status:
+                    
+                'INFO'
+
+        });
 
         return interaction.update({
 

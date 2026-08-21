@@ -38,6 +38,11 @@ Displays the Twitch account currently linked to your Discord account.
 
 Displays your tracked Twitch streaming statistics.
 
+## Required Settings
+
+- Self-Promo Channel
+- Server Leadership Team Promo Channel (All admins and mods will have their streams linked in this channel when they go live)
+
 ## Notes
 
 - Twitch usernames must be entered exactly as they appear on Twitch.

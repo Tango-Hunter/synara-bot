@@ -40,6 +40,11 @@ Removes a user from the application blacklist.
 
 Displays all currently blacklisted users.
 
+## Required Settings
+
+- Application Channel (channel that is used for users to apply using the moderator application)
+- Submission Channel (**PRIVATE** Channel that only admins can see submitted moderator applications)
+
 ## Notes
 
 - Applications contain fifteen questions divided into three sections.

@@ -99,8 +99,11 @@ async function handleFeatureCommand(
         guildId:
             interaction.guild.id,
 
+        title:
+            'Feature Flags',
+
         category:
-            'FEATURE_FLAGS',
+            'Administrative Workflow',
 
         details:
 

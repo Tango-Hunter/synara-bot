@@ -47,6 +47,11 @@ const {
     createScheduledEvent
 } = require('../../core/database/scheduled-events-repository');
 
+const {
+    discordLog
+} = require('../../core/logging/discord-logger');
+
+
 const eventDrafts = new Map();
 
 
@@ -1092,6 +1097,29 @@ Select the new channel.`,
 
             authorId:
                 draft.authorId
+        });
+
+        await discordLog({
+
+            guildId:
+
+                draft.guildId,
+
+            title:
+                'Scheduled Message Event',
+
+            category:
+
+                'Administrative Workflow',
+                    
+            details:
+
+                `${draft.authorId} created a scheduled message for channel: <#${draft.channelId}>`,
+
+            status:
+                    
+                'INFO'
+
         });
 
         eventDrafts.delete(

@@ -2,7 +2,6 @@
  * Title: embed-themes.js
  * Author: Tango Hunter
  * Date Created: 5/23/26
- * Date Modified: 5/23/26
  * Description: Centralized SYNARA embed themes.
  */
 
@@ -102,10 +101,8 @@ const embedThemes = {
 
         color:
             0x8B5CF6,
-
         icon:
             '📌',
-
         footer:
             'SYNARA • Sticky Message'
     },
@@ -158,6 +155,34 @@ const embedThemes = {
             '⚠',
         footer:
             'Official SYNARA Broadcast • Please read this announcement carefully.'
+    },
+
+    contentCreator: {
+
+        color:
+            0xFF4D6D,
+
+        icon:
+            '🎥',
+
+        youtube:
+            '▶️',
+
+        tiktok:
+            '♪',
+
+        instagram:
+            '📷',
+
+        x:
+            '𝕏',
+
+        threads:
+            '🧵',
+
+        footer:
+            'SYNARA • Content Creator Announcements'
+
     }
 };
 
