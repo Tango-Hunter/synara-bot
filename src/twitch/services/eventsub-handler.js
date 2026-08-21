@@ -2,13 +2,12 @@
  * Title: eventsub-handler.js
  * Author: Tango Hunter
  * Date Created: 5/30/26
- * Description: handles eventsub data being sent to Discord.
+ * Date Modified: 8/21/26
+ * Description: Handles EventSub data being sent to Discord.
  */
 
 const {
-    createLiveStreamEvent,
-    startOfflineCooldown,
-    cancelOfflineCooldown
+    createLiveStreamEvent
 } = require('../../discord/utils/live-stream-event');
 
 const {
@@ -30,9 +29,11 @@ const {
 } = require('./stream-notifications');
 
 const {
-    createOrUpdateLiveStatus,
+    claimLiveNotification,
     getActiveLiveStatusByDiscordId,
-    markOffline
+    markOffline,
+    updateLiveNotificationMessages,
+    releaseLiveNotificationClaim
 } = require('../database/twitch-live-repository');
 
 const {
@@ -44,8 +45,540 @@ const {
 } = require('./twitch-stream-service');
 
 const {
-    logFeature
+    logFeature,
+    logError
 } = require('../../core/logging/logger');
+
+const {
+    ERROR_TYPES
+} = require('../../core/logging/error-types');
+
+
+/*
+====================================
+OFFLINE DEBOUNCE
+====================================
+
+The timer is keyed by Twitch broadcaster
+rather than Discord guild.
+
+This ensures one Twitch stream lifecycle
+is shared across every Discord server that
+has linked the creator.
+
+Five minutes gives Twitch/console
+reconnections time to recover without
+creating a second live notification.
+*/
+
+const offlineCooldowns =
+    new Map();
+
+
+const OFFLINE_COOLDOWN_MS =
+    5 * 60 * 1000;
+
+
+/*
+====================================
+CLEAR OFFLINE COOLDOWN
+====================================
+*/
+
+function clearOfflineCooldown(
+    twitchUserId
+) {
+
+    const existingTimer =
+        offlineCooldowns.get(
+            twitchUserId
+        );
+
+    if (
+        existingTimer
+    ) {
+        clearTimeout(
+            existingTimer
+        );
+
+        offlineCooldowns.delete(
+            twitchUserId
+        );
+    }
+}
+
+
+/*
+====================================
+START OFFLINE COOLDOWN
+====================================
+*/
+
+function scheduleOfflineCooldown({
+
+    twitchUserId,
+
+    client
+
+}) {
+
+    /*
+    Reset an existing timer.
+
+    Multiple offline events therefore
+    extend the same five-minute window
+    instead of creating multiple cleanup
+    operations.
+    */
+
+    clearOfflineCooldown(
+        twitchUserId
+    );
+
+    const timer =
+
+        setTimeout(
+
+            async () => {
+
+                offlineCooldowns.delete(
+                    twitchUserId
+                );
+
+
+                try {
+
+                    /*
+                    ====================================
+                    VERIFY CURRENT TWITCH STATE
+                    ====================================
+                    */
+
+                    const streamData =
+
+                        await getLiveStreamData(
+                            twitchUserId
+                        );
+
+
+                    if (
+                        streamData
+                    ) {
+
+                        logFeature({
+
+                            category:
+                                'TWITCH',
+
+                            message:
+                                'Offline cooldown expired but stream is still live.',
+
+                            details: {
+
+                                twitchUserId,
+
+                                title:
+                                    streamData.title,
+
+                                category:
+                                    streamData.category
+
+                            }
+                        });
+
+                        return;
+                    }
+
+                    /*
+                    ====================================
+                    FINALIZE OFFLINE STATE
+                    ====================================
+                    */
+
+                    await finalizeStreamOffline({
+
+                        twitchUserId,
+
+                        client
+
+                    });
+                }
+
+                catch (
+                    error
+                ) {
+
+                    logError({
+
+                        type:
+                            ERROR_TYPES.TWITCH_ERROR,
+
+                        source:
+                            'eventsub-handler',
+
+                        message:
+                            'Failed to finalize Twitch offline state.',
+
+                        details: {
+
+                            twitchUserId,
+
+                            error:
+                                error.message,
+
+                            stack:
+                                error.stack
+
+                        }
+                    });
+                }
+            },
+
+            OFFLINE_COOLDOWN_MS
+        );
+
+    offlineCooldowns.set(
+        twitchUserId,
+        timer
+    );
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Stream offline cooldown started.',
+
+        details: {
+
+            twitchUserId,
+
+            cooldownSeconds:
+                OFFLINE_COOLDOWN_MS / 1000
+
+        }
+    });
+}
+
+
+/*
+====================================
+FINALIZE STREAM OFFLINE
+====================================
+*/
+
+async function finalizeStreamOffline({
+
+    twitchUserId,
+
+    client
+
+}) {
+
+    const users =
+
+        await getEnabledUsersByTwitchUserId(
+
+            twitchUserId
+
+        );
+
+    if (
+        users.length === 0
+    ) {
+        return;
+    }
+
+    logFeature({
+
+        category:
+            'TWITCH',
+
+        message:
+            'Stream confirmed offline after cooldown.',
+
+        details: {
+
+            twitchUserId,
+
+            matchedUsers:
+                users.length
+
+        }
+
+    });
+
+    for (
+        const user
+        of users
+    ) {
+
+        /*
+        ====================================
+        GET CURRENT LIVE STATUS
+        ====================================
+        */
+
+        const liveStatus =
+
+            await getActiveLiveStatusByDiscordId(
+
+                user.discord_user_id
+
+            );
+
+
+        if (
+            !liveStatus
+        ) {
+            continue;
+        }
+
+        /*
+        ====================================
+        CAPTURE STREAM SESSION
+        ====================================
+        */
+
+        const streamStartedAt =
+            liveStatus.started_at;
+
+        /*
+        ====================================
+        CALCULATE STREAM DURATION
+        ====================================
+        */
+
+        const durationSeconds =
+
+            Math.max(
+
+                0,
+
+                Math.floor(
+
+                    (
+
+                        Date.now()
+
+                        -
+
+                        new Date(
+                            streamStartedAt
+                        ).getTime()
+
+                    )
+
+                    /
+
+                    1000
+
+                )
+            );
+
+        /*
+        ====================================
+        ATOMICALLY MARK THIS STREAM OFFLINE
+        ====================================
+        */
+
+        const finalizedStatus =
+
+            await markOffline({
+
+                discordUserId:
+                    user.discord_user_id,
+
+                startedAt:
+                    streamStartedAt,
+
+                endedAt:
+                    new Date()
+
+            });
+
+        /*
+        ====================================
+        STREAM SESSION CHANGED
+        ====================================
+        */
+
+        if (
+            !finalizedStatus
+        ) {
+
+            logFeature({
+
+                category:
+                    'TWITCH',
+
+                message:
+                    'Offline finalization skipped because the active stream session changed.',
+
+                details: {
+
+                    twitchUserId,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    previousStartedAt:
+                        streamStartedAt
+
+                }
+            });
+
+            continue;
+        }
+
+        /*
+        ====================================
+        DELETE OLD LIVE NOTIFICATIONS
+        ====================================
+        */
+
+        try {
+
+            await deleteLiveNotifications({
+
+                client,
+
+                messageIds:
+                    finalizedStatus.message_ids
+
+            });
+        }
+
+        catch (
+            error
+        ) {
+
+            /*
+            ====================================
+            LOG CLEANUP FAILURE
+            ====================================
+            */
+            logError({
+
+                type:
+                    ERROR_TYPES.TWITCH_ERROR,
+
+                source:
+                    'eventsub-handler',
+
+                message:
+                    'Failed to delete Twitch live notification messages.',
+
+                details: {
+
+                    twitchUserId,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    error:
+                        error.message,
+
+                    stack:
+                        error.stack
+
+                }
+            });
+        }
+
+        /*
+        ====================================
+        UPDATE STREAM STATISTICS
+        ====================================
+        */
+
+        try {
+
+            await updateStatistics({
+
+                discordUserId:
+                    user.discord_user_id,
+
+                streamDurationSeconds:
+                    durationSeconds
+
+            });
+        }
+
+        catch (
+            error
+        ) {
+
+            /*
+            ====================================
+            LOG STATISTICS FAILURE
+            ====================================
+            */
+
+            logError({
+
+                type:
+                    ERROR_TYPES.TWITCH_ERROR,
+
+                source:
+                    'eventsub-handler',
+
+                message:
+                    'Failed to update Twitch stream statistics.',
+
+                details: {
+
+                    twitchUserId,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    durationSeconds,
+
+                    error:
+                        error.message,
+
+                    stack:
+                        error.stack
+
+                }
+            });
+        }
+
+        /*
+        ====================================
+        LOG FINAL STATE
+        ====================================
+        */
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Twitch live state finalized.',
+
+            details: {
+
+                twitchUserId,
+
+                discordUserId:
+                    user.discord_user_id,
+
+                durationSeconds,
+
+                startedAt:
+                    streamStartedAt,
+
+                endedAt:
+                    finalizedStatus.ended_at
+
+            }
+        });
+    }
+}
 
 
 /*
@@ -53,6 +586,7 @@ const {
 STREAM ONLINE
 ====================================
 */
+
 async function handleStreamOnline(
     payload,
     client
@@ -60,6 +594,19 @@ async function handleStreamOnline(
 
     const twitchUserId =
         payload.event.broadcaster_user_id;
+
+    const streamStartedAt =
+        payload.event.started_at;
+
+    /*
+    ====================================
+    CANCEL PENDING OFFLINE
+    ====================================
+    */
+
+    clearOfflineCooldown(
+        twitchUserId
+    );
 
     const users =
         await getEnabledUsersByTwitchUserId(
@@ -79,7 +626,6 @@ async function handleStreamOnline(
             twitchUserId,
 
             matchedUsers:
-
                 users.length,
 
             guilds:
@@ -87,15 +633,11 @@ async function handleStreamOnline(
                 users.reduce(
 
                     (
-
                         total,
-
                         user
-
                     ) =>
 
                         total +
-
                         user.guild_ids.length,
 
                     0
@@ -104,8 +646,33 @@ async function handleStreamOnline(
         }
     });
 
+
     if (
         users.length === 0
+    ) {
+        return;
+    }
+
+
+    /*
+    ====================================
+    GET CURRENT STREAM DATA
+    ====================================
+    */
+
+    const streamData =
+
+        await getLiveStreamData(
+
+            twitchUserId,
+
+            streamStartedAt
+
+        );
+
+
+    if (
+        !streamData
     ) {
 
         logFeature({
@@ -114,28 +681,17 @@ async function handleStreamOnline(
                 'TWITCH',
 
             message:
-                'No linked Discord users for Twitch account',
+                'Stream online event received but Twitch reports the stream as offline.',
 
             details: {
 
-                twitchUserId
+                twitchUserId,
+
+                startedAt:
+                    streamStartedAt
 
             }
-
         });
-
-        return;
-
-    }
-
-    const streamData =
-        await getLiveStreamData(
-            twitchUserId
-        );
-
-    if (
-        !streamData
-    ) {
 
         return;
     }
@@ -158,6 +714,12 @@ async function handleStreamOnline(
 
     });
 
+    /*
+    ====================================
+    SERVER LEADER EVENT
+    ====================================
+    */
+
     for (
         const user
         of users
@@ -167,7 +729,6 @@ async function handleStreamOnline(
             const guildId
             of user.guild_ids
         ) {
-
             const twitchMonitoringEnabled =
 
                 await getFeatureFlag({
@@ -176,12 +737,12 @@ async function handleStreamOnline(
 
                     featureName:
                         'twitchMonitoring'
+
                 });
 
             if (
                 !twitchMonitoringEnabled
             ) {
-
                 continue;
             }
 
@@ -194,9 +755,9 @@ async function handleStreamOnline(
             if (
                 !guild
             ) {
-
                 continue;
             }
+
 
             const serverLeaderId =
 
@@ -206,24 +767,22 @@ async function handleStreamOnline(
 
                     settingName:
                         'server_leader'
+
                 });
 
             if (
-
                 serverLeaderId !==
-
                 user.discord_user_id
-
             ) {
-
                 continue;
             }
 
-            cancelOfflineCooldown(
-                guild.id
-            );
+            /*
+            The live stream event utility is
+            separate from the actual Twitch
+            live notification state.
+            */
 
-            // SERVER LEADER EVENT NOTIFICATION
             await createLiveStreamEvent({
 
                 guild,
@@ -236,6 +795,7 @@ async function handleStreamOnline(
 
                 streamCategory:
                     streamData.category
+
             });
         }
     }
@@ -252,108 +812,220 @@ async function handleStreamOnline(
             'TWITCH',
 
         message:
-            'Stream online detected',
+            'Stream online detected.',
 
         details: {
 
             twitchUserId,
+
+            startedAt:
+                streamStartedAt,
 
             title:
                 streamData.title,
 
             category:
                 streamData.category
+
         }
     });
-
-    if (
-        users.length === 0
-    ) {
-
-        return;
-    }
 
     for (
         const user
         of users
     ) {
 
-        const messageIds =
+        /*
+        ====================================
+        ATOMIC LIVE CLAIM
+        ====================================
+        Duplicate stream.online events
+        receive null and are ignored.
+        */
 
-            await postLiveNotifications({
+        const claimed =
 
-                client,
-
-                guildIds:
-                    user.guild_ids,
+            await claimLiveNotification({
 
                 discordUserId:
                     user.discord_user_id,
 
-                twitchLogin:
-                    user.twitch_login,
+                startedAt:
+                    streamStartedAt
 
-                profileImageUrl:
-                    user.twitch_profile_image_url,
+            });
 
-                streamTitle:
-                    streamData.title,
+        if (
+            !claimed
+        ) {
+
+            logFeature({
+
+                category:
+                    'TWITCH',
+
+                message:
+                    'Duplicate stream.online event ignored.',
+
+                details: {
+
+                    twitchUserId,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    startedAt:
+                        streamStartedAt
+
+                }
+            });
+
+            continue;
+        }
+
+        try {
+
+            /*
+            ====================================
+            POST DISCORD NOTIFICATIONS
+            ====================================
+            */
+
+            const messageIds =
+
+                await postLiveNotifications({
+
+                    client,
+
+                    guildIds:
+                        user.guild_ids,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    twitchLogin:
+                        user.twitch_login,
+
+                    profileImageUrl:
+                        user.twitch_profile_image_url,
+
+                    streamTitle:
+                        streamData.title,
+
+                    streamCategory:
+                        streamData.category,
+
+                    thumbnailUrl:
+                        streamData.thumbnailUrl
+
+                });
+
+            /*
+            ====================================
+            SAVE MESSAGE IDS
+            ====================================
+            */
+
+            await updateLiveNotificationMessages({
+
+                discordUserId:
+                    user.discord_user_id,
+
+                messageIds,
 
                 streamCategory:
                     streamData.category,
 
+                streamTitle:
+                    streamData.title,
+
                 thumbnailUrl:
                     streamData.thumbnailUrl
+
             });
 
-        await createOrUpdateLiveStatus({
 
-            discordUserId:
-                user.discord_user_id,
+            logFeature({
 
-            messageIds,
+                category:
+                    'TWITCH',
 
-            streamCategory:
-                streamData.category,
+                message:
+                    'Notification delivery complete.',
 
-            streamTitle:
-                streamData.title,
+                details: {
 
-            thumbnailUrl:
-                streamData.thumbnailUrl,
+                    discordUserId:
+                        user.discord_user_id,
 
-            startedAt:
-                new Date()
-        });
+                    twitchUserId,
 
-        logFeature({
+                    guildsAttempted:
+                        user.guild_ids.length,
 
-            category:
-                'TWITCH',
+                    messagesPosted:
+                        Object.keys(
+                            messageIds
+                        ).length
 
-            message:
-                'Notification delivery complete',
+                }
+            });
+        }
 
-            details: {
+        catch (
+            error
+        ) {
 
-                discordUserId:
-                    user.discord_user_id,
+            /*
+            ====================================
+            RELEASE FAILED LIVE CLAIM
+            ====================================
 
-                twitchUserId,
+            The user should not remain marked
+            live if Discord notification delivery
+            failed.
 
-                guildsAttempted:
-                    user.guild_ids.length,
+            This allows a later stream.online
+            delivery to retry.
+            */
 
-                messagesPosted:
+            await releaseLiveNotificationClaim(
 
-                    Object.keys(
-                        messageIds
-                    ).length
+                user.discord_user_id
 
-            }
-        });
+            );
+
+
+            logError({
+
+                type:
+                    ERROR_TYPES.TWITCH_ERROR,
+
+                source:
+                    'eventsub-handler',
+
+                message:
+                    'Failed to deliver Twitch live notification.',
+
+                details: {
+
+                    twitchUserId,
+
+                    discordUserId:
+                        user.discord_user_id,
+
+                    error:
+                        error.message,
+
+                    stack:
+                        error.stack
+
+                }
+            });
+        }
     }
 }
+
 
 /*
 ====================================
@@ -368,11 +1040,21 @@ async function handleStreamOffline(
     const twitchUserId =
         payload.event.broadcaster_user_id;
 
-    const users =
+    /*
+    ====================================
+    SCHEDULE OFFLINE TRANSITION
+    ====================================
+    Twitch/console reconnections can generate
+    offline → online transitions very quickly.
+    */
 
-        await getEnabledUsersByTwitchUserId(
-            twitchUserId
-        );
+    scheduleOfflineCooldown({
+
+        twitchUserId,
+
+        client
+
+    });
 
     logFeature({
 
@@ -380,206 +1062,26 @@ async function handleStreamOffline(
             'TWITCH',
 
         message:
-            'Repository lookup complete',
+            'Stream offline detected. Waiting for cooldown before finalizing.',
 
         details: {
 
             twitchUserId,
 
-            matchedUsers:
+            cooldownSeconds:
+                OFFLINE_COOLDOWN_MS / 1000
 
-                users.length,
-
-            guilds:
-
-                users.reduce(
-
-                    (
-
-                        total,
-
-                        user
-
-                    ) =>
-
-                        total +
-
-                        user.guild_ids.length,
-
-                    0
-
-                )
-
-        }
-
-    });
-
-    if (
-        users.length === 0
-    ) {
-
-        return;
-    }
-
-    for (
-        const user
-        of users
-    ) {
-
-        for (
-            const guildId
-            of user.guild_ids
-        ) {
-
-            const twitchMonitoringEnabled =
-
-                await getFeatureFlag({
-
-                    guildId,
-
-                    featureName:
-                        'twitchMonitoring'
-                });
-
-            if (
-                !twitchMonitoringEnabled
-            ) {
-
-                continue;
-            }
-
-            const guild =
-
-                client.guilds.cache.get(
-                    guildId
-                );
-
-            if (
-                !guild
-            ) {
-
-                continue;
-            }
-
-            const serverLeaderId =
-
-                await getGuildSetting({
-
-                    guildId,
-
-                    settingName:
-                        'server_leader'
-                });
-
-            if (
-
-                serverLeaderId !==
-
-                user.discord_user_id
-
-            ) {
-
-                continue;
-            }
-
-            startOfflineCooldown({
-
-                guild
-            });
-        }
-    }
-
-    /*
-    ====================================
-    OFFLINE EMBED REMOVAL
-    ====================================
-    */
-
-    logFeature({
-
-        category:
-            'TWITCH',
-
-        message:
-            'Stream offline detected',
-
-        details: {
-
-            twitchUserId
         }
     });
-
-    for (
-        const user
-        of users
-    ) {
-
-        const liveStatus =
-
-            await getActiveLiveStatusByDiscordId(
-
-                user.discord_user_id
-            );
-
-        if (
-            !liveStatus
-        ) {
-
-            continue;
-        }
-
-        await deleteLiveNotifications({
-
-            client,
-
-            messageIds:
-                liveStatus.message_ids
-        });
-
-        const durationSeconds =
-
-            Math.floor(
-
-                (
-
-                    Date.now()
-
-                    -
-
-                    new Date(
-                        liveStatus.started_at
-                    )
-
-                )
-
-                / 1000
-            );
-
-        await updateStatistics({
-
-            discordUserId:
-                user.discord_user_id,
-
-            streamDurationSeconds:
-                durationSeconds
-        });
-
-        await markOffline({
-
-            discordUserId:
-                user.discord_user_id,
-
-            endedAt:
-                new Date()
-        });
-    }
 }
+
 
 /*
 ====================================
 EVENT SUB
 ====================================
 */
+
 async function handleEventSub(
     payload,
     client
@@ -598,6 +1100,7 @@ async function handleEventSub(
 
             break;
 
+
         case 'stream.online':
 
             await handleStreamOnline(
@@ -606,6 +1109,7 @@ async function handleEventSub(
             );
 
             break;
+
     }
 }
 
