@@ -1060,15 +1060,12 @@ async function getAuthorizedUser(
 
     }
 
-    const fields =
+        const fields =
         [
-
             'open_id',
-
             'display_name',
-
-            'profile_deep_link'
-
+            'profile_deep_link',
+            'avatar_url'
         ].join(',');
 
     try {
@@ -1202,7 +1199,6 @@ async function getAuthorizedUser(
         });
 
         return {
-
             accountIdentifier:
                 user.open_id,
 
@@ -1214,10 +1210,13 @@ async function getAuthorizedUser(
             creatorUrl:
                 user.profile_deep_link
                 ||
+                null,
+
+            avatarUrl:
+                user.avatar_url
+                ||
                 null
-
         };
-
     }
 
     catch (

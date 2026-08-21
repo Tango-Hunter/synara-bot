@@ -612,9 +612,18 @@ async function handleOAuthCallback({
     if (
         !transaction
     ) {
-        throw new Error(
-            'TikTok authorization session has expired or could not be found.'
-        );
+        return {
+
+            success:
+                false,
+
+            expired:
+                true,
+
+            error:
+                'TikTok authorization session has expired or could not be found.'
+
+        };
     }
 
     const {
