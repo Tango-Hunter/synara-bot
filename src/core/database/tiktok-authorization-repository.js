@@ -339,10 +339,43 @@ async function updateTikTokAuthorizationTokens({
     return result.rows[0];
 }
 
+async function getTikTokAuthorizationsNeedingRefresh({
+    expiresBefore
+}) {
+    const result = await pool.query(
+        `
+            SELECT
+                id,
+                account_identifier,
+                access_token,
+                refresh_token,
+                access_token_expires_at,
+                refresh_token_expires_at,
+                scope,
+                token_type,
+                authorization_status,
+                created_at,
+                updated_at
+            FROM tiktok_authorizations
+            WHERE
+                authorization_status = 'active'
+                AND access_token_expires_at <= $1
+            ORDER BY
+                access_token_expires_at
+        `,
+        [
+            expiresBefore
+        ]
+    );
+
+    return result.rows;
+}
+
 
 module.exports = {
     createTikTokAuthorization,
     getTikTokAuthorization,
     isAccessTokenExpired,
-    updateTikTokAuthorizationTokens
+    updateTikTokAuthorizationTokens,
+    getTikTokAuthorizationsNeedingRefresh
 };

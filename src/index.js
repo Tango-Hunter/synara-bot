@@ -51,6 +51,9 @@ const {
 } = require(
     './discord/scheduler/automation-scheduler'
 );
+const {
+    startSubscriptionScheduler
+} = require('./content-creators/subscription-scheduler');
 
 const {
     initializeDatabase
@@ -139,6 +142,7 @@ client.once('clientReady', async () => {
     startNightlyMessageScheduler();
     startActivityScheduler();
     startBirthdayScheduler();
+    startSubscriptionScheduler();
     startAutomationScheduler(client);
     registerDiscordEventListeners(client);
 

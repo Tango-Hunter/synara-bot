@@ -9,6 +9,9 @@
  * • Initialize platform subscriptions
  * • Coordinate platform-specific subscription services
  * • Maintain a consistent return contract across platforms
+ * • Maintain platform subscriptions/access authorizations
+ * • Handle generic retry and recovery behavior
+ * • Update Content Creator expiration records
  *
  * This file DOES NOT:
  * • Build Discord announcements
@@ -16,35 +19,64 @@
  * • Parse platform notifications
  * • Perform platform-specific subscription logic
  * • Handle Express routes
+ *
+ * IMPORTANT:
+ *
+ * Retry behavior belongs here rather than inside an individual
+ * platform module.
+ *
+ * Every platform receives the same:
+ *
+ *     Initial Attempt
+ *          ↓
+ *     15 minute recovery window
+ *          ↓
+ *     Retry #1
+ *          ↓
+ *     15 minute recovery window
+ *          ↓
+ *     Retry #2
+ *          ↓
+ *     15 minute recovery window
+ *          ↓
+ *     Retry #3
+ *
+ * Platform-specific modules perform ONE operation.
+ * This service determines when that operation is retried.
  */
 
+
+/*
+====================================
+DATABASE
+====================================
+*/
 
 const {
     getCreatorByPlatformAccount,
     getCreatorsNeedingSubscriptionRenewal,
     updateSubscriptionExpiration
-} = require(
-    '../core/database/content-creators-repository'
-);
+} = require('../core/database/content-creators-repository');
+
+
+/*
+====================================
+LOGGING
+====================================
+*/
 
 const {
     logFeature,
     logError
-} = require(
-    '../core/logging/logger'
-);
+} = require('../core/logging/logger');
 
 const {
     ERROR_TYPES
-} = require(
-    '../core/logging/error-types'
-);
+} = require('../core/logging/error-types');
 
 const {
     criticalLog
-} = require(
-    '../core/logging/discord-logger'
-);
+} = require('../core/logging/discord-logger');
 
 
 /*
@@ -56,48 +88,370 @@ PLATFORM SUBSCRIPTION SERVICES
 const YouTubeWebSub =
     require('./youtube-websub');
 
+const TikTokSubscription =
+    require('./tiktok-subscription');
+
 
 /*
 ====================================
 SUBSCRIPTION PLATFORM REGISTRY
 ====================================
-
-Each platform must define:
-
-supported:
-    Whether the platform has a subscription
-    mechanism that SYNARA can maintain.
-
-service:
-    The platform-specific subscription module.
-
-Platforms without subscription support
-must use:
-
-supported: false
-service: null
-
-Add new platforms here as they are
-implemented.
 */
+
+/*
+ * Each platform must define:
+ *
+ * supported:
+ *     Whether the platform has a
+ *     subscription/authorization mechanism
+ *     that SYNARA can maintain.
+ *
+ * service:
+ *     The platform-specific module.
+ *
+ * Platforms without subscription support
+ * use:
+ *
+ *     supported: false
+ *     service: null
+ *
+ * IMPORTANT:
+ *
+ * TikTok's "subscription" is technically
+ * OAuth access-token authorization rather
+ * than a WebSub subscription.
+ *
+ * SYNARA uses the generic
+ * subscriptionExpiresAt field for this
+ * platform to represent:
+ *
+ *     access_token_expires_at
+ *
+ * This keeps the Content Creator system
+ * platform agnostic.
+ */
 
 const SUBSCRIPTION_PLATFORMS = {
 
     youtube: {
+
         supported:
             true,
+
         service:
             YouTubeWebSub
+
     },
 
     tiktok: {
+
         supported:
-            false,
+            true,
+
         service:
+            TikTokSubscription
+
+    }
+};
+
+
+/*
+====================================
+RETRY CONFIGURATION
+====================================
+*/
+const RETRY_DELAY_MS = 15 * 60 * 1000;
+
+
+/*
+ * Initial attempt + 3 retries.
+ */
+const MAX_RETRIES = 3;
+
+
+/*
+ * The normal maintenance window is
+ * one hour.
+ *
+ * The scheduler will call this service
+ * every 30 minutes.
+ *
+ * This means an authorization entering
+ * the one-hour window will normally be
+ * discovered with at least one scheduler
+ * pass before expiration.
+ */
+const DEFAULT_MAINTENANCE_WINDOW_MS = 60 * 60 * 1000;
+
+
+/*
+====================================
+RETRY STATE
+====================================
+*/
+
+/*
+ * Retry state intentionally lives in
+ * this service because retry behavior
+ * is platform agnostic.
+ *
+ * Key:
+ *
+ *     platform:accountIdentifier
+ *
+ * Example:
+ *
+ *     tiktok:123456789
+ *
+ * Each entry contains:
+ *
+ *     platform
+ *     accountIdentifier
+ *     failedAt
+ *     nextRetryAt
+ *     retryCount
+ *     timer
+ *
+ * retryCount represents completed retries.
+ *
+ *     0 = initial attempt failed
+ *     1 = retry #1 failed
+ *     2 = retry #2 failed
+ *     3 = retry #3 failed
+ */
+const retryState = new Map();
+
+
+/*
+====================================
+HELPERS
+====================================
+*/
+
+/**
+ * Builds the unique retry key for a
+ * platform/account combination.
+ *
+ * The same platform account may exist
+ * across multiple Discord guilds.
+ *
+ * We must therefore retry once per
+ * platform account rather than once per
+ * Content Creator row.
+ */
+function getRetryKey({
+
+    platform,
+
+    accountIdentifier
+
+}) {
+    return (
+        `${platform}:${accountIdentifier}`
+    );
+}
+
+
+/**
+ * Builds a detailed representation of
+ * an error without exposing secrets.
+ *
+ * TikTok errors may contain:
+ *
+ *     tiktokError
+ *     tiktokErrorDescription
+ *     tiktokLogId
+ *
+ * Those are extremely useful for
+ * troubleshooting and critical logs.
+ *
+ * Access tokens and refresh tokens are
+ * intentionally never included.
+ */
+function getErrorDetails(
+    error
+) {
+
+    return {
+
+        message:
+            error?.message
+            ??
+            'Unknown error.',
+
+        name:
+            error?.name
+            ??
+            'Error',
+
+        stack:
+            error?.stack
+            ??
+            null,
+
+        tiktokError:
+            error?.tiktokError
+            ??
+            null,
+
+        tiktokErrorDescription:
+            error?.tiktokErrorDescription
+            ??
+            null,
+
+        tiktokLogId:
+            error?.tiktokLogId
+            ??
+            null,
+
+        status:
+            error?.status
+            ??
+            null,
+
+        statusCode:
+            error?.statusCode
+            ??
             null
+
+    };
+}
+
+
+/**
+ * Updates the subscription expiration
+ * for every Content Creator using the
+ * same platform account.
+ *
+ * This is only performed when the
+ * platform returns a usable
+ * subscriptionExpiresAt value.
+ *
+ * This preserves YouTube compatibility
+ * because YouTube's WebSub expiration is
+ * supplied through its verification
+ * challenge rather than directly by
+ * subscribe().
+ */
+async function updateCreatorExpirations({
+
+    platform,
+
+    accountIdentifier,
+
+    subscriptionExpiresAt
+
+}) {
+
+    if (
+        !subscriptionExpiresAt
+    ) {
+
+        return {
+
+            updated:
+                false,
+
+            creatorsUpdated:
+                0
+
+        };
     }
 
-};
+    const creators =
+        await getCreatorByPlatformAccount({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+    if (
+        creators.length === 0
+    ) {
+
+        return {
+
+            updated:
+                false,
+
+            creatorsUpdated:
+                0
+
+        };
+    }
+
+    let creatorsUpdated = 0;
+
+    for (
+        const creator of creators
+    ) {
+
+        await updateSubscriptionExpiration({
+
+            guildId:
+                creator.guild_id,
+
+            platform,
+
+            accountIdentifier,
+
+            subscriptionExpiresAt
+
+        });
+
+        creatorsUpdated++;
+    }
+
+    return {
+
+        updated:
+            true,
+
+        creatorsUpdated
+
+    };
+}
+
+
+/**
+ * Removes retry state for an account.
+ */
+function clearRetryState({
+
+    platform,
+
+    accountIdentifier
+
+}) {
+
+    const retryKey =
+        getRetryKey({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+    const state =
+        retryState.get(
+            retryKey
+        );
+
+    if (
+        state?.timer
+    ) {
+        clearTimeout(
+            state.timer
+        );
+    }
+
+    retryState.delete(
+        retryKey
+    );
+}
 
 
 /*
@@ -105,19 +459,14 @@ const SUBSCRIPTION_PLATFORMS = {
 PLATFORM LOOKUP
 ====================================
 */
-
 function getSubscriptionPlatform(
-
     platform
-
 ) {
 
     return (
 
         SUBSCRIPTION_PLATFORMS[
-
             platform
-
         ]
 
         ??
@@ -133,20 +482,15 @@ function getSubscriptionPlatform(
 SUBSCRIPTION SUPPORT
 ====================================
 */
-
 function supportsSubscription(
-
     platform
-
 ) {
 
     const configuration =
-
         getSubscriptionPlatform(
-
             platform
-
         );
+
 
     return (
 
@@ -167,12 +511,8 @@ INITIALIZE SUBSCRIPTION
 */
 
 /**
- * Initializes subscription handling for
- * a Content Creator.
- *
- * This function provides the common entry
- * point that content-creator-handler.js
- * will eventually call.
+ * Initializes subscription handling
+ * for a Content Creator.
  *
  * Platforms with subscription support:
  *
@@ -187,8 +527,7 @@ INITIALIZE SUBSCRIPTION
  *     return unsupported result
  *
  * The platform-specific module remains
- * responsible for its own subscription
- * protocol.
+ * responsible for its own protocol.
  */
 async function initializeSubscription({
 
@@ -199,11 +538,8 @@ async function initializeSubscription({
 }) {
 
     const configuration =
-
         getSubscriptionPlatform(
-
             platform
-
         );
 
     /*
@@ -211,17 +547,11 @@ async function initializeSubscription({
     UNKNOWN PLATFORM
     ====================================
     */
-
     if (
-
         !configuration
-
     ) {
-
         throw new Error(
-
             `Unsupported content creator platform: ${platform}`
-
         );
     }
 
@@ -230,15 +560,10 @@ async function initializeSubscription({
     NO SUBSCRIPTION SUPPORT
     ====================================
     */
-
     if (
-
         !configuration.supported
-
         ||
-
         !configuration.service
-
     ) {
 
         return {
@@ -264,9 +589,7 @@ async function initializeSubscription({
     PLATFORM SUBSCRIPTION
     ====================================
     */
-
     const result =
-
         await configuration.service.initialize({
 
             accountIdentifier
@@ -278,7 +601,6 @@ async function initializeSubscription({
     COMMON RETURN CONTRACT
     ====================================
     */
-
     return {
 
         platform,
@@ -294,7 +616,6 @@ async function initializeSubscription({
         subscriptionExpiresAt:
             result.subscriptionExpiresAt
             ??
-
             null,
 
         platformData:
@@ -317,19 +638,18 @@ SUBSCRIPTION VERIFICATION
  * The platform-specific module is
  * responsible for communicating with
  * the platform and determining the
- * actual subscription expiration.
+ * actual expiration.
  *
- * This service is responsible for:
+ * This service:
  *
- * • Finding all Content Creator records
- *   using the verified platform/account.
+ * • Finds all Content Creator records
+ *   using the platform/account.
  *
- * • Updating subscription expiration
- *   for every matching guild.
+ * • Updates expiration for every
+ *   matching guild.
  *
- * This keeps database operations out
- * of platform-specific subscription
- * modules.
+ * This remains compatible with
+ * YouTube WebSub verification.
  */
 async function handleSubscriptionVerification({
 
@@ -342,29 +662,19 @@ async function handleSubscriptionVerification({
 }) {
 
     if (
-
         !platform
-
         ||
-
         !accountIdentifier
-
         ||
-
         !subscriptionExpiresAt
-
     ) {
 
         throw new Error(
-
             'Platform, accountIdentifier, and subscriptionExpiresAt are required.'
-
         );
-
     }
 
     const creators =
-
         await getCreatorByPlatformAccount({
 
             platform,
@@ -378,10 +688,10 @@ async function handleSubscriptionVerification({
     NO REGISTERED CREATORS
     ====================================
     */
-
     if (
         creators.length === 0
     ) {
+
         return {
 
             platform,
@@ -402,7 +712,6 @@ async function handleSubscriptionVerification({
     UPDATE ALL MATCHING CREATORS
     ====================================
     */
-
     let creatorsUpdated = 0;
 
     for (
@@ -412,7 +721,6 @@ async function handleSubscriptionVerification({
         await updateSubscriptionExpiration({
 
             guildId:
-
                 creator.guild_id,
 
             platform,
@@ -424,7 +732,6 @@ async function handleSubscriptionVerification({
         });
 
         creatorsUpdated++;
-
     }
 
     /*
@@ -432,7 +739,6 @@ async function handleSubscriptionVerification({
     RETURN RESULT
     ====================================
     */
-
     return {
 
         platform,
@@ -447,7 +753,643 @@ async function handleSubscriptionVerification({
         subscriptionExpiresAt
 
     };
+}
 
+
+/*
+====================================
+RETRY OPERATION
+====================================
+*/
+
+/**
+ * Performs one retry attempt for a
+ * previously failed platform operation.
+ *
+ * This function is intentionally generic.
+ *
+ * It does not know whether the platform
+ * is TikTok, YouTube, or another future
+ * platform.
+ */
+async function performRetry({
+
+    platform,
+
+    accountIdentifier
+
+}) {
+
+    const retryKey =
+        getRetryKey({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+
+    const state =
+        retryState.get(
+            retryKey
+        );
+
+    if (
+        !state
+    ) {
+        return;
+    }
+
+    const configuration =
+        getSubscriptionPlatform(
+            platform
+        );
+
+    if (
+        !configuration
+        ||
+        !configuration.supported
+        ||
+        !configuration.service
+    ) {
+
+        clearRetryState({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+        return;
+    }
+
+    /*
+     * retryCount represents the number
+     * of retries already attempted.
+     *
+     * Therefore:
+     *
+     * retryCount = 0
+     *     → this is retry #1
+     *
+     * retryCount = 1
+     *     → this is retry #2
+     *
+     * retryCount = 2
+     *     → this is retry #3
+     */
+    const retryNumber = state.retryCount + 1;
+
+    /*
+    ====================================
+    CRITICAL RETRY WINDOW ALERT
+    ====================================
+    */
+    await criticalLog({
+
+        title:
+            'Content Creator Subscription Retry',
+
+        category:
+            'SUBSCRIPTION_SERVICE',
+
+        status:
+            'ERROR',
+
+        details: {
+
+            failure:
+                'The initial platform subscription/authorization attempt did not recover within the 15-minute recovery window.',
+
+            platform,
+
+            accountIdentifier,
+
+            retryNumber,
+
+            maxRetries:
+                MAX_RETRIES,
+
+            failedAt:
+                state.failedAt,
+
+            retryStartedAt:
+                new Date(),
+
+            nextRetry:
+                retryNumber < MAX_RETRIES
+
+        }
+    });
+
+    /*
+    ====================================
+    EXECUTE RETRY
+    ====================================
+    */
+    try {
+
+        const result =
+            await configuration.service.subscribe({
+
+                accountIdentifier
+
+            });
+
+        /*
+        ====================================
+        UPDATE EXPIRATION
+        ====================================
+        */
+        const expirationResult =
+            await updateCreatorExpirations({
+
+                platform,
+
+                accountIdentifier,
+
+                subscriptionExpiresAt:
+                    result.subscriptionExpiresAt
+
+            });
+
+        /*
+        ====================================
+        RECOVERY
+        ====================================
+        */
+        await criticalLog({
+
+            title:
+                'Content Creator Subscription Recovered',
+
+            category:
+                'SUBSCRIPTION_SERVICE',
+
+            status:
+                'SUCCESS',
+
+            details: {
+
+                failure:
+                    'A previously failed platform subscription/authorization operation recovered successfully.',
+
+                platform,
+
+                accountIdentifier,
+
+                successfulAttempt:
+                    retryNumber + 1,
+
+                retryNumber,
+
+                maxRetries:
+                    MAX_RETRIES,
+
+                subscriptionExpiresAt:
+                    result.subscriptionExpiresAt
+                    ??
+                    null,
+
+                creatorsUpdated:
+                    expirationResult.creatorsUpdated
+
+            }
+        });
+
+        logFeature({
+
+            category:
+                'CONTENT_CREATORS',
+
+            message:
+                'Platform subscription recovered after retry.',
+
+            details: {
+
+                platform,
+
+                accountIdentifier,
+
+                retryNumber,
+
+                successfulAttempt:
+                    retryNumber + 1,
+
+                subscriptionExpiresAt:
+                    result.subscriptionExpiresAt
+                    ??
+                    null,
+
+                creatorsUpdated:
+                    expirationResult.creatorsUpdated
+
+            }
+        });
+
+        clearRetryState({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+        return {
+
+            success:
+                true,
+
+            recovered:
+                true,
+
+            retryNumber,
+
+            result
+
+        };
+    }
+
+    catch (
+        error
+    ) {
+
+        /*
+        ====================================
+        RECORD FAILED RETRY
+        ====================================
+        */
+
+        state.retryCount = retryNumber;
+
+        state.lastError =
+            getErrorDetails(
+                error
+            );
+
+        /*
+        ====================================
+        ALL RETRIES EXHAUSTED
+        ====================================
+        */
+
+        if (
+            retryNumber >=
+            MAX_RETRIES
+        ) {
+
+            await criticalLog({
+
+                title:
+                    'Content Creator Subscription Recovery Failed',
+
+                category:
+                    'SUBSCRIPTION_SERVICE',
+
+                status:
+                    'ERROR',
+
+                details: {
+
+                    failure:
+                        'Initial subscription/authorization attempt and all three recovery retries failed.',
+
+                    platform,
+
+                    accountIdentifier,
+
+                    initialFailureAt:
+                        state.failedAt,
+
+                    finalAttemptAt:
+                        new Date(),
+
+                    retryCount:
+                        retryNumber,
+
+                    maxRetries:
+                        MAX_RETRIES,
+
+                    error:
+                        getErrorDetails(
+                            error
+                        )
+                }
+            });
+
+            logError({
+
+                type:
+                    ERROR_TYPES.UNKNOWN_ERROR,
+
+                source:
+                    'subscription-service',
+
+                message:
+                    'All platform subscription recovery attempts failed.',
+
+                details: {
+
+                    platform,
+
+                    accountIdentifier,
+
+                    initialFailureAt:
+                        state.failedAt,
+
+                    retryCount:
+                        retryNumber,
+
+                    maxRetries:
+                        MAX_RETRIES,
+
+                    error:
+                        getErrorDetails(
+                            error
+                        )
+                }
+            });
+
+            clearRetryState({
+
+                platform,
+
+                accountIdentifier
+
+            });
+
+            return {
+
+                success:
+                    false,
+
+                recovered:
+                    false,
+
+                exhausted:
+                    true,
+
+                retryNumber,
+
+                error:
+                    error.message
+
+            };
+        }
+
+        /*
+        ====================================
+        SCHEDULE NEXT RETRY
+        ====================================
+        */
+        state.nextRetryAt =
+            new Date(
+                Date.now()
+                +
+                RETRY_DELAY_MS
+            );
+
+        state.timer =
+            setTimeout(
+
+                () => {
+
+                    performRetry({
+
+                        platform,
+
+                        accountIdentifier
+
+                    })
+
+                    .catch(
+                        retryError => {
+
+                            logError({
+
+                                type:
+                                    ERROR_TYPES.UNKNOWN_ERROR,
+
+                                source:
+                                    'subscription-service',
+
+                                message:
+                                    'Unhandled subscription retry error.',
+
+                                details: {
+
+                                    platform,
+
+                                    accountIdentifier,
+
+                                    retryNumber,
+
+                                    error:
+                                        getErrorDetails(
+                                            retryError
+                                        )
+                                }
+                            });
+                        }
+                    );
+                },
+
+                RETRY_DELAY_MS
+
+            );
+
+        logError({
+
+            type:
+                ERROR_TYPES.UNKNOWN_ERROR,
+
+            source:
+                'subscription-service',
+
+            message:
+                'Platform subscription retry failed; another retry has been scheduled.',
+
+            details: {
+
+                platform,
+
+                accountIdentifier,
+
+                retryNumber,
+
+                maxRetries:
+                    MAX_RETRIES,
+
+                nextRetryAt:
+                    state.nextRetryAt,
+
+                error:
+                    getErrorDetails(
+                        error
+                    )
+            }
+        });
+
+        return {
+
+            success:
+                false,
+
+            recovered:
+                false,
+
+            exhausted:
+                false,
+
+            retryNumber,
+
+            retryScheduled:
+                true,
+
+            nextRetryAt:
+                state.nextRetryAt,
+
+            error:
+                error.message
+
+        };
+    }
+}
+
+
+/*
+====================================
+SCHEDULE RETRY
+====================================
+*/
+
+/**
+ * Creates retry state after the
+ * initial subscription attempt fails.
+ */
+function scheduleInitialRetry({
+
+    platform,
+
+    accountIdentifier,
+
+    error
+
+}) {
+
+    const retryKey =
+        getRetryKey({
+
+            platform,
+
+            accountIdentifier
+
+        });
+
+    /*
+     * If another maintenance cycle
+     * already created retry state for
+     * this account, do not create a
+     * duplicate retry timer.
+     */
+    if (
+        retryState.has(
+            retryKey
+        )
+    ) {
+        return retryState.get(
+            retryKey
+        );
+    }
+
+    const state = {
+
+        platform,
+
+        accountIdentifier,
+
+        failedAt:
+            new Date(),
+
+        nextRetryAt:
+            new Date(
+                Date.now()
+                +
+                RETRY_DELAY_MS
+            ),
+
+        retryCount:
+            0,
+
+        lastError:
+            getErrorDetails(
+                error
+            ),
+
+        timer:
+            null
+
+    };
+
+    state.timer =
+        setTimeout(
+
+            () => {
+
+                performRetry({
+
+                    platform,
+
+                    accountIdentifier
+
+                })
+
+                .catch(
+                    retryError => {
+
+                        logError({
+
+                            type:
+                                ERROR_TYPES.UNKNOWN_ERROR,
+
+                            source:
+                                'subscription-service',
+
+                            message:
+                                'Unhandled subscription retry error.',
+
+                            details: {
+
+                                platform,
+
+                                accountIdentifier,
+
+                                error:
+                                    getErrorDetails(
+                                        retryError
+                                    )
+
+                            }
+                        });
+                    }
+                );
+            },
+
+            RETRY_DELAY_MS
+
+        );
+
+    retryState.set(
+
+        retryKey,
+
+        state
+
+    );
+
+    return state;
 }
 
 
@@ -462,18 +1404,32 @@ SUBSCRIPTION MAINTENANCE
  * platforms for subscriptions that are
  * missing or approaching expiration.
  *
- * The service determines which platforms
- * support subscriptions and delegates
- * the actual subscription operation to
- * the platform-specific service.
+ * The default maintenance window is
+ * one hour.
  *
- * Platforms without subscription support
- * are skipped automatically.
+ * A scheduler should call this function
+ * every 30 minutes.
  *
- * A failed subscription request is treated
- * as a critical operational failure and is
- * sent to the private SYNARA critical
- * logging channel immediately.
+ * IMPORTANT:
+ *
+ * A failed operation does NOT immediately
+ * become a critical alert.
+ *
+ * Instead:
+ *
+ *     initial failure
+ *          ↓
+ *     Railway error
+ *          ↓
+ *     15 minute recovery timer
+ *          ↓
+ *     critical retry alert
+ *          ↓
+ *     retry #1
+ *          ↓
+ *     retry #2
+ *          ↓
+ *     retry #3
  */
 async function maintainSubscriptions({
 
@@ -481,36 +1437,13 @@ async function maintainSubscriptions({
 
 } = {}) {
 
-    /*
-    ====================================
-    DEFAULT MAINTENANCE WINDOW
-    ====================================
-    */
-
     const maintenanceThreshold =
-
         expiresBefore
-
         ??
-
         new Date(
-
             Date.now()
-
             +
-
-            (
-
-                24 *
-
-                60 *
-
-                60 *
-
-                1000
-
-            )
-
+            DEFAULT_MAINTENANCE_WINDOW_MS
         );
 
     /*
@@ -538,74 +1471,56 @@ async function maintainSubscriptions({
     CHECK ALL REGISTERED PLATFORMS
     ====================================
     */
-
     for (
-
         const [
-
             platform,
-
             configuration
-
         ]
-
         of Object.entries(
-
             SUBSCRIPTION_PLATFORMS
-
         )
-
     ) {
 
         /*
         ====================================
-        SKIP PLATFORMS WITHOUT SUBSCRIPTIONS
+        SKIP UNSUPPORTED PLATFORMS
         ====================================
         */
-
         if (
-
             !configuration.supported
-
             ||
-
             !configuration.service
-
         ) {
 
             platformsSkipped++;
 
             continue;
-
         }
 
         platformsChecked++;
 
         let platformCreators = [];
 
+        /*
+        ====================================
+        FIND ACCOUNTS REQUIRING
+        SUBSCRIPTION MAINTENANCE
+        ====================================
+        */
         try {
 
-            /*
-            ====================================
-            FIND CREATORS REQUIRING
-            SUBSCRIPTION MAINTENANCE
-            ====================================
-            */
-
             platformCreators =
-
                 await getCreatorsNeedingSubscriptionRenewal({
 
                     platform,
 
                     expiresBefore:
-
                         maintenanceThreshold
 
                 });
 
-            creatorsChecked +=
 
+            creatorsChecked +=
                 platformCreators.length;
 
         }
@@ -621,65 +1536,57 @@ async function maintainSubscriptions({
             CRITICAL PLATFORM LOOKUP FAILURE
             ====================================
             */
-
             await criticalLog({
 
                 title:
-
                     'Content Creator Subscription Failure',
 
                 category:
-
                     'SUBSCRIPTION_SERVICE',
 
                 status:
-
                     'ERROR',
 
                 details: {
 
                     failure:
-
                         'Unable to retrieve creators requiring subscription maintenance.',
 
                     platform,
 
                     expiresBefore:
-
                         maintenanceThreshold,
 
                     error:
-
-                        error.message
-
+                        getErrorDetails(
+                            error
+                        )
                 }
-
             });
 
             logError({
 
                 type:
-
                     ERROR_TYPES.UNKNOWN_ERROR,
 
                 source:
-
                     'subscription-service',
 
                 message:
-
                     'Failed to retrieve creators requiring subscription maintenance.',
 
                 details: {
 
                     platform,
 
+                    expiresBefore:
+                        maintenanceThreshold,
+
                     error:
-
-                        error.message
-
+                        getErrorDetails(
+                            error
+                        )
                 }
-
             });
 
             results.push({
@@ -687,15 +1594,12 @@ async function maintainSubscriptions({
                 platform,
 
                 creatorsChecked:
-
                     0,
 
                 subscriptionsRequested:
-
                     0,
 
                 subscriptionsSkipped:
-
                     0,
 
                 errors:
@@ -703,8 +1607,8 @@ async function maintainSubscriptions({
 
             });
 
-            continue;
 
+            continue;
         }
 
         /*
@@ -712,7 +1616,6 @@ async function maintainSubscriptions({
         NOTHING TO MAINTAIN
         ====================================
         */
-
         if (
             platformCreators.length === 0
         ) {
@@ -722,15 +1625,12 @@ async function maintainSubscriptions({
                 platform,
 
                 creatorsChecked:
-
                     0,
 
                 subscriptionsRequested:
-
                     0,
 
                 subscriptionsSkipped:
-
                     0,
 
                 errors:
@@ -739,7 +1639,6 @@ async function maintainSubscriptions({
             });
 
             continue;
-
         }
 
         /*
@@ -747,29 +1646,29 @@ async function maintainSubscriptions({
         TRACK UNIQUE PLATFORM ACCOUNTS
         ====================================
         */
-
         const processedAccounts =
-
             new Set();
 
-        let platformRequested = 0;
 
-        let platformSkipped = 0;
+        let platformRequested =
+            0;
 
-        let platformErrors = 0;
+        let platformSkipped =
+            0;
+
+        let platformErrors =
+            0;
 
         /*
         ====================================
         PROCESS PLATFORM ACCOUNTS
         ====================================
         */
-
         for (
             const creator of platformCreators
         ) {
 
             const accountIdentifier =
-
                 creator.account_identifier;
 
             /*
@@ -778,15 +1677,10 @@ async function maintainSubscriptions({
             IN MULTIPLE DISCORD GUILDS.
             ====================================
             */
-
             if (
-
                 processedAccounts.has(
-
                     accountIdentifier
-
                 )
-
             ) {
 
                 platformSkipped++;
@@ -794,19 +1688,48 @@ async function maintainSubscriptions({
                 subscriptionsSkipped++;
 
                 continue;
-
             }
 
             processedAccounts.add(
-
                 accountIdentifier
-
             );
+
+            const retryKey =
+                getRetryKey({
+
+                    platform,
+
+                    accountIdentifier
+
+                });
+
+            /*
+            ====================================
+            ALREADY WAITING FOR RETRY
+            ====================================
+            */
+
+            if (
+                retryState.has(
+                    retryKey
+                )
+            ) {
+
+                platformSkipped++;
+
+                subscriptionsSkipped++;
+
+                continue;
+            }
 
             try {
 
+                /*
+                ====================================
+                INITIAL PLATFORM ATTEMPT
+                ====================================
+                */
                 const result =
-
                     await configuration.service.subscribe({
 
                         accountIdentifier
@@ -817,6 +1740,53 @@ async function maintainSubscriptions({
 
                 subscriptionsRequested++;
 
+                /*
+                ====================================
+                UPDATE CONTENT CREATOR EXPIRATION
+                ====================================
+                */
+                const expirationResult =
+                    await updateCreatorExpirations({
+
+                        platform,
+
+                        accountIdentifier,
+
+                        subscriptionExpiresAt:
+                            result.subscriptionExpiresAt
+
+                    });
+
+                /*
+                ====================================
+                SUCCESSFUL INITIAL ATTEMPT
+                ====================================
+                */
+                logFeature({
+
+                    category:
+                        'CONTENT_CREATORS',
+
+                    message:
+                        'Platform subscription maintenance completed.',
+
+                    details: {
+
+                        platform,
+
+                        accountIdentifier,
+
+                        subscriptionExpiresAt:
+                            result.subscriptionExpiresAt
+                            ??
+                            null,
+
+                        creatorsUpdated:
+                            expirationResult.creatorsUpdated
+
+                    }
+                });
+
                 results.push({
 
                     platform,
@@ -826,10 +1796,15 @@ async function maintainSubscriptions({
                     success:
                         true,
 
-                    result
+                    recovered:
+                        false,
+
+                    result,
+
+                    creatorsUpdated:
+                        expirationResult.creatorsUpdated
 
                 });
-
             }
 
             catch (
@@ -842,58 +1817,24 @@ async function maintainSubscriptions({
 
                 /*
                 ====================================
-                CRITICAL RENEWAL FAILURE
+                INITIAL FAILURE
                 ====================================
                 */
-
-                await criticalLog({
-
-                    title:
-
-                        'Content Creator Subscription Renewal Failed',
-
-                    category:
-
-                        'SUBSCRIPTION_SERVICE',
-
-                    status:
-
-                        'ERROR',
-
-                    details: {
-
-                        failure:
-
-                            'Platform subscription renewal failed.',
-
-                        platform,
-
-                        accountIdentifier,
-
-                        expiresBefore:
-
-                            maintenanceThreshold,
-
-                        error:
-
-                            error.message
-
-                    }
-                });
+                const errorDetails =
+                    getErrorDetails(
+                        error
+                    );
 
                 logError({
 
                     type:
-
                         ERROR_TYPES.UNKNOWN_ERROR,
 
                     source:
-
                         'subscription-service',
 
                     message:
-
-                        'Platform subscription renewal failed.',
+                        'Initial platform subscription maintenance attempt failed. Retry scheduled.',
 
                     details: {
 
@@ -901,12 +1842,35 @@ async function maintainSubscriptions({
 
                         accountIdentifier,
 
-                        error:
+                        retryDelayMinutes:
+                            RETRY_DELAY_MS
+                            /
+                            60000,
 
-                            error.message
+                        maxRetries:
+                            MAX_RETRIES,
+
+                        error:
+                            errorDetails
 
                     }
                 });
+
+                /*
+                ====================================
+                SCHEDULE RETRY
+                ====================================
+                */
+                const retry =
+                    scheduleInitialRetry({
+
+                        platform,
+
+                        accountIdentifier,
+
+                        error
+
+                    });
 
                 results.push({
 
@@ -917,32 +1881,44 @@ async function maintainSubscriptions({
                     success:
                         false,
 
-                    error:
+                    recovered:
+                        false,
 
+                    retryScheduled:
+                        true,
+
+                    retryNumber:
+                        0,
+
+                    nextRetryAt:
+                        retry.nextRetryAt,
+
+                    error:
                         error.message
 
                 });
             }
         }
 
+        /*
+        ====================================
+        PLATFORM RESULTS
+        ====================================
+        */
         results.push({
 
             platform,
 
             creatorsChecked:
-
                 platformCreators.length,
 
             subscriptionsRequested:
-
                 platformRequested,
 
             subscriptionsSkipped:
-
                 platformSkipped,
 
             errors:
-
                 platformErrors
 
         });
@@ -953,7 +1929,6 @@ async function maintainSubscriptions({
     RETURN MAINTENANCE RESULT
     ====================================
     */
-
     return {
 
         maintenanceThreshold,
@@ -976,6 +1951,11 @@ async function maintainSubscriptions({
 }
 
 
+/*
+====================================
+EXPORTS
+====================================
+*/
 module.exports = {
     initializeSubscription,
     supportsSubscription,
