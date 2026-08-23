@@ -73,21 +73,6 @@ function startActivityScheduler() {
 
                 await runActivityAudit();
 
-                logFeature({
-
-                    category:
-                        'ACTIVITY',
-
-                    message:
-                        'Activity audit completed',
-
-                    details: {
-
-                        schedule:
-                            schedulerConfig.schedules.activityAudit
-                    }
-                });
-
             } catch (
                 error
             ) {

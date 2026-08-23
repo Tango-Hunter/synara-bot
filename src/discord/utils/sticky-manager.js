@@ -29,7 +29,7 @@ CONFIGURATION
 ====================================
 */
 
-const STICKY_DELAY = 5 * 60 * 1000;
+const STICKY_DELAY = 30 * 60 * 1000;
 
 const pendingRefreshes = new Map();
 
