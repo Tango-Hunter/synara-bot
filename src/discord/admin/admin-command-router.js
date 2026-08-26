@@ -21,6 +21,10 @@ const {
 } = require("./commands/broadcast");
 
 const {
+    handleInstallerBlacklistCommand
+} = require('./commands/installerblacklist');
+
+const {
     handleDocsCommand
 } = require("./commands/docs");
 
@@ -170,6 +174,21 @@ async function routeAdminCommand(
     ) {
 
         return await handleBroadcastCommand(
+            interaction
+        );
+    }
+
+    /*
+    ============================
+    INSTALLER BLACKLIST
+    ============================
+    */
+    if (
+        interaction.commandName ===
+        'installerblacklist'
+    ) {
+
+        return await handleInstallerBlacklistCommand(
             interaction
         );
     }

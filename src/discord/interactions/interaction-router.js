@@ -42,6 +42,10 @@ const {
 } = require("./broadcast-handler");
 
 const {
+    handleBlacklistInstallersInteraction
+} = require('./blacklist-installers-handler');
+
+const {
     handleContentCreatorInteraction
 } = require('./content-creator-handler');
 
@@ -181,6 +185,23 @@ async function routeInteraction(
 
         if (
             handledBroadcast !== false
+        ) {
+            return;
+        }
+
+        /*
+        ============================
+        BLACKLIST INSTALLERS INTERACTIONS
+        ============================
+        */
+
+        const handledBlacklistInstallers =
+            await handleBlacklistInstallersInteraction(
+                interaction
+            );
+
+         if (
+            handledBlacklistInstallers !== false
         ) {
             return;
         }

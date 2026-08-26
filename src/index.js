@@ -87,6 +87,9 @@ const {
     handleGuildCreate
 } = require('./discord/welcome/welcome-handler');
 const {
+    enforceBlacklistControl
+} = require('./discord/welcome/blacklist-control');
+const {
     handleGuildRemoval
 } = require("./discord/guild-removal/removal-handler");
 
@@ -413,34 +416,113 @@ client.on(
 );
 
 // ===============================
-// Initializes feature flags when SYNARA is added to a new server
+// New guild joins SYNARA
 // ===============================
+//
+// IMPORTANT:
+// Blacklist enforcement MUST happen
+// before feature flags, guild settings,
+// welcome processing, or any other
+// guild-specific database initialization.
+//
+// A blacklisted guild or installer is
+// therefore rejected before SYNARA
+// creates any guild records.
+//
+// If blacklist control returns false,
+// the guildCreate workflow ends immediately.
+//
 client.on(
     'guildCreate',
 
     async guild => {
 
-        await initializeGuildFeatures({
+        try {
 
-            guildId:
-                guild.id,
+            /*
+            ====================================
+            BLACKLIST CONTROL
+            ====================================
 
-            guildName:
-                guild.name
-        });
+            This MUST remain the first
+            operation performed after
+            guildCreate.
 
-        await initializeGuildSettings({
+            If the guild or installer is
+            blacklisted, blacklist-control
+            removes SYNARA from the guild
+            and returns false.
 
-            guildId:
-                guild.id,
+            No guild database changes occur
+            before this check.
+            */
 
-            guildName:
-                guild.name
-        });
+            const allowed =
+                await enforceBlacklistControl(
+                    guild
+                );
+            if (
+                !allowed
+            ) {
+                return;
+            }
 
-        await handleGuildCreate(
-            guild
-        );
+            /*
+            ====================================
+            INITIALIZE FEATURE FLAGS
+            ====================================
+            */
+            await initializeGuildFeatures({
+                guildId:
+                    guild.id,
+                guildName:
+                    guild.name
+            });
+
+            /*
+            ====================================
+            INITIALIZE GUILD SETTINGS
+            ====================================
+            */
+            await initializeGuildSettings({
+                guildId:
+                    guild.id,
+                guildName:
+                    guild.name
+            });
+
+            /*
+            ====================================
+            WELCOME WORKFLOW
+            ====================================
+            */
+            await handleGuildCreate(
+                guild
+            );
+        }
+
+        catch (
+            error
+        ) {
+            logError({
+                type:
+                    ERROR_TYPES.DISCORD_ERROR,
+                source:
+                    "guildCreate",
+                message:
+                    "Failed to process new guild after blacklist control.",
+                details: {
+                    guildId:
+                        guild.id,
+                    guildName:
+                        guild.name,
+                    error:
+                        error.message,
+                    stack:
+                        error.stack
+                }
+            });
+        }
     }
 );
 

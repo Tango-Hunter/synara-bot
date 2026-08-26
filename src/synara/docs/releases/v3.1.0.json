@@ -1,10 +1,10 @@
 {
     "version": "v3.1.0",
-    "title": "Content Creator Announcements",
+    "title": "SYNARA Installer Blacklist",
     "type": "New Feature",
     "documents": [
         {
-            "id": "content_creator"
+            "id": "installer_blacklist"
         }
     ]
 }

@@ -1,5 +1,5 @@
 {
-    "version": "v3.0.3",
+    "version": "v3.1.0",
 
     "documents": [
 
@@ -362,7 +362,21 @@
             "settings": [],
             "category": "engagement",
             "footer": "interactive"
-        }
+        },
+
+        {
+            "id": "installer_blacklist",
+            "type": "feature",
+            "name": "Installer Blacklist",
+            "path": "features/blacklist-installers.md",
+            "commands": [
+                "/installerblacklist Add",
+                "/installerblacklist Remove"
+            ],
+            "settings": [],
+            "category": "administration",
+            "footer": "configuration"
+            }
 
     ]
 }

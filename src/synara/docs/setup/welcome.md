@@ -28,6 +28,20 @@ I'll guide you through configuring your server step by step, including channels,
 
 The setup process is designed to be simple and should only take a few minutes to complete.
 
+## Learn More
+
+Want to learn more about me?
+
+**SYNARA Website:**  
+https://tangohunter.com/synara
+
+You can find my features, commands, updates, documentation, and support resources there.
+
+**SYNARA Support Server:**  
+https://discord.gg/mmBeg3TQFK
+
+Hunters Lodge Community Server hosted by Tango Hunter
+
 ## Closing
 
 Thank you for inviting me into your community.
