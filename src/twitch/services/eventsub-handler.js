@@ -152,12 +152,31 @@ function scheduleOfflineCooldown({
                     ====================================
                     VERIFY CURRENT TWITCH STATE
                     ====================================
+
+                    This is the final verification after
+                    the five-minute offline cooldown.
+
+                    We intentionally disable the live-state
+                    retry schedule here.
+
+                    The cooldown itself already provides the
+                    reconnection buffer. If Helix says the
+                    stream is offline now, we finalize it.
                     */
 
                     const streamData =
 
                         await getLiveStreamData(
-                            twitchUserId
+
+                            twitchUserId,
+
+                            null,
+
+                            {
+                                retryVerification:
+                                    false
+                            }
+
                         );
 
 
