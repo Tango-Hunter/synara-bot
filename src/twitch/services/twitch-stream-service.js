@@ -74,26 +74,53 @@ function wait(
 }
 
 
-/*
-====================================
-GET LIVE STREAM DATA
-====================================
-*/
-
 async function getLiveStreamData(
     twitchUserId,
-    streamStartedAt = null
+    streamStartedAt = null,
+    options = {}
 ) {
+
+    const {
+
+        retryVerification = true
+
+    } = options;
 
     const accessToken =
         await getAccessToken();
 
     const verificationAttempts = [];
 
+        /*
+        ====================================
+        DETERMINE VERIFICATION SCHEDULE
+        ====================================
+        
+        stream.online events use the full
+        retry schedule because Twitch Helix
+        may temporarily lag behind EventSub.
+    
+        Offline cooldown verification is
+        intentionally a single request because
+        the five-minute offline cooldown has
+        already provided the reconnection buffer.
+        */
+    
+        const verificationDelays =
+            retryVerification
+    
+                ?
+    
+            LIVE_VERIFICATION_DELAYS_MS
+    
+                :
+    
+            [0];
+
     for (
         let attemptIndex = 0;
         attemptIndex <
-            LIVE_VERIFICATION_DELAYS_MS.length;
+            verificationDelays.length;
         attemptIndex++
     ) {
 
@@ -101,7 +128,7 @@ async function getLiveStreamData(
             attemptIndex + 1;
 
         const delayMs =
-            LIVE_VERIFICATION_DELAYS_MS[
+            verificationDelays[
                 attemptIndex
             ];
 
@@ -507,53 +534,94 @@ async function getLiveStreamData(
         }
     }
 
-    /*
-    ====================================
-    LIVE STATE COULD NOT BE VERIFIED
-    ====================================
-
-    EventSub told us that the stream went
-    online, but Helix never confirmed the
-    stream during the verification window.
-    */
-
-    logError({
-
-        type:
-            ERROR_TYPES?.TWITCH_ERROR
-            ??
-            'TWITCH_ERROR',
-
-        source:
-            'twitch-stream-service',
-
-        message:
-            'Twitch stream.online event could not be verified through Helix after all verification attempts.',
-
-        details: {
-
-            twitchUserId,
-
-            startedAt:
-                streamStartedAt,
-
-            attempts:
-                verificationAttempts.length,
-
-            maxAttempts:
-                LIVE_VERIFICATION_DELAYS_MS.length,
-
-            verificationWindowSeconds:
-                LIVE_VERIFICATION_DELAYS_MS[
-                    LIVE_VERIFICATION_DELAYS_MS.length - 1
-                ] / 1000,
-
-            verificationAttempts
-
+        /*
+        ====================================
+        LIVE STATE COULD NOT BE VERIFIED
+        ====================================
+        */
+        const failureMessage =
+    
+            retryVerification
+    
+                ?
+    
+            'Twitch stream.online event could not be verified through Helix after all verification attempts.'
+    
+                :
+    
+            'Twitch live-state verification returned no active stream.';
+    
+        /*
+        ====================================
+        LOG VERIFICATION FAILURE
+        ====================================
+        */
+        if (
+            retryVerification
+        ) {
+    
+            logError({
+    
+                type:
+                    ERROR_TYPES?.TWITCH_ERROR
+                    ??
+                    'TWITCH_ERROR',
+    
+                source:
+                    'twitch-stream-service',
+    
+                message:
+                    failureMessage,
+    
+                details: {
+    
+                    twitchUserId,
+    
+                    startedAt:
+                        streamStartedAt,
+    
+                    attempts:
+                        verificationAttempts.length,
+    
+                    maxAttempts:
+                        verificationDelays.length,
+    
+                    verificationWindowSeconds:
+                        verificationDelays[
+                            verificationDelays.length - 1
+                        ] / 1000,
+    
+                    verificationAttempts
+    
+                }
+            });
         }
-    });
-
-    return null;
+    
+        else {
+    
+            logFeature({
+    
+                category:
+                    'TWITCH',
+    
+                message:
+                    'Twitch offline-state verification confirms stream is offline.',
+    
+                details: {
+    
+                    twitchUserId,
+    
+                    startedAt:
+                        streamStartedAt,
+    
+                    attempts:
+                        verificationAttempts.length
+    
+                }
+            });
+        }
+    
+        return null;
 }
 
 
