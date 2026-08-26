@@ -367,6 +367,56 @@ async function initializeDatabase() {
 
     `);
 
+    /*
+    ====================================
+    BLACKLISTED INSTALLERS
+    ====================================
+    */
+
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS blacklisted_installers (
+
+            id
+                BIGSERIAL
+                PRIMARY KEY,
+
+            type
+                VARCHAR(16)
+                NOT NULL,
+
+            name
+                VARCHAR(255)
+                NOT NULL,
+
+            discord_id
+                VARCHAR(32)
+                NOT NULL,
+
+            reason
+                TEXT,
+
+            created_at
+                TIMESTAMP WITH TIME ZONE
+                NOT NULL
+                DEFAULT NOW(),
+
+            CONSTRAINT blacklisted_installers_type_check
+                CHECK (
+                    type IN (
+                        'guild',
+                        'user'
+                    )
+                ),
+
+            CONSTRAINT blacklisted_installers_unique_target
+                UNIQUE (
+                    type,
+                    discord_id
+                )
+
+        );
+    `);
+
     logFeature({
 
         category:
@@ -402,7 +452,9 @@ async function initializeDatabase() {
 
                 'content_creators',
 
-                'tiktok_authorizations'
+                'tiktok_authorizations',
+
+                'blacklisted_installers'
             ] 
         }
     });

@@ -7,7 +7,8 @@
  */
 
 const {
-    EmbedBuilder
+    EmbedBuilder,
+    PermissionsBitField
 } = require('discord.js');
 
 const client =
@@ -16,6 +17,10 @@ const client =
 const {
     getGuildSetting
 } = require('../database/guild-settings-repository');
+
+const {
+    findWelcomeChannel
+} = require('../../discord/welcome/welcome-channel');
 
 
 const CRITICAL_LOGS_CHANNEL_ID =
@@ -55,9 +60,126 @@ const STATUS_ICONS = {
         '☾'
 };
 
-// ===============================
-// Main Logging function within Discord
-// ===============================
+
+/*
+====================================
+CHECK CHANNEL PERMISSIONS
+====================================
+*/
+
+function canUseLoggingChannel(
+    channel
+) {
+
+    if (
+        !channel
+    ) {
+        return false;
+    }
+
+
+    /*
+    ====================================
+    BOT MEMBER
+    ====================================
+    */
+
+    const guild =
+        channel.guild;
+
+    if (
+        !guild
+    ) {
+        return false;
+    }
+
+
+    const botMember =
+        guild.members.me;
+
+    if (
+        !botMember
+    ) {
+        return false;
+    }
+
+
+    /*
+    ====================================
+    PERMISSIONS
+    ====================================
+    */
+
+    const permissions =
+        channel.permissionsFor(
+            botMember
+        );
+
+    if (
+        !permissions
+    ) {
+        return false;
+    }
+
+
+    return (
+
+        permissions.has(
+            PermissionsBitField.Flags.ViewChannel
+        )
+
+        &&
+
+        permissions.has(
+            PermissionsBitField.Flags.SendMessages
+        )
+
+        &&
+
+        permissions.has(
+            PermissionsBitField.Flags.EmbedLinks
+        )
+    );
+}
+
+
+/*
+====================================
+FIND FALLBACK CHANNEL
+====================================
+*/
+
+function findFallbackChannel(
+    guildId
+) {
+
+    const guild =
+        client.guilds.cache.get(
+            guildId
+        );
+
+    if (
+        !guild
+    ) {
+
+        return null;
+
+    }
+
+
+    return findWelcomeChannel(
+        guild
+    );
+
+}
+
+
+/*
+====================================
+MAIN DISCORD LOGGING FUNCTION
+====================================
+*/
+
 async function discordLog({
 
     guildId,
@@ -69,42 +191,237 @@ async function discordLog({
     details,
 
     status = 'INFO'
+
 }) {
 
     try {
 
-        const logsChannelId =
+        /*
+        ====================================
+        VALIDATE GUILD
+        ====================================
+        */
+        const guild =
+            client.guilds.cache.get(
+                guildId
+            );
+
+        if (
+            !guild
+        ) {
+
+            console.error(
+                '[DISCORD LOGGER] Guild not found.',
+                {
+                    guildId,
+                    title,
+                    category
+                }
+            );
+
+            return;
+        }
+
+        /*
+        ====================================
+        GET CONFIGURED LOGGING CHANNEL
+        ====================================
+        */
+        let logsChannelId =
             await getGuildSetting({
 
                 guildId,
 
                 settingName:
                     'channel_logs'
+
             });
 
+        let channel = null;
+
+        let usingFallback = false;
+
+        let fallbackReason = null;
+
+        /*
+        ====================================
+        CONFIGURED CHANNEL
+        ====================================
+        */
         if (
-            !logsChannelId
+            logsChannelId
         ) {
-            return;
+
+            try {
+                channel =
+                    await client.channels.fetch(
+                        logsChannelId
+                    );
+            }
+
+            catch (
+                error
+            ) {
+
+                fallbackReason =
+                    'The configured logging channel could not be accessed. It may have been deleted or SYNARA may no longer have permission to access it.';
+
+                console.error(
+
+                    '[DISCORD LOGGER] Configured logging channel could not be fetched.',
+
+                    {
+
+                        guildId,
+
+                        channelId:
+                            logsChannelId,
+
+                        error:
+                            error.message
+
+                    }
+                );
+            }
+
+            /*
+            ====================================
+            VERIFY CHANNEL
+            ====================================
+            */
+            if (
+                channel
+                &&
+                !canUseLoggingChannel(
+                    channel
+                )
+            ) {
+                fallbackReason =
+                    'The configured logging channel exists, but SYNARA cannot use it. Please verify View Channel, Send Messages, and Embed Links permissions.';
+
+                channel =
+                    null;
+
+            }
         }
 
-        const channel =
-            await client.channels.fetch(
-                logsChannelId
-            );
+        else {
+            fallbackReason =
+                'No logging channel has been configured for this server.';
+        }
 
+        /*
+        ====================================
+        FALLBACK CHANNEL
+        ====================================
+        */
         if (
             !channel
         ) {
+
+            channel =
+                findFallbackChannel(
+                    guildId
+                );
+
+            usingFallback =
+                Boolean(
+                    channel
+                );
+        }
+
+        /*
+        ====================================
+        NO CHANNEL AVAILABLE
+        ====================================
+        */
+        if (
+            !channel
+        ) {
+            console.error(
+
+                '[DISCORD LOGGER] No logging channel or fallback channel is available.',
+
+                {
+
+                    guildId,
+
+                    title,
+
+                    category,
+
+                    fallbackReason
+
+                }
+            );
+
             return;
         }
 
-        const embed =
+        /*
+        ====================================
+        PREPARE DETAILS
+        ====================================
+        */
+        let displayDetails =
+            details;
 
+        if (
+            usingFallback
+        ) {
+
+            displayDetails = {
+
+                loggingNotice:
+                    'SYNARA is currently using a fallback channel because the server logging channel is not configured or is unavailable. An administrator should run /setup and configure the logging channel.',
+
+                fallbackReason,
+
+                fallbackChannel:
+                    channel.name,
+
+                fallbackChannelId:
+                    channel.id,
+
+                originalDetails:
+                    details
+
+            };
+        }
+
+        /*
+        ====================================
+        FORMAT DETAILS
+        ====================================
+        */
+        let detailsText;
+
+        if (
+            typeof displayDetails ===
+            'string'
+        ) {
+            detailsText =
+                displayDetails;
+        }
+
+        else {
+            detailsText =
+                JSON.stringify(
+                    displayDetails,
+                    null,
+                    2
+                );
+        }
+
+        /*
+        ====================================
+        CREATE EMBED
+        ====================================
+        */
+        const embed =
             new EmbedBuilder()
 
                 .setColor(
-
                     STATUS_COLORS[
                         status
                     ]
@@ -115,7 +432,6 @@ async function discordLog({
                 )
 
                 .setTitle(
-
                     `${
 
                         STATUS_ICONS[
@@ -130,33 +446,42 @@ async function discordLog({
                 )
 
                 .addFields(
-
                     {
-
                         name:
                             'Category',
 
                         value:
-                            category,
+                            category
+                            ||
+                            'Uncategorized',
 
                         inline:
                             false
                     },
-
                     {
-
                         name:
                             'Details',
 
                         value:
-                            details,
+
+                            detailsText.length >
+                            1024
+
+                                ?
+
+                            `${detailsText.slice(
+                                0,
+                                1021
+                            )}...`
+
+                                :
+
+                            detailsText,
 
                         inline:
                             false
                     },
-
                     {
-
                         name:
                             'Status',
 
@@ -166,43 +491,121 @@ async function discordLog({
                         inline:
                             false
                     }
-                )
+                );
 
-                .setFooter({
+        /*
+        ====================================
+        FALLBACK WARNING
+        ====================================
+        */
+        if (
+            usingFallback
+        ) {
 
-                    text:
+            embed.addFields({
 
-                        `SYNARA • ${
-                            new Date()
-                                .toLocaleString(
-                                    'en-US',
-                                    {
-                                        timeZone:
-                                            'America/New_York'
-                                    }
-                                )
-                        }`
-                })
+                name:
+                    '⚠ Logging Channel Not Configured',
 
-                .setTimestamp();
+                value:
+                    'This message was posted in a fallback channel. Please run `/setup` and configure SYNARA\'s logging channel.',
 
+                inline:
+                    false
+
+            });
+        }
+
+        embed.setFooter({
+
+            text:
+
+                `SYNARA • ${
+                    new Date()
+                        .toLocaleString(
+                            'en-US',
+                            {
+                                timeZone:
+                                    'America/New_York'
+                            }
+                        )
+                }`
+        });
+
+        embed.setTimestamp();
+
+        /*
+        ====================================
+        SEND LOG
+        ====================================
+        */
         await channel.send({
-
             embeds: [
                 embed
             ]
         });
 
-    } catch (error) {
+        /*
+        ====================================
+        LOCAL FALLBACK LOG
+        ====================================
+        */
+        if (
+            usingFallback
+        ) {
+
+            console.warn(
+
+                '[DISCORD LOGGER] Used fallback channel because the configured logging channel is unavailable.',
+
+                {
+
+                    guildId,
+
+                    fallbackChannelId:
+                        channel.id,
+
+                    fallbackChannelName:
+                        channel.name,
+
+                    fallbackReason,
+
+                    title,
+
+                    category
+
+                }
+            );
+        }
+    }
+
+    catch (
+        error
+    ) {
 
         console.error(
 
             '[DISCORD LOGGER ERROR]',
 
-            error
+            {
+
+                guildId,
+
+                title,
+
+                category,
+
+                error:
+                    error.message,
+
+                stack:
+                    error.stack
+
+            }
         );
     }
 }
+
 
 // ===============================
 // Critical SYNARA logging

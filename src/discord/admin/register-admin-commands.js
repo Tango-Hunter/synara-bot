@@ -93,6 +93,90 @@ const commands = [
 
     /*
     ============================
+    INSTALLER BLACKLIST
+    ============================
+    */
+
+    new SlashCommandBuilder()
+
+        .setName(
+            'installerblacklist'
+        )
+
+        .setDescription(
+            'Manage the SYNARA installer blacklist.'
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'add'
+                    )
+
+                    .setDescription(
+                        'Add a Discord user or guild to the SYNARA blacklist.'
+                    )
+
+                    .addStringOption(
+
+                        option =>
+
+                            option
+
+                                .setName(
+                                    'type'
+                                )
+
+                                .setDescription(
+                                    'Type of Discord entity to blacklist.'
+                                )
+
+                                .setRequired(
+                                    true
+                                )
+
+                                .addChoices(
+
+                                    {
+                                        name:
+                                            'Guild',
+
+                                        value:
+                                            'guild'
+                                    },
+
+                                    {
+                                        name:
+                                            'User',
+
+                                        value:
+                                            'user'
+                                    }
+                                )
+                    )
+        )
+
+        .addSubcommand(
+
+            subcommand =>
+
+                subcommand
+
+                    .setName(
+                        'remove'
+                    )
+
+                    .setDescription(
+                        'Remove a user or guild from the SYNARA blacklist.'
+                    )
+        ),
+
+    /*
+    ============================
     DOCUMENTATION
     ============================
     */
