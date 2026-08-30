@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 
 # Log files
 logs/*.log
+
+# Database Migration
+database-migration/

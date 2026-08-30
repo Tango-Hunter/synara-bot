@@ -33,7 +33,7 @@ function buildLiveEmbed({
         )
 
         .setTitle(
-            '🔴 LIVE NOW - CLICK HERE TO JOIN'
+            `🔴 ${twitchLogin} IS LIVE NOW - CLICK HERE TO JOIN`
         )
 
         .setDescription(

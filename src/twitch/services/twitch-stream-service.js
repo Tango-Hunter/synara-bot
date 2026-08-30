@@ -416,6 +416,9 @@ async function getLiveStreamData(
                 twitchDisplayName:
                     stream.user_name,
 
+                startedAt:
+                    stream.started_at,
+
                 thumbnailUrl
 
             };

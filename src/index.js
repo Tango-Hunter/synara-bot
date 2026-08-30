@@ -48,12 +48,14 @@ const {
 } = require('./discord/scheduler/birthday-scheduler');
 const {
     startAutomationScheduler
-} = require(
-    './discord/scheduler/automation-scheduler'
-);
+} = require('./discord/scheduler/automation-scheduler');
 const {
     startSubscriptionScheduler
 } = require('./content-creators/subscription-scheduler');
+
+const {
+    reconcileTwitchLiveState
+} = require('./twitch/services/twitch-live-state-reconciliation');
 
 const {
     initializeDatabase
@@ -124,6 +126,9 @@ client.once('clientReady', async () => {
     // Databases
     await initializeDatabase();
     await initializeTwitchTables();
+
+    // Twitch Live State Reconciliation
+    await reconcileTwitchLiveState(client);
 
     logFeature({
 

@@ -417,6 +417,146 @@ async function initializeDatabase() {
         );
     `);
 
+    /*
+    ====================================
+    SYNARA SUBSCRIPTIONS
+    ====================================
+    */
+
+    await pool.query(`
+
+        CREATE TABLE IF NOT EXISTS synara_subscriptions (
+
+            id
+                BIGSERIAL
+                PRIMARY KEY,
+
+            user_id
+                TEXT
+                NOT NULL,
+
+            guild_id
+                TEXT
+                NOT NULL,
+
+            guild_name
+                TEXT
+                NOT NULL,
+
+            tier
+                TEXT
+                NOT NULL,
+
+            status
+                TEXT
+                NOT NULL,
+
+            subscription_id
+                TEXT
+                UNIQUE,
+
+            expires_at
+                TIMESTAMP WITH TIME ZONE,
+
+            source
+                TEXT
+                NOT NULL,
+
+            updated_at
+                TIMESTAMP WITH TIME ZONE
+                NOT NULL
+                DEFAULT NOW(),
+
+            created_at
+                TIMESTAMP WITH TIME ZONE
+                NOT NULL
+                DEFAULT NOW(),
+
+            CONSTRAINT synara_subscriptions_tier_check
+                CHECK (
+                    tier IN (
+                        'Foundation',
+                        'Intelligence'
+                    )
+                ),
+
+            CONSTRAINT synara_subscriptions_status_check
+                CHECK (
+                    status IN (
+                        'active',
+                        'expired',
+                        'cancelled',
+                        'pending_cancellation',
+                    )
+                ),
+
+            CONSTRAINT synara_subscriptions_source_check
+                CHECK (
+                    source IN (
+                        'Subscription',
+                        'Trial',
+                        'Sponsored'
+                    )
+                )
+
+        );
+
+    `);
+
+
+    /*
+    ====================================
+    SYNARA SUBSCRIPTION INDEXES
+    ====================================
+    */
+
+    await pool.query(`
+
+        CREATE INDEX IF NOT EXISTS
+            idx_synara_subscriptions_guild_id
+
+        ON synara_subscriptions (
+            guild_id
+        );
+
+    `);
+
+
+    await pool.query(`
+
+        CREATE INDEX IF NOT EXISTS
+            idx_synara_subscriptions_user_id
+
+        ON synara_subscriptions (
+            user_id
+        );
+
+    `);
+
+
+    await pool.query(`
+
+        CREATE INDEX IF NOT EXISTS
+            idx_synara_subscriptions_subscription_id
+
+        ON synara_subscriptions (
+            subscription_id
+        );
+
+    `);
+
+
+    await pool.query(`
+
+        CREATE INDEX IF NOT EXISTS
+            idx_synara_subscriptions_expires_at
+
+        ON synara_subscriptions (
+            expires_at
+        );
+
+    `);
+
     logFeature({
 
         category:
@@ -454,7 +594,9 @@ async function initializeDatabase() {
 
                 'tiktok_authorizations',
 
-                'blacklisted_installers'
+                'blacklisted_installers',
+
+                'synara_subscriptions'
             ] 
         }
     });

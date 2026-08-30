@@ -122,18 +122,10 @@ function scheduleOfflineCooldown({
 
 }) {
 
-    /*
-    Reset an existing timer.
-
-    Multiple offline events therefore
-    extend the same five-minute window
-    instead of creating multiple cleanup
-    operations.
-    */
-
     clearOfflineCooldown(
         twitchUserId
     );
+
 
     const timer =
 
@@ -152,31 +144,11 @@ function scheduleOfflineCooldown({
                     ====================================
                     VERIFY CURRENT TWITCH STATE
                     ====================================
-
-                    This is the final verification after
-                    the five-minute offline cooldown.
-
-                    We intentionally disable the live-state
-                    retry schedule here.
-
-                    The cooldown itself already provides the
-                    reconnection buffer. If Helix says the
-                    stream is offline now, we finalize it.
                     */
 
                     const streamData =
-
                         await getLiveStreamData(
-
-                            twitchUserId,
-
-                            null,
-
-                            {
-                                retryVerification:
-                                    false
-                            }
-
+                            twitchUserId
                         );
 
 
@@ -190,11 +162,14 @@ function scheduleOfflineCooldown({
                                 'TWITCH',
 
                             message:
-                                'Offline cooldown expired but stream is still live.',
+                                'Offline cooldown expired but Twitch confirms the stream is still live.',
 
                             details: {
 
                                 twitchUserId,
+
+                                twitchStartedAt:
+                                    streamData.startedAt,
 
                                 title:
                                     streamData.title,
@@ -203,14 +178,18 @@ function scheduleOfflineCooldown({
                                     streamData.category
 
                             }
+
                         });
 
+
                         return;
+
                     }
+
 
                     /*
                     ====================================
-                    FINALIZE OFFLINE STATE
+                    TWITCH CONFIRMS OFFLINE
                     ====================================
                     */
 
@@ -221,6 +200,7 @@ function scheduleOfflineCooldown({
                         client
 
                     });
+
                 }
 
                 catch (
@@ -249,17 +229,26 @@ function scheduleOfflineCooldown({
                                 error.stack
 
                         }
+
                     });
+
                 }
+
             },
 
             OFFLINE_COOLDOWN_MS
+
         );
 
+
     offlineCooldowns.set(
+
         twitchUserId,
+
         timer
+
     );
+
 
     logFeature({
 
@@ -277,7 +266,9 @@ function scheduleOfflineCooldown({
                 OFFLINE_COOLDOWN_MS / 1000
 
         }
+
     });
+
 }
 
 
@@ -614,8 +605,9 @@ async function handleStreamOnline(
     const twitchUserId =
         payload.event.broadcaster_user_id;
 
-    const streamStartedAt =
+    const eventStartedAt =
         payload.event.started_at;
+
 
     /*
     ====================================
@@ -627,10 +619,18 @@ async function handleStreamOnline(
         twitchUserId
     );
 
+
+    /*
+    ====================================
+    LOAD LINKED USERS
+    ====================================
+    */
+
     const users =
         await getEnabledUsersByTwitchUserId(
             twitchUserId
         );
+
 
     logFeature({
 
@@ -662,7 +662,9 @@ async function handleStreamOnline(
                     0
 
                 )
+
         }
+
     });
 
 
@@ -675,18 +677,15 @@ async function handleStreamOnline(
 
     /*
     ====================================
-    GET CURRENT STREAM DATA
+    VERIFY WITH TWITCH
     ====================================
+
+    Twitch is the source of truth.
     */
 
     const streamData =
-
         await getLiveStreamData(
-
-            twitchUserId,
-
-            streamStartedAt
-
+            twitchUserId
         );
 
 
@@ -706,14 +705,20 @@ async function handleStreamOnline(
 
                 twitchUserId,
 
-                startedAt:
-                    streamStartedAt
+                eventStartedAt
 
             }
+
         });
 
         return;
     }
+
+
+    const streamStartedAt =
+        streamData.startedAt
+            || eventStartedAt;
+
 
     /*
     ====================================
@@ -733,6 +738,7 @@ async function handleStreamOnline(
 
     });
 
+
     /*
     ====================================
     SERVER LEADER EVENT
@@ -748,8 +754,8 @@ async function handleStreamOnline(
             const guildId
             of user.guild_ids
         ) {
-            const twitchMonitoringEnabled =
 
+            const twitchMonitoringEnabled =
                 await getFeatureFlag({
 
                     guildId,
@@ -759,17 +765,19 @@ async function handleStreamOnline(
 
                 });
 
+
             if (
                 !twitchMonitoringEnabled
             ) {
                 continue;
             }
 
-            const guild =
 
+            const guild =
                 client.guilds.cache.get(
                     guildId
                 );
+
 
             if (
                 !guild
@@ -779,7 +787,6 @@ async function handleStreamOnline(
 
 
             const serverLeaderId =
-
                 await getGuildSetting({
 
                     guildId,
@@ -789,6 +796,7 @@ async function handleStreamOnline(
 
                 });
 
+
             if (
                 serverLeaderId !==
                 user.discord_user_id
@@ -796,11 +804,6 @@ async function handleStreamOnline(
                 continue;
             }
 
-            /*
-            The live stream event utility is
-            separate from the actual Twitch
-            live notification state.
-            */
 
             await createLiveStreamEvent({
 
@@ -816,8 +819,11 @@ async function handleStreamOnline(
                     streamData.category
 
             });
+
         }
+
     }
+
 
     /*
     ====================================
@@ -837,7 +843,9 @@ async function handleStreamOnline(
 
             twitchUserId,
 
-            startedAt:
+            eventStartedAt,
+
+            twitchStartedAt:
                 streamStartedAt,
 
             title:
@@ -847,7 +855,9 @@ async function handleStreamOnline(
                 streamData.category
 
         }
+
     });
+
 
     for (
         const user
@@ -858,12 +868,9 @@ async function handleStreamOnline(
         ====================================
         ATOMIC LIVE CLAIM
         ====================================
-        Duplicate stream.online events
-        receive null and are ignored.
         */
 
-        const claimed =
-
+        const claim =
             await claimLiveNotification({
 
                 discordUserId:
@@ -874,8 +881,9 @@ async function handleStreamOnline(
 
             });
 
+
         if (
-            !claimed
+            !claim.claimed
         ) {
 
             logFeature({
@@ -884,7 +892,7 @@ async function handleStreamOnline(
                     'TWITCH',
 
                 message:
-                    'Duplicate stream.online event ignored.',
+                    'Live notification claim rejected.',
 
                 details: {
 
@@ -893,14 +901,53 @@ async function handleStreamOnline(
                     discordUserId:
                         user.discord_user_id,
 
-                    startedAt:
+                    reason:
+                        claim.reason,
+
+                    existingStartedAt:
+                        claim.status
+                            ?.started_at,
+
+                    eventStartedAt,
+
+                    twitchStartedAt:
                         streamStartedAt
 
                 }
+
             });
 
+
             continue;
+
         }
+
+
+        logFeature({
+
+            category:
+                'TWITCH',
+
+            message:
+                'Live notification claim successful.',
+
+            details: {
+
+                twitchUserId,
+
+                discordUserId:
+                    user.discord_user_id,
+
+                reason:
+                    claim.reason,
+
+                startedAt:
+                    streamStartedAt
+
+            }
+
+        });
+
 
         try {
 
@@ -911,7 +958,6 @@ async function handleStreamOnline(
             */
 
             const messageIds =
-
                 await postLiveNotifications({
 
                     client,
@@ -938,6 +984,7 @@ async function handleStreamOnline(
                         streamData.thumbnailUrl
 
                 });
+
 
             /*
             ====================================
@@ -988,30 +1035,17 @@ async function handleStreamOnline(
                         ).length
 
                 }
+
             });
+
         }
 
         catch (
             error
         ) {
 
-            /*
-            ====================================
-            RELEASE FAILED LIVE CLAIM
-            ====================================
-
-            The user should not remain marked
-            live if Discord notification delivery
-            failed.
-
-            This allows a later stream.online
-            delivery to retry.
-            */
-
             await releaseLiveNotificationClaim(
-
                 user.discord_user_id
-
             );
 
 
@@ -1040,9 +1074,13 @@ async function handleStreamOnline(
                         error.stack
 
                 }
+
             });
+
         }
+
     }
+
 }
 
 
@@ -1059,13 +1097,6 @@ async function handleStreamOffline(
     const twitchUserId =
         payload.event.broadcaster_user_id;
 
-    /*
-    ====================================
-    SCHEDULE OFFLINE TRANSITION
-    ====================================
-    Twitch/console reconnections can generate
-    offline → online transitions very quickly.
-    */
 
     scheduleOfflineCooldown({
 
@@ -1074,6 +1105,7 @@ async function handleStreamOffline(
         client
 
     });
+
 
     logFeature({
 
@@ -1091,7 +1123,9 @@ async function handleStreamOffline(
                 OFFLINE_COOLDOWN_MS / 1000
 
         }
+
     });
+
 }
 
 
