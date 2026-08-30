@@ -486,7 +486,7 @@ async function initializeDatabase() {
                         'active',
                         'expired',
                         'cancelled',
-                        'pending_cancellation',
+                        'pending_cancellation'
                     )
                 ),
 
