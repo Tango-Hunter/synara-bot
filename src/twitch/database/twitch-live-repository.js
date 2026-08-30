@@ -766,6 +766,85 @@ async function releaseLiveNotificationClaim(
 }
 
 
+/*
+====================================
+RESET LIVE SESSION
+====================================
+
+Used when Twitch confirms that the
+broadcaster is currently live but the
+database contains an older session.
+
+Twitch is authoritative.
+*/
+
+async function resetLiveSession({
+
+    discordUserId,
+
+    startedAt,
+
+    streamCategory,
+
+    streamTitle,
+
+    thumbnailUrl
+
+}) {
+
+    const result =
+        await pool.query(
+
+            `
+            UPDATE twitch_live_status
+
+            SET
+
+                message_ids = '{}'::jsonb,
+
+                live_now = TRUE,
+
+                started_at = $2,
+
+                stream_category = $3,
+
+                stream_title = $4,
+
+                thumbnail_url = $5,
+
+                ended_at = NULL,
+
+                updated_at = NOW()
+
+            WHERE
+
+                discord_user_id = $1
+
+            RETURNING *
+            `,
+
+            [
+
+                discordUserId,
+
+                startedAt,
+
+                streamCategory,
+
+                streamTitle,
+
+                thumbnailUrl
+
+            ]
+
+        );
+
+
+    return result.rows[0] || null;
+
+}
+
+
 module.exports = {
 
     createOrUpdateLiveStatus,
@@ -776,5 +855,6 @@ module.exports = {
     updateLiveNotificationMessages,
     updateLiveStreamData,
     markOffline,
-    releaseLiveNotificationClaim
+    releaseLiveNotificationClaim,
+    resetLiveSession
 };

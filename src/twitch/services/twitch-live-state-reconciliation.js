@@ -3,13 +3,15 @@
  * Author: Tango Hunter
  * Date Created: 8/29/26
  * Description: Reconciles SYNARA's cached Twitch live state against Twitch Helix when SYNARA starts.
+ *
  * Twitch is the definitive source of truth.
  */
 
 const {
     getAllActiveLiveStatuses,
     markOffline,
-    updateLiveStreamData
+    updateLiveStreamData,
+    resetLiveSession
 } = require('../database/twitch-live-repository');
 
 const {
@@ -19,10 +21,6 @@ const {
 const {
     deleteLiveNotifications
 } = require('./stream-notifications');
-
-const {
-    updateStatistics
-} = require('../database/twitch-statistics-repository');
 
 const {
     logFeature,
@@ -36,7 +34,7 @@ const {
 
 /*
 ====================================
-RECONCILE LIVE STATE
+RECONCILE TWITCH LIVE STATE
 ====================================
 */
 
@@ -57,8 +55,57 @@ async function reconcileTwitchLiveState(
     });
 
 
-    const activeStatuses =
-        await getAllActiveLiveStatuses();
+    /*
+    ====================================
+    LOAD ACTIVE DATABASE STATES
+    ====================================
+
+    Only records currently marked as live
+    need reconciliation.
+
+    Twitch will determine whether each
+    record is actually still live.
+    */
+
+    let activeStatuses;
+
+    try {
+
+        activeStatuses =
+            await getAllActiveLiveStatuses();
+
+    }
+
+    catch (
+        error
+    ) {
+
+        logError({
+
+            type:
+                ERROR_TYPES.TWITCH_ERROR,
+
+            source:
+                'twitch-live-state-reconciliation',
+
+            message:
+                'Failed to load active Twitch live states.',
+
+            details: {
+
+                error:
+                    error.message,
+
+                stack:
+                    error.stack
+
+            }
+
+        });
+
+        throw error;
+
+    }
 
 
     logFeature({
@@ -79,12 +126,26 @@ async function reconcileTwitchLiveState(
     });
 
 
+    /*
+    ====================================
+    RECONCILIATION COUNTERS
+    ====================================
+    */
+
     let confirmedLive = 0;
+
+    let sessionUpdated = 0;
 
     let finalizedOffline = 0;
 
     let failed = 0;
 
+
+    /*
+    ====================================
+    PROCESS EACH ACTIVE RECORD
+    ====================================
+    */
 
     for (
         const status
@@ -99,6 +160,15 @@ async function reconcileTwitchLiveState(
             twitch_user_id:
                 twitchUserId,
 
+            twitch_login:
+                twitchLogin,
+
+            twitch_display_name:
+                twitchDisplayName,
+
+            guild_ids:
+                guildIds,
+
             started_at:
                 databaseStartedAt,
 
@@ -110,12 +180,51 @@ async function reconcileTwitchLiveState(
 
         try {
 
+            logFeature({
+
+                category:
+                    'TWITCH',
+
+                message:
+                    'Reconciling Twitch live state.',
+
+                details: {
+
+                    twitchUserId,
+
+                    twitchLogin,
+
+                    discordUserId,
+
+                    guildCount:
+                        guildIds?.length || 0,
+
+                    databaseStartedAt,
+
+                    messageCount:
+                        messageIds
+                            ? Object.keys(
+                                messageIds
+                            ).length
+                            : 0
+
+                }
+
+            });
+
+
             /*
             ====================================
-            VERIFY WITH TWITCH
+            ASK TWITCH
             ====================================
 
-            Twitch is authoritative.
+            Twitch is the definitive source
+            of truth.
+
+            We intentionally use the normal
+            live-state verification service
+            here so the same Twitch API logic
+            is used throughout SYNARA.
             */
 
             const streamData =
@@ -126,7 +235,7 @@ async function reconcileTwitchLiveState(
 
             /*
             ====================================
-            STILL LIVE
+            TWITCH CONFIRMS LIVE
             ====================================
             */
 
@@ -136,30 +245,139 @@ async function reconcileTwitchLiveState(
 
                 const twitchStartedAt =
                     streamData.startedAt
-                        || databaseStartedAt;
+                        || null;
 
 
-                await updateLiveStreamData({
+                /*
+                ====================================
+                COMPARE STREAM SESSIONS
+                ====================================
 
-                    discordUserId,
+                If Twitch's current started_at
+                matches the database, this is
+                the same stream session.
 
-                    startedAt:
-                        twitchStartedAt,
+                If it differs, the database contains
+                a stale session and Twitch has
+                established that a new stream has
+                started.
+                */
 
-                    streamCategory:
-                        streamData.category,
+                const databaseStartMs =
+                    databaseStartedAt
+                        ? new Date(
+                            databaseStartedAt
+                        ).getTime()
+                        : null;
 
-                    streamTitle:
-                        streamData.title,
+                const twitchStartMs =
+                    twitchStartedAt
+                        ? new Date(
+                            twitchStartedAt
+                        ).getTime()
+                        : null;
 
-                    thumbnailUrl:
-                        streamData.thumbnailUrl
 
-                });
+                const sameSession =
+
+                    databaseStartMs !== null
+
+                    &&
+
+                    twitchStartMs !== null
+
+                    &&
+
+                    databaseStartMs ===
+                        twitchStartMs;
 
 
-                confirmedLive++;
+                /*
+                ====================================
+                SAME SESSION
+                ====================================
+                */
 
+                if (
+                    sameSession
+                ) {
+
+                    await updateLiveStreamData({
+
+                        discordUserId,
+
+                        startedAt:
+                            twitchStartedAt,
+
+                        streamCategory:
+                            streamData.category,
+
+                        streamTitle:
+                            streamData.title,
+
+                        thumbnailUrl:
+                            streamData.thumbnailUrl
+
+                    });
+
+
+                    confirmedLive++;
+
+
+                    logFeature({
+
+                        category:
+                            'TWITCH',
+
+                        message:
+                            'Startup reconciliation confirmed existing Twitch stream session is still live.',
+
+                        details: {
+
+                            twitchUserId,
+
+                            twitchLogin,
+
+                            discordUserId,
+
+                            startedAt:
+                                twitchStartedAt,
+
+                            title:
+                                streamData.title,
+
+                            category:
+                                streamData.category
+
+                        }
+
+                    });
+
+
+                    continue;
+
+                }
+
+
+                /*
+                ====================================
+                NEW TWITCH SESSION
+                ====================================
+
+                Twitch says the broadcaster is live,
+                but the database contains a different
+                session.
+
+                This means SYNARA was offline when
+                the previous session ended and/or the
+                new session began.
+
+                Twitch wins.
+
+                Before replacing the database state,
+                remove any notification messages that
+                belong to the stale session.
+                */
 
                 logFeature({
 
@@ -167,11 +385,13 @@ async function reconcileTwitchLiveState(
                         'TWITCH',
 
                     message:
-                        'Startup reconciliation confirmed broadcaster is live.',
+                        'Startup reconciliation detected a new Twitch stream session.',
 
                     details: {
 
                         twitchUserId,
+
+                        twitchLogin,
 
                         discordUserId,
 
@@ -190,6 +410,149 @@ async function reconcileTwitchLiveState(
                 });
 
 
+                /*
+                ====================================
+                DELETE STALE NOTIFICATIONS
+                ====================================
+                */
+
+                if (
+                    messageIds
+
+                    &&
+
+                    Object.keys(
+                        messageIds
+                    ).length > 0
+                ) {
+
+                    try {
+
+                        await deleteLiveNotifications({
+
+                            client,
+
+                            messageIds
+
+                        });
+
+
+                        logFeature({
+
+                            category:
+                                'TWITCH',
+
+                            message:
+                                'Stale Twitch live notifications removed during session reconciliation.',
+
+                            details: {
+
+                                twitchUserId,
+
+                                discordUserId,
+
+                                messageIds
+
+                            }
+
+                        });
+
+                    }
+
+                    catch (
+                        error
+                    ) {
+
+                        logError({
+
+                            type:
+                                ERROR_TYPES.TWITCH_ERROR,
+
+                            source:
+                                'twitch-live-state-reconciliation',
+
+                            message:
+                                'Failed to remove stale Twitch live notifications during session reconciliation.',
+
+                            details: {
+
+                                twitchUserId,
+
+                                discordUserId,
+
+                                error:
+                                    error.message,
+
+                                stack:
+                                    error.stack
+
+                            }
+
+                        });
+
+                    }
+
+                }
+
+
+                /*
+                ====================================
+                REPLACE DATABASE SESSION
+                ====================================
+
+                We use createOrUpdateLiveStatus
+                semantics through the existing
+                repository function.
+
+                The repository's update path clears
+                stale message IDs and replaces the
+                session timestamp.
+                */
+
+                await resetLiveSession({
+
+                    discordUserId,
+
+                    startedAt:
+                        twitchStartedAt
+                        || databaseStartedAt,
+
+                    streamCategory:
+                        streamData.category,
+
+                    streamTitle:
+                        streamData.title,
+
+                    thumbnailUrl:
+                        streamData.thumbnailUrl
+
+                });
+
+
+                sessionUpdated++;
+
+
+                /*
+                ====================================
+                IMPORTANT
+                ====================================
+
+                We intentionally DO NOT post a new
+                live notification here.
+
+                Startup reconciliation is responsible
+                for synchronizing persistent state.
+
+                EventSub remains responsible for
+                triggering live notification delivery.
+
+                If the stream is already live when
+                SYNARA starts, the database now knows
+                the correct Twitch session and will not
+                be carrying stale session information.
+                */
+
+
                 continue;
 
             }
@@ -197,7 +560,39 @@ async function reconcileTwitchLiveState(
 
             /*
             ====================================
-            TWITCH SAYS OFFLINE
+            TWITCH CONFIRMS OFFLINE
+            ====================================
+
+            Twitch is offline, therefore the
+            database's live state is stale.
+            */
+
+            logFeature({
+
+                category:
+                    'TWITCH',
+
+                message:
+                    'Startup reconciliation found a stale offline Twitch live state.',
+
+                details: {
+
+                    twitchUserId,
+
+                    twitchLogin,
+
+                    discordUserId,
+
+                    databaseStartedAt
+
+                }
+
+            });
+
+
+            /*
+            ====================================
+            ATOMICALLY MARK OFFLINE
             ====================================
             */
 
@@ -215,6 +610,18 @@ async function reconcileTwitchLiveState(
                 });
 
 
+            /*
+            ====================================
+            SESSION CHANGED
+            ====================================
+
+            If markOffline returned no row,
+            something changed between the initial
+            query and this update.
+
+            Do not overwrite that newer state.
+            */
+
             if (
                 !finalizedStatus
             ) {
@@ -225,7 +632,7 @@ async function reconcileTwitchLiveState(
                         'TWITCH',
 
                     message:
-                        'Startup reconciliation could not finalize live state because the session changed.',
+                        'Startup reconciliation did not finalize the state because the active stream session changed.',
 
                     details: {
 
@@ -247,135 +654,87 @@ async function reconcileTwitchLiveState(
 
             /*
             ====================================
-            DELETE OLD NOTIFICATIONS
+            DELETE STALE DISCORD NOTIFICATIONS
             ====================================
             */
 
-            try {
+            if (
+                finalizedStatus.message_ids
 
-                await deleteLiveNotifications({
+                &&
 
-                    client,
-
-                    messageIds:
-                        finalizedStatus.message_ids
-
-                });
-
-            }
-
-            catch (
-                error
+                Object.keys(
+                    finalizedStatus.message_ids
+                ).length > 0
             ) {
 
-                logError({
+                try {
 
-                    type:
-                        ERROR_TYPES.TWITCH_ERROR,
+                    await deleteLiveNotifications({
 
-                    source:
-                        'twitch-live-state-reconciliation',
+                        client,
 
-                    message:
-                        'Failed to delete stale Twitch live notification messages during startup reconciliation.',
+                        messageIds:
+                            finalizedStatus.message_ids
 
-                    details: {
-
-                        twitchUserId,
-
-                        discordUserId,
-
-                        error:
-                            error.message,
-
-                        stack:
-                            error.stack
-
-                    }
-
-                });
-
-            }
+                    });
 
 
-            /*
-            ====================================
-            UPDATE STATISTICS
-            ====================================
-            */
+                    logFeature({
 
-            try {
+                        category:
+                            'TWITCH',
 
-                const durationSeconds =
+                        message:
+                            'Stale Twitch live notifications removed after startup offline reconciliation.',
 
-                    Math.max(
+                        details: {
 
-                        0,
+                            twitchUserId,
 
-                        Math.floor(
+                            discordUserId,
 
-                            (
+                            messageIds:
+                                finalizedStatus.message_ids
 
-                                Date.now()
+                        }
 
-                                -
+                    });
 
-                                new Date(
-                                    databaseStartedAt
-                                ).getTime()
+                }
 
-                            )
+                catch (
+                    error
+                ) {
 
-                            /
+                    logError({
 
-                            1000
+                        type:
+                            ERROR_TYPES.TWITCH_ERROR,
 
-                        )
+                        source:
+                            'twitch-live-state-reconciliation',
 
-                    );
+                        message:
+                            'Failed to remove stale Twitch live notifications after startup offline reconciliation.',
 
+                        details: {
 
-                await updateStatistics({
+                            twitchUserId,
 
-                    discordUserId,
+                            discordUserId,
 
-                    streamDurationSeconds:
-                        durationSeconds
+                            error:
+                                error.message,
 
-                });
+                            stack:
+                                error.stack
 
-            }
+                        }
 
-            catch (
-                error
-            ) {
+                    });
 
-                logError({
-
-                    type:
-                        ERROR_TYPES.TWITCH_ERROR,
-
-                    source:
-                        'twitch-live-state-reconciliation',
-
-                    message:
-                        'Failed to update Twitch stream statistics during startup reconciliation.',
-
-                    details: {
-
-                        twitchUserId,
-
-                        discordUserId,
-
-                        error:
-                            error.message,
-
-                        stack:
-                            error.stack
-
-                    }
-
-                });
+                }
 
             }
 
@@ -389,11 +748,13 @@ async function reconcileTwitchLiveState(
                     'TWITCH',
 
                 message:
-                    'Startup reconciliation finalized stale offline state.',
+                    'Startup reconciliation finalized stale Twitch live state.',
 
                 details: {
 
                     twitchUserId,
+
+                    twitchLogin,
 
                     discordUserId,
 
@@ -431,6 +792,8 @@ async function reconcileTwitchLiveState(
 
                     twitchUserId,
 
+                    twitchLogin,
+
                     discordUserId,
 
                     error:
@@ -448,6 +811,12 @@ async function reconcileTwitchLiveState(
     }
 
 
+    /*
+    ====================================
+    FINAL SUMMARY
+    ====================================
+    */
+
     logFeature({
 
         category:
@@ -462,6 +831,8 @@ async function reconcileTwitchLiveState(
                 activeStatuses.length,
 
             confirmedLive,
+
+            sessionUpdated,
 
             finalizedOffline,
 
